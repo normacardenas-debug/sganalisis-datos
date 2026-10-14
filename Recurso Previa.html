@@ -1,0 +1,1583 @@
+<!DOCTYPE html>
+ <html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Previo al Análisis · Seminario de Grado ULagos</title>
+<meta name="description" content="Prepara tu base de datos o tu transcripción antes de hacer el análisis.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js"></script>
+<style>
+  :root{
+    --azul:#0055B7;--azul-osc:#003d85;--azul-claro:#e9f2fb;--celeste:#8FC6E8;
+    --verde:#2E7D1F;--verde-osc:#1F5C14;--verde-claro:#eafbe6;--verde-borde:#ACDA90;
+    --morado:#9F26B4;--morado-claro:#f3e8f7;
+    --rojo:#b0392b;--rojo-claro:#fdeeee;
+    --ambar-texto:#7a5d12;--ambar-claro:#fff8e6;--ambar-borde:#f0dca0;
+    --tinta:#0d1b2a;--texto:#1a232b;--texto-2:#3a4551;--texto-3:#55606b;
+    --borde:#e2e6ea;--gris-claro:#f4f6f8;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:#fff;font-family:'Open Sans',sans-serif;color:var(--texto);line-height:1.6;overflow-x:hidden}
+  a{color:var(--azul)} a:hover{color:var(--azul-osc)}
+  h1,h2,h3,h4{font-family:'Roboto Condensed',sans-serif;margin:0;line-height:1.15}
+  img{display:block;max-width:100%;height:auto}
+  ::selection{background:var(--celeste)}
+  :focus-visible{outline:3px solid var(--azul);outline-offset:2px}
+  .skip-link{position:absolute;left:-999px;top:0;background:var(--azul);color:#fff;padding:10px 18px;z-index:200;border-radius:0 0 6px 0}
+  .skip-link:focus{left:0}
+  .sr{position:absolute;left:-9999px}
+  .sec{padding:44px clamp(16px,6vw,56px)}
+  .alt{background:#fafbfc}
+  .wrap{max-width:1100px;margin:0 auto}
+  .wrap-sm{max-width:1000px;margin:0 auto}
+  .badge{display:inline-block;font:700 12px 'Open Sans',sans-serif;letter-spacing:.08em;text-transform:uppercase;padding:6px 12px;border-radius:20px;margin:0 0 14px}
+  .b-azul{background:var(--azul-claro);color:var(--azul)}
+  .b-verde{background:var(--verde-claro);color:var(--verde)}
+  .b-morado{background:var(--morado-claro);color:var(--morado)}
+  .b-ambar{background:#fff1c2;color:var(--ambar-texto)}
+  .h2{font-size:clamp(28px,3.6vw,40px);margin-bottom:12px;color:var(--tinta)}
+  .h3{font-size:20px;margin:34px 0 10px;color:var(--tinta)}
+  .lead{font-size:16px;line-height:1.7;color:var(--texto-2);margin:0 0 16px}
+  .small{font-size:14px;line-height:1.6;color:var(--texto-3)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
+  .card{background:#fff;border:1px solid var(--borde);border-radius:12px;padding:18px 20px;border-top-width:4px}
+  .card-t{font:700 16px 'Roboto Condensed',sans-serif;margin:0 0 6px;color:var(--tinta)}
+  .card p.txt{font-size:14px;line-height:1.55;color:var(--texto-3);margin:0}
+  .card,.camino{transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+  a.card:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(13,27,42,.08)}
+  .aviso{display:flex;gap:10px;align-items:flex-start;background:var(--azul-claro);border-radius:10px;padding:14px 16px;margin:0 0 20px;font-size:14.5px;line-height:1.55;color:#1a3a5c}
+  .aviso-ambar{background:var(--ambar-claro);border:1px solid var(--ambar-borde);color:#5c4a14}
+  .aviso p{margin:0}
+  details.plegable{background:#fff;border:1px dashed #b6c6d6;border-radius:10px;padding:0 18px;margin:16px 0}
+  details.plegable>summary{cursor:pointer;padding:14px 0;font:700 14.5px 'Open Sans',sans-serif;color:var(--azul);min-height:44px}
+  details.plegable[open]{padding-bottom:14px}
+  details.plegable p{font-size:14.5px;line-height:1.6;color:var(--texto-2);margin:0 0 10px}
+  details.plegable ul{margin:0 0 8px;padding-left:20px;font-size:14.5px;line-height:1.7;color:var(--texto-2)}
+  .tabla-ej{width:100%;border-collapse:collapse;font-size:13.5px}
+  .tabla-ej th{background:var(--tinta);color:#fff;text-align:left;padding:9px 12px;font:700 12px 'Open Sans',sans-serif}
+  .tabla-ej td{padding:9px 12px;border-top:1px solid #eef1f4;vertical-align:top;line-height:1.5}
+  .scroll-x{overflow-x:auto;background:#fff;border-radius:12px;border:1px solid var(--borde)}
+  .btn{min-height:44px;padding:10px 18px;border-radius:8px;font:700 13.5px 'Open Sans',sans-serif;cursor:pointer;transition:background .15s ease}
+  .btn-pri{background:var(--azul);color:#fff;border:none} .btn-pri:hover{background:var(--azul-osc)}
+  .btn-sec{background:#fff;color:var(--azul);border:1.5px solid var(--azul)} .btn-sec:hover{background:var(--azul-claro)}
+  .btn-ver{background:var(--verde);color:#fff;border:none} .btn-ver:hover{background:#24651a}
+  .btn-peligro{background:#fff;color:var(--rojo);border:1.5px solid var(--rojo)} .btn-peligro:hover{background:var(--rojo-claro)}
+  .btn:disabled{opacity:.5;cursor:not-allowed}
+  .mini-btn{min-height:44px;padding:6px 12px;border-radius:8px;border:1.5px solid #c9d1d9;background:#fff;font:600 12.5px 'Open Sans',sans-serif;color:var(--texto);cursor:pointer}
+  .mini-btn:hover{border-color:var(--azul);color:var(--azul)}
+  .mini-btn:disabled{opacity:.5;cursor:not-allowed}
+  .esquema{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid var(--borde);box-shadow:0 2px 8px rgba(0,0,0,.04)}
+  .esquema ol{list-style:none;margin:0;padding:0 clamp(16px,6vw,56px);display:flex;gap:2px;overflow-x:auto;scrollbar-width:thin}
+  .esquema button{flex:none;display:flex;align-items:center;gap:8px;min-height:52px;padding:0 14px;background:none;border:none;border-bottom:3px solid transparent;font:600 14px 'Open Sans',sans-serif;color:var(--texto);cursor:pointer;white-space:nowrap}
+  .esquema button:hover{color:var(--azul);border-bottom-color:var(--celeste)}
+  .esquema button[aria-current="step"]{color:var(--azul);border-bottom-color:var(--azul)}
+  .esquema .n{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:var(--gris-claro);font:700 12px 'Open Sans',sans-serif;color:var(--texto-2)}
+  .esquema button[aria-current="step"] .n{background:var(--azul);color:#fff}
+  .vista[hidden]{display:none}
+  .pie-vista{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:40px;padding-top:20px;border-top:1px solid var(--borde)}
+  .meta{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 22px}
+  .meta span{display:inline-flex;align-items:center;gap:7px;font:600 13px 'Open Sans',sans-serif;background:var(--gris-claro);color:var(--texto-2);border-radius:20px;padding:6px 14px}
+  .caminos{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin:0 0 20px}
+  .camino{position:relative;display:flex;gap:14px;align-items:flex-start;min-height:120px;padding:20px 22px;border-radius:14px;border:2px solid var(--borde);border-top-width:6px;background:#fff;cursor:pointer}
+  .camino:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(13,27,42,.08)}
+  .camino input{margin-top:4px;width:22px;height:22px;flex:none}
+  .camino .t{font:700 20px 'Roboto Condensed',sans-serif;color:var(--tinta);display:block;margin-bottom:4px}
+  .camino .d{font-size:14px;line-height:1.5;color:var(--texto-3);display:block}
+  .camino.c-verde{border-top-color:var(--verde)} .camino.c-verde input{accent-color:var(--verde)}
+  .camino.c-azul{border-top-color:var(--azul)} .camino.c-azul input{accent-color:var(--azul)}
+  .camino.on.c-verde{background:var(--verde-claro);border-color:var(--verde)}
+  .camino.on.c-azul{background:var(--azul-claro);border-color:var(--azul)}
+  .check{display:flex;gap:12px;align-items:flex-start;background:#fff;border:1px solid var(--borde);border-radius:10px;padding:14px 16px;cursor:pointer;min-height:44px;font-size:14.5px;line-height:1.5}
+  .check:hover{border-color:var(--celeste);background:#fbfdff}
+  .check input{margin-top:3px;width:20px;height:20px;flex:none;accent-color:var(--verde)}
+  .checks{display:flex;flex-direction:column;gap:10px}
+  .dos{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;align-items:start}
+  .dos h4{font:700 15px 'Roboto Condensed',sans-serif;margin:0 0 8px}
+  .nota-vista{background:var(--ambar-claro);border:1px solid var(--ambar-borde);color:#5c4a14;border-radius:10px;padding:12px 16px;margin:0 0 20px;font-size:14.5px;line-height:1.55}
+  .mini{width:100%;border-collapse:collapse;font-size:13px;min-width:300px}
+  .mini th,.mini td{border:1px solid #d5dbe1;padding:6px 8px;text-align:left;vertical-align:top}
+  .mini th{background:#f4f6f8;font-weight:700}
+  .ex-tabla{width:100%;border-collapse:collapse}
+  .ex-tabla th{background:var(--tinta);color:#fff;padding:9px 12px;font:700 12px 'Open Sans',sans-serif;text-align:center}
+  .ex-tabla td{padding:8px 12px;text-align:center;font-size:14px;border-top:1px solid #eef1f4}
+  .ex-tabla td:first-child{font:700 13.5px 'Roboto Condensed',sans-serif}
+  .caso-h{padding:14px 18px;color:#fff}
+  .caso-h h4{font:700 15px 'Roboto Condensed',sans-serif;margin:0}
+  .caso-b{padding:16px 18px}
+  .par{display:flex;align-items:center;gap:10px;margin-bottom:6px;font-size:14px}
+  .par b{flex:none;width:32px;height:32px;border-radius:6px;background:var(--gris-claro);display:flex;align-items:center;justify-content:center;font:700 15px 'Roboto Condensed',sans-serif}
+  .consejos{list-style:none;padding:0;margin:16px 0 0;display:flex;flex-direction:column;gap:8px}
+  .consejos li{display:flex;gap:12px;align-items:flex-start;background:var(--gris-claro);border-radius:8px;padding:12px 16px;font-size:15px;line-height:1.55}
+  .consejos li span:first-child{flex:none;color:var(--verde);font-weight:700}
+  .ejemplo{font-size:14.5px;line-height:1.6;background:var(--gris-claro);border-radius:8px;padding:14px 16px;margin-bottom:10px}
+  .ejemplo p{margin:0 0 8px} .ejemplo p:last-child{margin:0}
+  .herr{display:flex;flex-direction:column;gap:8px;text-decoration:none;color:inherit}
+  .herr .fila{display:flex;align-items:center;gap:10px}
+  .herr .fila b{font:700 16px 'Roboto Condensed',sans-serif;color:var(--azul);flex:1}
+  .sub{display:flex;align-items:center;gap:12px;margin:56px 0 8px;padding-top:32px;border-top:1px solid var(--borde);scroll-margin-top:72px}
+  .sub .num{flex:none;width:34px;height:34px;border-radius:50%;background:var(--azul);color:#fff;display:flex;align-items:center;justify-content:center;font:700 16px 'Roboto Condensed',sans-serif}
+  .sub h3{font-size:24px;color:var(--tinta)}
+
+  /* espacio de trabajo */
+  .alerta{background:#fff3cd;border:3px solid #e0a800;border-radius:12px;padding:16px 20px;margin:0 0 18px;display:flex;gap:14px;align-items:flex-start}
+  .alerta .ico{line-height:0;flex:none;color:var(--ambar-texto)}
+  .alerta p{margin:0;font-size:15.5px;line-height:1.55;color:#4a3a05}
+  .alerta strong{font-size:17px;color:#3d2f00}
+  .espacio{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:18px;align-items:start}
+  @media(max-width:860px){.espacio{grid-template-columns:minmax(0,1fr)}}
+  .campos{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+  .campos label{display:flex;flex-direction:column;gap:4px;font:700 12.5px 'Open Sans',sans-serif;color:var(--texto-2);flex:1 1 180px;min-width:0}
+  .campos input,.campos select{min-height:44px;border:1.5px solid #c9d1d9;border-radius:8px;padding:8px 12px;font:15px 'Open Sans',sans-serif;background:#fff;width:100%;min-width:0}
+  #txt{width:100%;min-height:420px;border:2px solid var(--azul);border-radius:10px;padding:14px 16px;font:15px/1.6 Calibri,'Open Sans',sans-serif;resize:vertical;color:var(--texto);background:#fff}
+  #txt:focus{outline:3px solid var(--celeste)}
+  .panel{background:#fff;border:1px solid var(--borde);border-radius:12px;padding:16px 18px}
+  .panel h4{font:700 16px 'Roboto Condensed',sans-serif;margin:0 0 10px;color:var(--tinta)}
+  .r{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-top:1px solid #eef1f4;font-size:14px;line-height:1.5}
+  .r:first-of-type{border-top:none}
+  .r .i{flex:none;width:22px;text-align:center;padding-top:1px} .r .i svg{width:18px;height:18px;display:block;margin:0 auto} .r .i.info{color:var(--azul)} .r .i.warn{color:var(--ambar-texto)} .r .i.ok{color:var(--verde)}
+  .r .c{flex:1;min-width:0}
+  .r .acc{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;align-items:center}
+  .r select{min-height:44px;border:1.5px solid #c9d1d9;border-radius:8px;padding:4px 8px;font:13px 'Open Sans',sans-serif;background:#fff}
+  .r code{background:var(--gris-claro);padding:1px 6px;border-radius:4px;font-size:13px}
+  .barra{position:sticky;bottom:0;z-index:20;background:#fff;border:1px solid var(--borde);border-radius:12px;box-shadow:0 -4px 16px rgba(13,27,42,.1);padding:12px 16px;margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .estado{flex:1 1 220px;font:700 14px 'Open Sans',sans-serif;min-width:0}
+  .estado.warn{color:#8a5a00} .estado.ok{color:var(--verde)}
+  .barra .btn{flex:1 1 auto;padding:8px 12px;font-size:13px}
+  .tab-t{min-height:44px;padding:8px 18px;border-radius:22px;border:1.5px solid;font:700 13.5px 'Open Sans',sans-serif;cursor:pointer}
+  .tabla-ed{width:100%;border-collapse:collapse}
+  .tabla-ed th{background:var(--tinta);color:#fff;text-align:left;padding:8px 8px;font:700 12px 'Open Sans',sans-serif}
+  .tabla-ed td{padding:4px;border-top:1px solid var(--borde);vertical-align:top}
+  .tabla-ed td.nump{padding:8px 12px;font:700 14px 'Roboto Condensed',sans-serif;color:var(--azul)}
+  .tabla-ed input{width:100%;min-width:56px;min-height:44px;border:1px solid #c9d1d9;border-radius:6px;padding:8px;font:13.5px 'Open Sans',sans-serif;background:#fff}
+  .th-in{display:flex;align-items:center;gap:2px}
+  .th-in input{background:transparent;border:none;border-bottom:1px dashed rgba(255,255,255,.5);border-radius:0;color:#fff;font:700 12px 'Open Sans',sans-serif;min-height:36px;padding:4px}
+  .th-in button{background:none;border:none;color:#ffd6d0;font-size:18px;cursor:pointer;min-width:32px;min-height:44px}
+  .x{background:none;border:none;color:var(--rojo);font-size:22px;cursor:pointer;min-width:44px;min-height:44px}
+  .dim{background:#fff;border:1.5px solid var(--celeste);border-radius:12px;overflow:hidden;margin-bottom:16px}
+  .dim-h{background:var(--azul-claro);padding:14px 16px;border-bottom:1.5px solid var(--celeste)}
+  .lab-dim{display:block;font:700 12px 'Open Sans',sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--azul)}
+  .lab-dim textarea{display:block;width:100%;margin-top:4px;min-height:48px;border:1.5px solid var(--celeste);border-radius:6px;padding:8px 10px;font:700 14px 'Roboto Condensed',sans-serif;text-transform:none;letter-spacing:0;color:var(--tinta);background:#fff;resize:vertical}
+  .lab-dim-t{font:700 12px 'Open Sans',sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--verde);margin:12px 0 6px}
+  .esc{display:flex;gap:6px;flex-wrap:wrap}
+  .chip{min-height:44px;padding:6px 14px;border-radius:22px;border:1.5px solid var(--verde);background:#fff;color:var(--verde);font:600 12.5px 'Open Sans',sans-serif;cursor:pointer}
+  .chip.on{background:var(--verde);color:#fff}
+  .refs{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  .refs span{font:600 12px 'Open Sans',sans-serif;color:var(--texto-2);background:#fff;border:1px solid var(--borde);border-radius:14px;padding:3px 10px}
+  .refs b{color:var(--verde)}
+  .dim-b{padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+  .fila-q{display:flex;gap:10px;align-items:flex-start;padding:10px;border:1px solid var(--borde);border-radius:8px;background:#fafbfc}
+  .fila-q label{display:block;font:700 12px 'Open Sans',sans-serif;letter-spacing:.05em;text-transform:uppercase;color:var(--texto-3)}
+  .fila-q .q-p{flex:0 0 84px} .fila-q .q-e{flex:1;min-width:0}
+  .fila-q input,.fila-q textarea{display:block;width:100%;margin-top:4px;min-height:44px;border:1px solid #c9d1d9;border-radius:6px;padding:8px;font:13.5px 'Open Sans',sans-serif;text-transform:none;letter-spacing:0;color:var(--texto);background:#fff}
+  .fila-q textarea{resize:vertical}
+  .msg{font-size:13.5px;min-height:20px;margin:8px 0 0}
+  .msg.err{color:var(--rojo)} .msg.ok{color:var(--verde)}
+
+  /* diseño: pasos, subnavegación, iconos */
+  .lead{max-width:none}
+  .pasos{list-style:none;margin:0 0 28px;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;counter-reset:p}
+  .pasos li{position:relative;background:var(--gris-claro);border-radius:12px;padding:18px 20px 18px 62px;counter-increment:p;font-size:14.5px;line-height:1.55;color:var(--texto-2)}
+  .pasos li::before{content:counter(p);position:absolute;left:18px;top:16px;width:32px;height:32px;border-radius:50%;background:var(--azul);color:#fff;display:flex;align-items:center;justify-content:center;font:700 16px 'Roboto Condensed',sans-serif}
+  .pasos strong{display:block;font:700 17px 'Roboto Condensed',sans-serif;color:var(--tinta);margin-bottom:2px}
+  .subnav{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 26px;padding:0;list-style:none}
+  .subnav a{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:6px 14px;border:1.5px solid var(--borde);border-radius:22px;background:#fff;color:var(--texto);text-decoration:none;font:600 13.5px 'Open Sans',sans-serif}
+  .subnav a:hover{border-color:var(--azul);color:var(--azul)}
+  .subnav b{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--azul-claro);color:var(--azul);font:700 12px 'Open Sans',sans-serif}
+  .camino .ic{flex:none;width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:var(--gris-claro);color:var(--texto-2)}
+  .camino.c-verde .ic{background:var(--verde-claro);color:var(--verde)}
+  .camino.c-azul .ic{background:var(--azul-claro);color:var(--azul)}
+  .camino .ic svg{width:24px;height:24px}
+  .camino input{position:absolute;top:14px;right:14px;margin:0}
+  .camino{padding-right:48px}
+  @media(min-width:861px){.espacio .panel{position:sticky;top:68px;max-height:calc(100vh - 92px);overflow:auto}}
+  .qz{margin:0 0 18px}.qz p.q{font-weight:600;margin:0 0 10px}
+  .qz .q-ej{margin:0 0 12px;padding:10px 12px;background:var(--gris-claro);border-left:3px solid var(--azul);border-radius:4px;font-size:14px;line-height:1.5}
+  .modo-transcripcion[hidden]{display:none!important}
+  .modo-sel{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:14px 0 6px;padding:12px 14px;border:1px solid var(--borde);border-radius:10px;background:#fff}
+  .modo-sel #lblModo{font:700 14px 'Open Sans',sans-serif;color:var(--texto)}
+  .modo-sel .mini-btn[aria-pressed="true"]{background:var(--azul);border-color:var(--azul);color:#fff}
+  .modo-sel .small{flex-basis:100%;margin:0}
+  .qz .op{display:block;width:100%;text-align:left;min-height:44px;margin:0 0 8px;padding:10px 14px;border:1.5px solid #c9d1d9;border-radius:8px;background:#fff;font:14.5px 'Open Sans',sans-serif;color:var(--texto);cursor:pointer}
+  .qz .op:hover{border-color:var(--azul)}
+  .qz .op.ok{border-color:var(--verde);background:var(--verde-claro)}
+  .qz .op.mal{border-color:var(--rojo);background:var(--rojo-claro)}
+  .qz .fb{font-size:14.5px;line-height:1.55;margin:6px 0 0;color:var(--texto-2)}
+
+  /* franja de activación de conocimientos previos (borde a borde, una pregunta a la vez) */
+  .act{margin:0 calc(50% - 50vw) 32px;padding:26px calc(50vw - 50%) 28px;border-top:4px solid}
+  .act-verde{background:linear-gradient(90deg,#eafbe6,#d9f1d1);border-top-color:var(--verde);--act:var(--verde);--act-osc:#1f5a14;--act-suave:#a9d89c;--act-hover:#eafbe6}
+  .act-azul{background:linear-gradient(90deg,#e9f2fb,#d6e8f8);border-top-color:var(--azul);--act:var(--azul);--act-osc:var(--azul-osc);--act-suave:#a9c9ec;--act-hover:var(--azul-claro)}
+  .act-top{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 12px}
+  .act-pill{font:700 12px 'Open Sans',sans-serif;letter-spacing:.08em;text-transform:uppercase;background:var(--act);color:#fff;padding:6px 14px;border-radius:20px}
+  .act-n{font:600 14px 'Open Sans',sans-serif;color:var(--act-osc)}
+  .act-dots{margin-left:auto;display:flex;gap:6px}
+  .act-dots span{width:28px;height:6px;border-radius:3px;display:block;background:var(--act-suave)}
+  .act-dots span.on{background:var(--act)}
+  .act-h{font-size:clamp(22px,2.8vw,30px);color:var(--tinta);margin:0 0 6px}
+  .act .lead{margin:0 0 16px}
+  .act-q{background:#fff;border:1px solid var(--borde);border-radius:12px;padding:20px 22px}
+  .act-q.ok{border-color:var(--verde-borde)} .act-q.mal{border-color:#e7b3ad}
+  .act-q .q{font:700 15.5px 'Roboto Condensed',sans-serif;color:var(--tinta);margin:0 0 14px;line-height:1.35}
+  .act-ops{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+  .act-ops .op{display:flex;gap:8px;align-items:center;text-align:left;min-height:58px;padding:11px 14px;border:1.5px solid #c9d1d9;border-radius:8px;background:#fff;font:600 13.5px 'Open Sans',sans-serif;color:var(--texto);cursor:pointer}
+  .act-ops .op:hover:not(:disabled){border-color:var(--act)}
+  .act-ops .op:disabled{cursor:default}
+  .act-ops .op.ok{border-color:var(--verde);background:var(--verde-claro);color:var(--verde)}
+  .act-ops .op.mal{border-color:var(--rojo);background:var(--rojo-claro);color:var(--rojo)}
+  .act-ops .marca{flex:none;font-weight:700;min-width:1em}
+  .act-fb{margin-top:14px;padding:14px 16px;border-radius:8px;border-left:4px solid}
+  .act-fb p{margin:0;font-size:14px;line-height:1.55;color:var(--texto-2)}
+  .act-fb p.t{font:700 13.5px 'Open Sans',sans-serif;margin-bottom:4px}
+  .act-fb.ok{background:var(--verde-claro);border-color:var(--verde)} .act-fb.ok p.t{color:var(--verde)}
+  .act-fb.mal{background:var(--rojo-claro);border-color:var(--rojo)} .act-fb.mal p.t{color:var(--rojo)}
+  .act-nav{display:flex;justify-content:space-between;gap:12px;margin-top:16px;flex-wrap:wrap}
+  .act-btn{min-height:44px;padding:10px 20px;border-radius:8px;font:700 14px 'Open Sans',sans-serif;cursor:pointer;border:1.5px solid var(--act);background:#fff;color:var(--act-osc)}
+  .act-btn:hover{background:var(--act-hover)}
+  .act-btn:disabled{opacity:.5;cursor:not-allowed}
+  .act-btn.pri{background:var(--act);color:#fff}
+  .act-btn.pri:hover{background:var(--act-osc)}
+  .act + .subnav{scroll-margin-top:72px}
+
+  /* editor: agregar, bases y pestañas en dos filas */
+  .opc-agregar{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+  .opc{display:flex;flex-direction:column;gap:6px;text-align:left;min-height:44px;padding:16px 18px;border:2px solid var(--borde);border-radius:12px;background:#fff;cursor:pointer;font:14px/1.55 'Open Sans',sans-serif;color:var(--texto-2)}
+  .opc:hover{border-color:var(--azul);background:#fbfdff}
+  .opc:disabled{opacity:.5;cursor:not-allowed}
+  .opc-t{font:700 17px 'Roboto Condensed',sans-serif;color:var(--azul)}
+  .bases{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:0 0 16px;padding:14px 16px;background:var(--gris-claro);border-radius:12px}
+  .bases[hidden],.cab[hidden]{display:none}
+  .bases-t{flex:1 0 100%;margin:0;font:700 13px 'Open Sans',sans-serif;color:var(--texto-2)}
+  .base-b{min-height:44px;padding:8px 16px;border-radius:10px;border:2px solid var(--borde);background:#fff;font:700 14px 'Open Sans',sans-serif;color:var(--tinta);cursor:pointer}
+  .base-b:hover{border-color:var(--verde)}
+  .base-b[aria-pressed="true"]{border-color:var(--verde);background:var(--verde-claro);color:var(--verde)}
+  .base-b.inf[aria-pressed="true"]{border-color:var(--azul);background:var(--azul-claro);color:var(--azul)}
+  .cab{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;margin:0 0 16px}
+  .cab-t{margin:0;flex:1 1 auto;font:700 18px 'Roboto Condensed',sans-serif;color:var(--tinta);align-self:center}
+  .cab-campo{display:flex;flex-direction:column;gap:2px;flex:1 1 300px;max-width:520px;font:700 14px 'Open Sans',sans-serif;color:var(--tinta)}
+  .cab-campo .small{font-weight:400;margin-bottom:4px}
+  .cab-campo input{min-height:44px;border:1px solid #c9d1d9;border-radius:6px;padding:9px 10px;font:14px 'Open Sans',sans-serif}
+  .btn-quitar{flex:none}
+  .tabs-g{display:flex;gap:8px 12px;flex-wrap:wrap;align-items:flex-start;margin:0 0 10px}
+  .tabs-l{flex:0 0 140px;padding-top:12px;font:700 12px 'Open Sans',sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--texto-3)}
+  #tabsL,#tabsR{display:flex;gap:8px;flex-wrap:wrap;flex:1 1 280px}
+  #cabPerfil{margin-top:8px;padding-top:14px;border-top:1px dashed var(--borde)}
+  .tabla-ed td.perf-c{padding:8px 10px;font:600 12.5px 'Open Sans',sans-serif;color:var(--texto-2);background:var(--gris-claro)}
+
+  @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}a.card:hover,.camino:hover{transform:none}}
+  @media print{.esquema,.skip-link,button,.no-print{display:none!important}.vista[hidden]{display:block!important}}
+</style>
+</head>
+<body>
+<a href="#contenido-principal" class="skip-link">Saltar al contenido principal</a>
+<div style="display:flex;flex-direction:column;min-height:100vh">
+
+<header style="background:var(--azul);color:#fff;padding:42px clamp(16px,6vw,56px) 34px;display:flex;align-items:center;gap:32px;flex-wrap:wrap">
+  <div style="width:180px;height:76px;flex:none;display:flex;align-items:center;justify-content:center">
+    <img src="./logoula.png" alt="Universidad de Los Lagos" width="916" height="398" style="max-height:100%;width:auto">
+  </div>
+  <div style="flex:1;min-width:240px">
+    <p style="margin:0 0 6px;font:600 12px/1.4 'Open Sans',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#d6ebfa">Seminario de Grado · SEM2-2026</p>
+    <h1 style="font-size:clamp(30px,4.6vw,48px);line-height:1.05;font-weight:700">Previo al Análisis</h1>
+    <p style="margin:10px 0 0;font-size:16px;line-height:1.5;color:#e9f2fb">Deja tus datos listos para llegar a analizar y no a ordenar</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">
+      <a href="./index.html" style="display:inline-flex;align-items:center;min-height:44px;font:600 13.5px 'Open Sans',sans-serif;color:#fff;background:rgba(255,255,255,.16);padding:9px 16px;border-radius:22px;text-decoration:none">← Inicio</a>
+    </div>
+  </div>
+</header>
+
+<nav class="esquema" aria-label="Vistas del recurso"><ol id="esquema"></ol></nav>
+
+<main id="contenido-principal" style="flex:1">
+
+<!-- ============ VISTA 1 ============ -->
+<section class="vista sec" id="v1" data-titulo="Tu camino">
+  <div class="wrap-sm">
+    <p class="badge b-azul">1 · Punto de partida</p>
+    <h2 class="h2" tabindex="-1">Tu camino</h2>
+    <p class="lead">El análisis necesita datos ordenados. Si empiezas con la transcripción incompleta o con la base de datos desordenada, el tiempo se te irá en arreglar eso. Acá preparas tus datos, y el análisis lo haces después con el recurso de tu enfoque.</p>
+    <ol class="pasos">
+      <li><strong>Elige tu camino</strong>Marca el instrumento que aplicó tu grupo. Cada uno tiene su propia preparación.</li>
+      <li><strong>Deja tus datos listos</strong>Completa tu base de datos o ordena tu transcripción, y descárgala.</li>
+      <li><strong>Llega a analizar</strong>Confirma la lista de la vista 4 y entra al recurso de análisis de tu enfoque.</li>
+    </ol>
+    <h3 class="h3" style="margin-top:8px">¿Qué instrumentos aplicó tu grupo?</h3>
+    <p class="small" style="margin:0 0 12px">Marca todos los que correspondan. Si aplicaron más de uno, prepara cada uno por separado.</p>
+    <div class="caminos" id="caminos" role="group" aria-label="Instrumentos aplicados"></div>
+    <div id="resumenCamino" aria-live="polite"></div>
+  </div>
+  <div class="wrap-sm pie-vista"><span></span><button class="btn btn-pri" data-ir="2">Continuar →</button></div>
+</section>
+
+<!-- ============ VISTA 2 ============ -->
+<section class="vista sec" id="v2" data-titulo="Tu base de datos" hidden>
+  <div class="wrap">
+    <p class="badge b-verde">2 · Encuesta</p>
+    <h2 class="h2" tabindex="-1">Tu base de datos</h2>
+    <div class="nota-vista" id="nota2" hidden>Según lo que marcaste, esta vista no corresponde a tu estudio. Puedes saltarla.</div>
+    <div class="act act-verde no-print" data-activ="encuesta">
+      <div class="act-top"><span class="act-pill">Antes de comenzar</span><span class="act-n" aria-live="polite"></span><span class="act-dots" aria-hidden="true"></span></div>
+      <h3 class="act-h">¿Qué sabes o puedes deducir sobre tu base de datos?</h3>
+      <p class="lead">No necesitas saberlo todo de antemano: algunas respuestas se pueden deducir. Elige la que te parezca y lee la explicación.</p>
+      <div class="act-cuerpo"></div>
+      <div class="act-nav"><button class="act-btn" type="button" data-mov="-1">← Anterior</button><button class="act-btn pri" type="button" data-mov="1">Siguiente →</button></div>
+    </div>
+    <ul class="subnav no-print" aria-label="Pasos de esta vista"><li><a href="#s2-1"><b>1</b>Codifica tus respuestas</a></li><li><a href="#s2-2"><b>2</b>Arma la estructura de la base</a></li><li><a href="#s2-3"><b>3</b>Completa tus tablas</a></li><li><a href="#s2-4"><b>4</b>Revisa antes de analizar</a></li></ul>
+
+    <h3 class="h3" style="margin-top:0">¿Qué es tabular?</h3>
+    <p class="lead">Tabular es traspasar las respuestas de tu instrumento a una tabla ordenada, llamada base de datos. En ella cada fila es un encuestado y cada columna una pregunta. Con esa tabla, en el análisis, el programa Jamovi cuenta cuántas veces aparece cada respuesta y calcula la media y la moda por ti. Al final de este recurso te indicamos cómo descargarlo.</p>
+    <p class="lead">Para empezar el análisis necesitas tu base de datos <strong>en Excel</strong> y subida a la carpeta Drive del curso.</p>
+
+    <div class="sub" id="s2-1"><span class="num">1</span><h3>Codifica tus respuestas</h3></div>
+    <p class="lead">Codificar es asignar un número a cada respuesta. Estos son los tres casos más frecuentes. Usa siempre el mismo número para la misma respuesta.</p>
+    <div class="grid" id="casos"></div>
+
+    <h3 class="h3">Tu libro de códigos</h3>
+    <p class="lead">Antes de digitar, anota qué significa cada número y qué dice cada enunciado. Si aplicaste encuestas a grupos distintos, agrega un perfil para cada grupo; así mantienes sus preguntas y respuestas separadas.</p>
+    <div class="aviso"><p><strong>Numera todas las preguntas de corrido</strong>, en el orden en que aparecen en tu instrumento. Si el perfil tiene 4 preguntas (P1 a P4), el primer enunciado Likert es P5. Así ningún nombre se repite entre las hojas.</p></div>
+    <p class="small" style="margin:0 0 8px">Así se ve un libro de códigos completo en Google Sheets (trabajo de un estudiante). A la izquierda, las preguntas de perfil con el significado de cada código; a la derecha, los enunciados Likert agrupados por dimensión.</p>
+    <img src="./sheets7-libro-codigos.png" width="2996" height="878" loading="lazy" alt="Libro de códigos en Google Sheets. Tabla Perfil: 1 Edad (1 = 18-20, 2 = 21-23, 3 = 24-26); 2 Género (1 = Masculino, 2 = Femenino, 3 = Otro); 3 Semestre; 4 Tipo de establecimiento. Tabla de preguntas: cinco dimensiones con tres enunciados cada una, numerados del 5 al 19, y la escala 4 = Totalmente de acuerdo a 1 = Totalmente en desacuerdo." style="width:100%;max-width:900px;height:auto;border:1px solid var(--borde);border-radius:8px">
+    <details class="plegable">
+      <summary>¿Por qué no escribir "Hombre" o "Mujer" directamente en Excel?</summary>
+      <p>Jamovi necesita números para calcular. Además, con palabras cualquier diferencia de escritura ("mujer", "Mujer", "Mujer " con un espacio al final) se cuenta como una categoría distinta y el gráfico sale con barras repetidas. Con números y un libro de códigos ese error no ocurre. Las palabras se escriben después, solo en la tabla de frecuencias que usarás para el gráfico.</p>
+    </details>
+
+    <div class="sub" id="s2-2"><span class="num">2</span><h3>Arma la estructura de la base</h3></div>
+    <p class="lead">Así se ve una base ya tabulada. Cada fila es un encuestado y cada columna una pregunta (P1, P2…). Los valores son los códigos del libro de códigos.</p>
+    <div class="aviso"><p>En la columna <strong>"Encuestado"</strong> escribe solo el número de cada persona (1, 2, 3…), sin letras. La letra "P" se usa solo para las preguntas (P1, P2…).</p></div>
+    <p class="small" style="margin:0 0 8px">Ejemplo con datos inventados. Hoja "Perfil" (P1 = Repitencia, P2 = Tiempo en el establecimiento, P3 = Género).</p>
+    <div class="scroll-x" style="max-width:520px;margin-bottom:24px"><table class="ex-tabla" style="min-width:320px" id="tPerfil"></table></div>
+    <p class="small" style="margin:0 0 8px">Hoja "Preguntas" (escala Likert). El perfil usó P1 a P3, así que los enunciados siguen desde P4. Escala 1 a 4, de "Totalmente en desacuerdo" a "Totalmente de acuerdo".</p>
+    <div class="scroll-x"><table class="ex-tabla" style="min-width:600px" id="tPreg"></table></div>
+
+    <div class="sub" id="s2-3"><span class="num">3</span><h3>Completa tus tablas</h3></div>
+    <p class="lead">Completa el libro de códigos y las respuestas de cada encuestado. Las tablas se ordenan en dos filas: arriba el <strong>libro de códigos</strong> (qué significa cada número) y abajo las <strong>respuestas</strong>. Al final descargas todo en un Excel.</p>
+    <div class="alerta" role="note">
+      <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg></span>
+      <p><strong>Lo que escribas se guarda solo en este navegador y en este computador.</strong> Si cambias de equipo, usas una ventana privada o borras el historial, se pierde. <strong>Descarga el Excel cada vez que termines</strong> y súbelo a la carpeta Drive del curso.</p>
+    </div>
+    <details class="plegable no-print" id="agregar">
+      <summary>¿Aplicaste tu encuesta a más de un grupo, o aplicaste más de una encuesta? Agrégalo aquí</summary>
+      <p>Elige lo que corresponde a tu estudio. Si lo agregas por error, puedes quitarlo con el botón «Quitar» que aparece junto a su nombre.</p>
+      <div class="opc-agregar">
+        <button type="button" class="opc" data-agregar="perfil"><span class="opc-t">+ Otro perfil</span><span class="opc-d">Aplicaste los <strong>mismos enunciados</strong> a otro grupo, que respondió sus propias preguntas de perfil (por ejemplo, estudiantes y docentes). Se agregan dos tablas: sus códigos y sus respuestas de perfil. Las respuestas a los enunciados de todos los grupos van en la misma hoja Preguntas.</span></button>
+        <button type="button" class="opc" data-agregar="encuesta"><span class="opc-t">+ Otra encuesta</span><span class="opc-d">Aplicaste <strong>otro cuestionario, con enunciados distintos</strong>. Se agrega una base completa, con su libro de códigos, sus respuestas y su propio Excel.</span></button>
+      </div>
+      <p class="small" id="agrInf" style="margin:14px 0 0">¿Tus entrevistas o grupos focales incluyeron preguntas de perfil (edad, años de experiencia…)? Esas respuestas también se tabulan aquí. <button type="button" class="mini-btn" data-agregar="inf">+ Perfil de informantes</button></p>
+      <p class="msg ok" id="msgAgregar" role="status" aria-live="polite"></p>
+    </details>
+    <div id="basesT" class="bases no-print" role="group" aria-label="Elige la base de datos" hidden></div>
+    <div id="cabBase" class="cab" hidden></div>
+    <div class="tabs-g"><span class="tabs-l" id="lblL">Libro de códigos</span><div id="tabsL" role="group" aria-labelledby="lblL"></div></div>
+    <div class="tabs-g"><span class="tabs-l" id="lblR">Respuestas</span><div id="tabsR" role="group" aria-labelledby="lblR"></div></div>
+    <div id="cabPerfil" class="cab" hidden></div>
+    <p class="small" id="notaT" style="margin:0 0 14px"></p>
+    <div id="accT" class="no-print" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px"></div>
+    <div id="edT"></div>
+    <div class="barra no-print" style="margin-top:18px;position:static;box-shadow:none">
+      <span class="estado ok" id="estadoT" role="status" aria-live="polite">Se guarda automáticamente en este navegador.</span>
+      <button class="btn btn-ver" id="btnPlantillaX" type="button">Descargar Excel</button>
+      <button class="btn btn-peligro" id="btnResetT" type="button">Empezar de nuevo</button>
+    </div>
+    <p class="msg" id="msgX" role="status" aria-live="polite"></p>
+    <p class="small">El Excel trae el libro de códigos, una hoja por cada perfil y la hoja Preguntas. Si tienes más de una encuesta, cada una se descarga en su propio Excel. Solo se incluyen las filas que tienen datos.</p>
+
+    <div class="sub" id="s2-4"><span class="num">4</span><h3>Revisa antes de analizar</h3></div>
+    <p class="lead">Un error de digitación cambia la media de toda una pregunta. Dedica unos minutos a estas cuatro revisiones.</p>
+    <div class="grid" id="revBase"></div>
+    <div class="aviso aviso-ambar" style="margin-top:20px"><p><strong>Truco en Google Sheets.</strong> Selecciona la fila de títulos y ve a Datos → Crear un filtro. Al abrir el ícono de filtro de cada columna, en "Filtrar por valores" verás todos los valores distintos que contiene. Así detectas de inmediato un 5, un 0 o una letra que no debería estar.</p></div>
+    <details class="plegable">
+      <summary>¿Y si mi instrumento tiene enunciados redactados en negativo?</summary>
+      <p>Por ejemplo, "Me cuesta concentrarme en clases" dentro de una dimensión de motivación. En esos enunciados, estar de acuerdo expresa lo contrario que en el resto de la dimensión, y eso cambia la lectura de la tabla síntesis.</p>
+      <p>No los recodifiques por tu cuenta. Márcalos en tu libro de códigos y consúltalo en tutoría antes de completar la tabla síntesis.</p>
+    </details>
+  </div>
+  <div class="wrap pie-vista"><button class="btn btn-sec" data-ir="1">← Volver</button><button class="btn btn-pri" data-ir="3">Continuar →</button></div>
+</section>
+
+<!-- ============ VISTA 3 ============ -->
+<section class="vista sec" id="v3" data-titulo="Tu transcripción" hidden>
+  <div class="wrap">
+    <p class="badge b-azul">3 · Entrevistas y grupo focal</p>
+    <h2 class="h2" tabindex="-1">Tu transcripción</h2>
+    <div class="nota-vista" id="nota3" hidden>Según lo que marcaste, esta vista no corresponde a tu estudio. Puedes saltarla.</div>
+    <div class="act act-azul no-print" data-activ="transcripcion">
+      <div class="act-top"><span class="act-pill">Antes de comenzar</span><span class="act-n" aria-live="polite"></span><span class="act-dots" aria-hidden="true"></span></div>
+      <h3 class="act-h">¿Qué sabes o puedes deducir sobre tu transcripción?</h3>
+      <p class="lead">No necesitas saberlo todo de antemano: algunas respuestas se pueden deducir. Elige la que te parezca y lee la explicación.</p>
+      <div class="act-cuerpo"></div>
+      <div class="act-nav"><button class="act-btn" type="button" data-mov="-1">← Anterior</button><button class="act-btn pri" type="button" data-mov="1">Siguiente →</button></div>
+    </div>
+    <ul class="subnav no-print" aria-label="Pasos de esta vista"><li><a href="#s3-1"><b>1</b>Elige el tipo de transcripción</a></li><li><a href="#s3-2"><b>2</b>Transcribe con una herramienta y revisa</a></li><li><a href="#s3-3"><b>3</b>Consejos y formato</a></li><li><a href="#s3-4"><b>4</b>Evita los errores más frecuentes</a></li><li><a href="#espacio"><b>5</b>Pega y ordena tu transcripción</a></li></ul>
+    <div class="modo-sel no-print" role="group" aria-labelledby="lblModo"><span id="lblModo">¿Qué vas a transcribir?</span><button type="button" class="mini-btn" data-modo="entrevista" aria-pressed="true">Entrevista</button><button type="button" class="mini-btn" data-modo="focal" aria-pressed="false">Grupo focal</button><span class="small">Los ejemplos, consejos y etiquetas (Entrevistador o Moderador) se ajustan a lo que elijas.</span></div>
+
+    <h3 class="h3" style="margin-top:12px">¿Qué es transcribir?</h3>
+    <p class="lead">Transcribir es pasar a texto escrito todo lo que se dijo en una entrevista o grupo focal grabado. El texto permite leer con calma, marcar fragmentos, compararlos entre participantes y citarlos de forma textual en tu escrito.</p>
+    <p class="lead">Para empezar el análisis necesitas tus transcripciones <strong>completas y en formato literal limpio</strong>. Sin ellas no es posible avanzar.</p>
+    <div class="aviso"><p><strong>¿Tu guion incluyó preguntas de perfil</strong> (edad, género, años de experiencia…)? Transcríbelas igual que el resto y, además, tabula esas respuestas en la vista 2 para describir a quienes participaron. Ahí, abre «¿Aplicaste tu encuesta a más de un grupo…?» y usa el botón «+ Perfil de informantes».</p></div>
+    <div class="grid">
+      <div class="card" style="border-top-color:var(--azul)"><p class="card-t" style="color:var(--azul)">Base del análisis</p><p class="txt">La transcripción es el material que, en el análisis, se sube al programa Atlas.ti y desde el que se extraen las citas. Al final de este recurso te indicamos cómo obtenerlo.</p></div>
+      <div class="card" style="border-top-color:var(--verde)"><p class="card-t" style="color:var(--verde)">Formato literal limpio</p><p class="txt">Se omiten muletillas, repeticiones y sonidos, y se conserva lo que dijo la persona con sus propias palabras.</p></div>
+      <div class="card" style="border-top-color:var(--morado)"><p class="card-t" style="color:var(--morado)">Fidelidad</p><p class="txt">Nunca se agrega ni se completa lo que no se dijo. Lo que no se entiende se marca como [inaudible].</p></div>
+    </div>
+
+    <div class="sub" id="s3-1"><span class="num">1</span><h3>Elige el tipo de transcripción</h3></div>
+    <p class="lead">El mismo fragmento en los tres formatos. En Seminario de Grado usamos la <strong>transcripción literal limpia</strong>.</p>
+    <div class="grid" id="tipos"></div>
+
+    <div class="sub" id="s3-2"><span class="num">2</span><h3>Transcribe con una herramienta y revisa</h3></div>
+    <div class="grid">
+      <a href="https://turboscribe.ai/es/" target="_blank" rel="noopener" class="card herr" style="border-top-color:var(--azul)">
+        <span class="fila"><img src="./turboscribe-logo.png" alt="" width="28" height="28" style="width:28px;height:28px;border-radius:7px;flex:none"><b>TurboScribe</b><span aria-hidden="true">↗</span></span>
+        <span class="small">Transcribe automáticamente el audio. Se sugiere usar el modo "delfín" o "ballena" para mayor precisión.</span>
+        <span class="sr">(se abre en una pestaña nueva)</span>
+      </a>
+      <a href="https://tactiq.io/es" target="_blank" rel="noopener" class="card herr" style="border-top-color:var(--azul)">
+        <span class="fila"><img src="./tactiq-logo.png" alt="" width="28" height="28" style="width:28px;height:28px;border-radius:7px;flex:none"><b>Tactiq</b><span aria-hidden="true">↗</span></span>
+        <span class="small">Alternativa para transcribir y luego revisar el texto según las indicaciones de esta guía.</span>
+        <span class="sr">(se abre en una pestaña nueva)</span>
+      </a>
+    </div>
+    <div class="aviso aviso-ambar" style="margin-top:16px"><p>Ambas herramientas entregan un primer borrador de tu transcripción. Siempre debes escuchar tu grabación de nuevo, corregirla y limpiarla según el formato de la sección siguiente. Esto es solo para transcribir; cuando analices, utilizarás el programa Atlas.ti.</p></div>
+
+    <div class="sub" id="s3-3"><span class="num">3</span><h3>Consejos y formato</h3></div>
+    <ul class="consejos" id="consejos"></ul>
+    <details class="plegable modo-transcripcion" data-modo-transcripcion="entrevista">
+      <summary>Ver ejemplo de transcripción</summary>
+      <div class="ejemplo">
+        <p>Entrevistador: ¿Cómo cambió su forma de evaluar durante la pandemia?</p>
+        <p>Participante: Tuve que cambiar las pruebas escritas por trabajos en grupo, porque en línea no podía controlar que no se copiaran. Al principio me costó mucho, sobre todo con [inaudible], pero después los estudiantes se acostumbraron.</p>
+        <p>Entrevistador: ¿Y cómo entregaba la retroalimentación?</p>
+      </div>
+      <p>Archivo <strong>E1CM1.docx</strong>. Al inicio de cada línea, escribe quién habla y luego dos puntos. Usa [inaudible] donde la grabación no se entiende. No uses negritas.</p>
+    </details>
+    <details class="plegable modo-transcripcion" data-modo-transcripcion="focal">
+      <summary>Ejemplo de grupo focal</summary>
+      <p>En una misma grabación intervienen el moderador y varias personas. Identifica a quien modera como «Moderador» y a cada participante con un código estable: P1, P2, P3…</p>
+      <ul>
+        <li>Usa "Moderador:" para quien conduce y "P1:", "P2:", "P3:"… para cada participante. Cada persona conserva su número durante toda la transcripción.</li>
+        <li>Un archivo por grupo focal, nombrado con su código (por ejemplo, F1.docx). Al citar, se unen ambos códigos: F1P2.</li>
+        <li>Escribe cada intervención en una línea distinta. Si varias personas hablan a la vez y no puedes distinguirlas, marca [habla simultánea].</li>
+      </ul>
+      <p>Ejemplo inventado solo para ilustrar.</p>
+      <div class="ejemplo">
+        <p>Moderador: ¿Cómo cambió su forma de evaluar durante la pandemia?</p>
+        <p>P2: Yo pasé de las pruebas escritas a trabajos en grupo, porque en línea era difícil controlar la copia.</p>
+        <p>P3: Yo mantuve la prueba, pero le puse tiempo limitado. [habla simultánea]</p>
+        <p>P1: A mí me pasó parecido, sobre todo con la copia.</p>
+      </div>
+    </details>
+
+    <div class="sub" id="s3-4"><span class="num">4</span><h3>Evita los errores más frecuentes</h3></div>
+    <p class="lead">Estos errores se detectaron en transcripciones de años anteriores. Los fragmentos se anonimizaron y algunos se adaptaron para explicar cómo corregirlos. Revisa siempre el borrador con la grabación.</p>
+    <div class="scroll-x">
+      <table class="tabla-ej" style="min-width:760px">
+        <caption class="sr">Errores frecuentes en transcripciones, con ejemplos reales y cómo corregirlos</caption>
+        <thead><tr><th scope="col" style="width:20%">Error</th><th scope="col" style="width:45%">Así apareció</th><th scope="col">Qué hacer</th></tr></thead>
+        <tbody>
+          <tr class="modo-transcripcion" data-modo-transcripcion="entrevista"><td><strong>Nombres en lugar de roles</strong></td><td>"A: Bueno, mucho gusto. Yo soy [nombre]…"<br>"F: Ya."</td><td>Usa "Entrevistador:" y "Participante:". Reemplaza los nombres de personas y establecimientos por [nombre] o [establecimiento].</td></tr>
+          <tr class="modo-transcripcion" data-modo-transcripcion="focal"><td><strong>Nombres en lugar de códigos</strong></td><td>"Moderador: ¿Qué opinan? Camila: Yo prefiero trabajar en grupo."</td><td>Identifica a quien modera como "Moderador" y asigna a cada participante un código estable ("P1", "P2"…). Reemplaza nombres de personas y establecimientos por [nombre] o [establecimiento].</td></tr>
+          <tr><td><strong>Muletillas y repeticiones</strong></td><td>"…ordenar los contenidos, <u>cierto</u>, como dije anteriormente, también ayuda <u>como</u> a darle el sentido lógico, <u>cierto</u> a las clases…"</td><td>Quítalas sin cambiar las palabras de la persona.</td></tr>
+          <tr><td><strong>Palabras mal reconocidas por la herramienta</strong></td><td>"…cuando es la formación <u>universaria</u>…"<br>"Que les vaya muy <u>viendo</u>…"</td><td>Escucha de nuevo ese tramo. Si confirmas la palabra, corrígela ("universitaria"). Si no se entiende, escribe [inaudible].</td></tr>
+          <tr class="modo-transcripcion" data-modo-transcripcion="entrevista"><td><strong>Dos turnos de habla en una misma línea</strong></td><td>"A: ¿Cómo guían a los estudiantes durante el proceso? <u>F: Como no hay un formato específico para el área, les vamos mostrando qué hacer en cada etapa.</u>"</td><td>Empieza una línea nueva cada vez que cambia quién habla.</td></tr>
+          <tr class="modo-transcripcion" data-modo-transcripcion="focal"><td><strong>Varias intervenciones en una misma línea</strong></td><td>"Moderador: ¿Qué opinan? <u>P1: Me sirve trabajar en grupo. P2: Yo prefiero hacerlo individualmente.</u>"</td><td>Empieza una línea nueva para cada intervención. Mantén el mismo código (P1, P2…) durante toda la transcripción.</td></tr>
+          <tr><td><strong>Respuestas cortadas</strong></td><td>"…el propio uso del lenguaje a veces puede ponerte en problemas y también <u>condicion</u>"</td><td>Vuelve a la grabación y completa la frase. Si el audio se corta, marca [inaudible].</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3 class="h3">Antes y después</h3>
+    <div class="grid modo-transcripcion" data-modo-transcripcion="entrevista">
+      <div class="card" style="border-top-color:var(--rojo)">
+        <p class="card-t" style="color:var(--rojo)">✗ Borrador sin revisar</p>
+        <p style="font-size:14.5px;line-height:1.6;margin:0 0 8px">A: ¿Consideras que la planificación es una guía útil o más bien un requisito administrativo?</p>
+        <p style="font-size:14.5px;line-height:1.6;margin:0">F: Ya, claro. Considero que son... Ambas cosas porque al hacer el ejercicio de ordenar los contenidos, cierto, como dije anteriormente, también ayuda como a darle el sentido lógico, cierto a las clases, al contenido, todo eso.</p>
+      </div>
+      <div class="card" style="border-top-color:var(--verde)">
+        <p class="card-t" style="color:var(--verde)">✓ Literal limpia (archivo E1PH.docx)</p>
+        <p style="font-size:14.5px;line-height:1.6;margin:0 0 8px">Entrevistador: ¿Consideras que la planificación es una guía útil o más bien un requisito administrativo?</p>
+        <p style="font-size:14.5px;line-height:1.6;margin:0">Participante: Considero que son ambas cosas, porque al hacer el ejercicio de ordenar los contenidos, como dije anteriormente, también ayuda a darle el sentido lógico a las clases, al contenido.</p>
+      </div>
+      <div class="card" style="border-top-color:var(--azul)">
+        <p class="card-t" style="color:var(--azul)">→ Copia de trabajo para Atlas.ti</p>
+        <p style="font-size:14.5px;line-height:1.6;margin:0 0 8px">Pregunta 2: ¿Consideras que la planificación es una guía útil o más bien un requisito administrativo?</p>
+        <p style="font-size:14.5px;line-height:1.6;margin:0">Considero que son ambas cosas, porque al hacer el ejercicio de ordenar los contenidos, como dije anteriormente, también ayuda a darle el sentido lógico a las clases, al contenido.</p>
+      </div>
+    </div>
+    <p class="small modo-transcripcion" data-modo-transcripcion="entrevista" style="margin:10px 0 0">E1PH = Entrevistado 1, Pedagogía en Historia. Ejemplo anonimizado. La transcripción limpia conserva las palabras de la persona y pone cada intervención en una línea.</p>
+    <div class="grid modo-transcripcion" data-modo-transcripcion="focal">
+      <div class="card" style="border-top-color:var(--rojo)">
+        <p class="card-t" style="color:var(--rojo)">✗ Borrador sin revisar</p>
+        <p style="font-size:14.5px;line-height:1.6;margin:0">Moderador: ¿Qué les ayudó a organizar el trabajo en grupo? Camila: Eh, repartir las tareas, cierto, repartir las tareas. Nicole: A mí me sirvió como acordar fechas.</p>
+      </div>
+      <div class="card" style="border-top-color:var(--verde)">
+        <p class="card-t" style="color:var(--verde)">✓ Literal limpia (archivo F1.docx)</p>
+        <p style="font-size:14.5px;line-height:1.6;margin:0 0 8px">Moderador: ¿Qué les ayudó a organizar el trabajo en grupo?</p>
+        <p style="font-size:14.5px;line-height:1.6;margin:0 0 8px">P1: Repartir las tareas.</p>
+        <p style="font-size:14.5px;line-height:1.6;margin:0">P2: A mí me sirvió acordar fechas.</p>
+      </div>
+      <div class="card" style="border-top-color:var(--azul)">
+        <p class="card-t" style="color:var(--azul)">→ Copia de trabajo para Atlas.ti</p>
+        <p style="font-size:14.5px;line-height:1.6;margin:0 0 8px">Pregunta 2: ¿Qué les ayudó a organizar el trabajo en grupo?</p>
+        <p style="font-size:14.5px;line-height:1.6;margin:0 0 8px">P1: Repartir las tareas.</p>
+        <p style="font-size:14.5px;line-height:1.6;margin:0">P2: A mí me sirvió acordar fechas.</p>
+      </div>
+    </div>
+    <p class="small modo-transcripcion" data-modo-transcripcion="focal" style="margin:10px 0 0">F1 = Grupo focal 1. Ejemplo anonimizado. La transcripción limpia conserva las palabras de cada participante y pone cada intervención en una línea. En la copia de trabajo, mantén los códigos P1, P2… para saber quién dijo cada cosa; al citar, combínalos con el del grupo: F1P1, F1P2.</p>
+
+    <!-- ESPACIO DE TRABAJO -->
+    <details class="plegable">
+      <summary>Ponte a prueba</summary>
+      <div id="qz"></div>
+    </details>
+
+    <div class="sub" id="espacio"><span class="num">5</span><h3>Pega y ordena tu transcripción</h3></div>
+    <p class="lead">Pega aquí el borrador de una transcripción (una por vez). El espacio te muestra qué falta ordenar, te deja corregirlo y te entrega el texto limpio, sin negritas, colores ni tipografías, listo para copiar o descargar.</p>
+
+    <div class="alerta" role="note">
+      <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg></span>
+      <p><strong>Tu texto se guarda solo en este navegador y en este computador, no en internet.</strong> Si cambias de equipo, abres una ventana privada o borras el historial, se pierde. Se guarda una transcripción a la vez y se borra sola si pasan 14 días sin editarla porque las transcripciones tienen información confidencial. <strong>Descarga tu transcripción en Word</strong> y, si el computador es compartido, <strong>bórrala cuando termines</strong>.</p>
+    </div>
+
+    <div class="campos">
+      <label for="codigo"><span id="lblCodigoArchivo">Código del archivo</span><input id="codigo" type="text" maxlength="20" placeholder="Ej. E1CM1" autocomplete="off"></label>
+      <label for="tipoT">Tipo<select id="tipoT"><option value="entrevista">Entrevista</option><option value="focal">Grupo focal</option></select></label>
+    </div>
+
+    <div class="aviso no-print" style="align-items:center;flex-wrap:wrap">
+      <div style="flex:1 1 300px"><p style="margin:0"><strong>¿Prefieres transcribir directo en Word?</strong> Descarga la plantilla, escribe cada turno con su etiqueta y luego pega el texto aquí para revisarlo. La plantilla usa el tipo que elegiste arriba.</p></div>
+      <button class="btn btn-sec" id="btnPlantillaWord" type="button">Descargar plantilla en Word</button>
+    </div>
+
+    <div class="espacio">
+      <div>
+        <label for="txt" class="sr">Texto de la transcripción</label>
+        <textarea id="txt" spellcheck="false" placeholder="Pega aquí tu transcripción. Una intervención por línea: Entrevistador: / Participante:."></textarea>
+        <p class="small" style="margin:8px 0 0">Al pegar, se elimina automáticamente el formato (negritas, colores, tipografías). Solo queda el texto. Los cambios se guardan solos en este navegador.</p>
+      </div>
+      <div class="panel" aria-live="polite"><h4>Revisión</h4><div id="panel"></div></div>
+    </div>
+
+    <div class="barra no-print">
+      <span class="estado warn" id="estado" role="status">Aún no hay texto</span>
+      <button class="btn btn-sec" id="btnCopiar" type="button">Copiar texto limpio</button>
+      <button class="btn btn-pri" id="btnWord" type="button">Descargar en Word</button>
+      <button class="btn btn-peligro" id="btnBorrar" type="button">Borrar mi transcripción</button>
+    </div>
+    <p class="msg" id="msgT" role="status" aria-live="polite"></p>
+    <div class="aviso no-print" id="tras" hidden><div>
+      <p style="margin:0 0 10px"><strong>¿Ya está el Word en tu carpeta de descargas?</strong> Ábrelo y revisa que se vea bien. Si el computador es compartido, borra la transcripción de este navegador.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-peligro" id="btnBorrarTras" type="button">Borrar de este navegador</button><button class="btn btn-sec" id="btnDejar" type="button">Dejarla por ahora</button></div>
+    </div></div>
+  </div>
+  <div class="wrap pie-vista"><button class="btn btn-sec" data-ir="2">← Volver</button><button class="btn btn-pri" data-ir="4">Continuar →</button></div>
+</section>
+
+<!-- ============ VISTA 4 ============ -->
+<section class="vista sec" id="v4" data-titulo="Lista para analizar" hidden>
+  <div class="wrap-sm">
+    <p class="badge b-ambar">4 · Cierre</p>
+    <h2 class="h2" tabindex="-1">Lista para analizar</h2>
+    <p class="lead">Primero deja listo el programa de análisis y luego revisa cada punto de la lista con tu grupo. Cuando todos los de tu camino estén marcados, puedes llegar a analizar.</p>
+    <h3 class="h3" style="margin-top:8px">Deja listo el programa de análisis</h3>
+    <p class="lead">En el análisis trabajarás con un programa según tu enfoque. Los recursos de análisis te enseñan a usarlo paso a paso; acá solo tienes que dejarlo listo antes de esa sesión, así llegas directo a analizar.</p>
+    <div class="grid" id="software" style="margin-bottom:8px"></div>
+    <h3 class="h3">Revisa tu lista</h3>
+    <div class="aviso aviso-ambar"><p><strong>Importante.</strong> Lo que marcas se guarda solo en este navegador y en este computador. Si cambias de equipo, usas una ventana privada o borras el historial, se pierde.</p></div>
+    <div id="listas"></div>
+    <p id="chkProg" class="small" style="margin-top:14px" role="status" aria-live="polite"></p>
+    <h3 class="h3">Y luego, el análisis</h3>
+    <div class="grid" id="recursosAnalisis"></div>
+  </div>
+  <div class="wrap-sm pie-vista"><button class="btn btn-sec" data-ir="3">← Volver</button><a class="btn btn-pri" href="./index.html" style="text-decoration:none;display:inline-flex;align-items:center">Volver al inicio</a></div>
+</section>
+
+</main>
+
+<footer style="background:var(--tinta);color:#e9f2fb;padding:36px clamp(16px,6vw,56px);text-align:center">
+  <p style="margin:0 0 10px"><strong>Universidad de Los Lagos</strong> · Departamento de Educación · Seminario de Grado</p>
+  <div style="margin-top:15px;display:inline-block;text-align:center;max-width:760px">
+    <a rel="license noopener" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" style="display:inline-block">
+      <img alt="Licencia Creative Commons" width="88" height="31" style="border-width:0;margin:0 auto 5px" src="https://i.creativecommons.org/l/by-nc/4.0/88x31.png">
+    </a>
+    <small style="display:block;line-height:1.5">Esta obra de <strong>Jesús Sánchez Alvarado</strong> está bajo una
+      <a rel="license noopener" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" style="color:inherit">Licencia Creative Commons Atribución-NoComercial 4.0 Internacional</a>.</small>
+  </div>
+</footer>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  const $ = (s, r) => (r || document).querySelector(s);
+  const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const leer = (k, f) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : f; } catch (e) { return f; } };
+  const guardar = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } };
+  const K = { camino: 'ulagos-previa-camino-v1', chk: 'ulagos-previa-checklist-v1' };
+  // La transcripción se guarda solo en localStorage de este navegador, en una sola copia (clave ulagos-previa-transcripcion-v1) y se borra a los 14 días sin editar.
+
+  /* ---------- vistas ---------- */
+  const vistas = $$('.vista');
+  function indicesVisibles() {
+    const hay = Object.values(camino).some(Boolean);
+    return vistas.map((_, i) => i + 1).filter(n => !hay || n === 1 || n === 4 || (n === 2 && camino.encuesta) || (n === 3 && (camino.entrevista || camino.focal)));
+  }
+  function pintarEsquema() {
+    const visibles = indicesVisibles();
+    $('#esquema').innerHTML = visibles.map(n => `<li><button type="button" data-ir="${n}"><span class="n" aria-hidden="true">${n}</span>${esc(vistas[n - 1].dataset.titulo)}</button></li>`).join('');
+    const actual = vistas.findIndex(v => !v.hidden) + 1;
+    const botonActual = actual && $('#esquema button[data-ir="' + actual + '"]');
+    if (botonActual) botonActual.setAttribute('aria-current', 'step');
+  }
+  function mostrar(n, enfocar) {
+    const visibles = indicesVisibles();
+    n = Math.min(Math.max(1, n), vistas.length);
+    if (!visibles.includes(n)) {
+      const actual = vistas.findIndex(v => !v.hidden) + 1;
+      n = n > actual ? (visibles.find(v => v > actual) || visibles[visibles.length - 1]) : ([...visibles].reverse().find(v => v < actual) || visibles[0]);
+    }
+    vistas.forEach((v, i) => { v.hidden = (i + 1 !== n); });
+    $$('#esquema button').forEach(b => { if (+b.dataset.ir === n) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current'); });
+    try { history.replaceState(null, '', '#v' + n); } catch (e) { /* archivo local */ }
+    if (enfocar) {
+      const h = $('h2', vistas[n - 1]); if (h) h.focus({ preventScroll: true });
+      const html = document.documentElement;
+      const scrollBehavior = html.style.scrollBehavior;
+      html.style.scrollBehavior = 'auto';
+      window.scrollTo(0, 0);
+      html.style.scrollBehavior = scrollBehavior;
+    }
+  }
+  document.addEventListener('click', e => {
+    const b = e.target.closest('[data-ir]'); if (b) { mostrar(parseInt(b.dataset.ir, 10), true); return; }
+    const s = e.target.closest('[data-salto]'); if (s) { e.preventDefault(); const t = document.getElementById(s.dataset.salto); if (t) t.scrollIntoView({ behavior: 'auto', block: 'start' }); }
+  });
+
+  // Al imprimir o guardar en PDF, los plegables se abren y luego vuelven a su estado.
+  let abiertosAlImprimir = [];
+  window.addEventListener('beforeprint', () => { abiertosAlImprimir = $$('details.plegable:not([open])'); abiertosAlImprimir.forEach(d => { d.open = true; }); });
+  window.addEventListener('afterprint', () => { abiertosAlImprimir.forEach(d => { d.open = false; }); abiertosAlImprimir = []; });
+
+  /* ---------- contenido estático generado ---------- */
+  const CASOS = [
+    { t: 'Respuestas Sí / No', c: '#0055B7', d: 'Datos de dos opciones. Como todas las categorías, se numeran desde 1.', p: [['1', 'Sí'], ['2', 'No']] },
+    { t: 'Perfiles o categorías', c: '#2E7D1F', d: 'Asigna un número a cada categoría y úsalo siempre igual. Ejemplo con género.', p: [['1', 'Hombre'], ['2', 'Mujer'], ['3', 'Prefiero no decirlo']] },
+    { t: 'Escala Likert (4 puntos)', c: '#9F26B4', d: 'Cada nivel de acuerdo recibe un número. A mayor número, mayor acuerdo.', p: [['4', 'Totalmente de acuerdo'], ['3', 'De acuerdo'], ['2', 'En desacuerdo'], ['1', 'Totalmente en desacuerdo']] },
+  ];
+  $('#casos').innerHTML = CASOS.map(c => `<div class="card" style="padding:0;overflow:hidden;border-top-width:1px"><div class="caso-h" style="background:${c.c}"><h4>${esc(c.t)}</h4></div><div class="caso-b"><p class="small" style="margin:0 0 12px">${esc(c.d)}</p>${c.p.map(p => `<div class="par"><b style="color:${c.c}">${esc(p[0])}</b><span>${esc(p[1])}</span></div>`).join('')}</div></div>`).join('');
+
+  const PERFIL = [[1, 4, 1], [2, 4, 2], [2, 3, 1], [1, 1, 2], [2, 2, 3], [1, 2, 1], [2, 4, 1], [2, 3, 2], [1, 2, 2], [1, 2, 3]];
+  const PREG = [[4, 4, 1, 1, 3, 3, 2, 1], [3, 4, 1, 2, 2, 2, 3, 2], [4, 2, 1, 1, 3, 3, 2, 3], [2, 3, 1, 2, 2, 1, 2, 4], [3, 4, 2, 2, 2, 3, 2, 3], [2, 1, 2, 2, 2, 2, 4, 2], [1, 3, 2, 1, 1, 2, 4, 1], [3, 3, 3, 1, 1, 3, 1, 3], [4, 4, 4, 3, 1, 2, 1, 2], [4, 3, 3, 4, 4, 1, 1, 3]];
+  function tabla(el, cols, data, color) {
+    el.innerHTML = '<caption class="sr">Ejemplo de base de datos</caption><thead><tr><th scope="col">Encuestado</th>' + cols.map(c => `<th scope="col">${c}</th>`).join('') + '</tr></thead><tbody>' +
+      data.map((r, i) => `<tr><td style="color:${color}">${i + 1}</td>${r.map(v => `<td>${v}</td>`).join('')}</tr>`).join('') + '</tbody>';
+  }
+  tabla($('#tPerfil'), ['P1', 'P2', 'P3'], PERFIL, '#0055B7');
+  tabla($('#tPreg'), ['P4', 'P5', 'P6', 'P7', 'P8', 'P9', 'P10', 'P11'], PREG, '#2E7D1F');
+
+  const REV = [
+    ['Celdas vacías', 'Si alguien no respondió, deja la celda vacía. No escribas 0: en una escala de 1 a 4 el 0 no existe y bajaría la media. Jamovi tratará la celda vacía como dato perdido.'],
+    ['Valores fuera de rango', 'Cada columna solo puede tener los códigos de tu libro de códigos. Un 5 en una escala de 1 a 4 es un error de digitación y se corrige mirando el instrumento original.'],
+    ['Solo números', 'Nada de letras, espacios ni símbolos en las celdas de respuesta. Tampoco "NR", "-" o "x".'],
+    ['Una fila por encuestado', 'El número de filas debe coincidir con el número de instrumentos aplicados, sin filas repetidas ni vacías entre medio.'],
+  ];
+  $('#revBase').innerHTML = REV.map(r => `<div class="card" style="border-top-color:var(--ambar-borde)"><h4 class="card-t">${esc(r[0])}</h4><p class="txt">${esc(r[1])}</p></div>`).join('');
+
+  const TIPOS = [
+    ['1. Transcripción literal', '#0055B7', 'Incluye muletillas, pausas, repeticiones, risas y otros sonidos tal como ocurrieron.', 'Umm... bueno, la verdad es que me gusta mucho, aunque a veces me siento un poco confundido. (ríe)'],
+    ['2. Transcripción literal limpia', '#2E7D1F', 'Omite muletillas, pausas, repeticiones y sonidos. Conserva las palabras de la persona. Es la que usamos.', 'Bueno, la verdad es que me gusta mucho, aunque a veces me siento un poco confundido.'],
+    ['3. Transcripción inteligente (editada)', '#9F26B4', 'Además reescribe y acorta el texto para hacerlo más claro, sin alterar el sentido.', 'Me gusta mucho, aunque a veces me siento un poco confundido.'],
+  ];
+  $('#tipos').innerHTML = TIPOS.map(t => `<div class="card" style="padding:0;overflow:hidden;border-top-width:1px;border-color:${t[1]}"><div class="caso-h" style="background:${t[1]}"><h4>${esc(t[0])}</h4></div><div class="caso-b"><p class="small" style="margin:0 0 12px">${esc(t[2])}</p><p style="font-size:14px;line-height:1.55;margin:0;font-style:italic">"${esc(t[3])}"</p></div></div>`).join('');
+
+  const CONSEJOS = [
+    'Al inicio de cada línea, escribe quién habla y luego dos puntos: "Entrevistador:" y "Participante:" (en un grupo focal, "Moderador:", "P1:", "P2:", etc.).',
+    'Guarda un archivo Word por participante y nómbralo con su código (por ejemplo, E1CM1.docx).',
+    'Si una parte no se entiende, escribe [inaudible] y sigue. No completes con lo que crees que dijo.',
+    'Omite muletillas (eh, o sea, este), repeticiones y sonidos, pero conserva las palabras propias de la persona.',
+    'No uses negrita, subrayado ni colores en el texto de las respuestas.',
+    'Usa letra Calibri 11, interlineado 1,5 y texto justificado.',
+    'Reemplaza nombres de personas y de establecimientos por [nombre] o [establecimiento].',
+    'Tómate tu tiempo. Escucha de nuevo cada fragmento dudoso: transcribir bien ahorra problemas al codificar.',
+  ];
+  $('#consejos').innerHTML = CONSEJOS.map(c => `<li><span aria-hidden="true">✓</span><span>${esc(c)}</span></li>`).join('');
+
+  /* ---------- editor de tablas (libro de códigos y respuestas) ---------- */
+  // Estructura: una o más encuestas. Cada encuesta tiene uno o más perfiles (grupos que respondieron los mismos enunciados),
+  // un libro de códigos de preguntas y una hoja de preguntas compartida. Opcionalmente, un "Perfil de informantes"
+  // para las preguntas de perfil de entrevistas o grupos focales. Cada base se descarga en su propio Excel.
+  const TK = 'ulagos-previa-cuanti-v1', BK = 'ulagos-previa-bases-v3';
+  const ESCALAS = [
+    ['satisfaccion', 'Satisfacción', ['Muy insatisfecho(a)', 'Insatisfecho(a)', 'Satisfecho(a)', 'Muy satisfecho(a)']],
+    ['importancia', 'Importancia', ['No es importante', 'Poco importante', 'Importante', 'Muy importante']],
+    ['frecuencia', 'Frecuencia', ['Nunca', 'A veces', 'Frecuentemente', 'Siempre']],
+    ['valor', 'Valor', ['Malo', 'Regular', 'Bueno', 'Excelente']],
+    ['acuerdo', 'Acuerdo', ['Totalmente en desacuerdo', 'En desacuerdo', 'De acuerdo', 'Totalmente de acuerdo']],
+    ['dificultad', 'Dificultad', ['Muy fácil', 'Fácil', 'Difícil', 'Muy difícil']],
+  ];
+  const escalaTexto = k => { const e = ESCALAS.find(x => x[0] === k); return e ? [4, 3, 2, 1].map(n => n + ' = ' + e[2][n - 1]).join('; ') : ''; };
+  const NOTAS = {
+    codPerfil: 'Una fila por pregunta de perfil. Escribe la pregunta y qué significa cada código (en la columna 1, lo que marcaste con 1, y así). Las filas traen un ejemplo de fondo (género, años de experiencia, edad) que se reemplaza al escribir. Deja vacíos los códigos que no uses; si necesitas más, agrega una columna.',
+    codPreguntas: 'Cada tarjeta es una dimensión. Escribe su nombre y elige el tipo de escala que usaron todos sus enunciados, así no la repites en cada fila. Usa "+ Fila en esta dimensión" para sumar enunciados y "+ Agregar dimensión" para una tarjeta nueva. Numera los enunciados de corrido, después del perfil.',
+    perfil: 'Una fila por encuestado. Cambia P1, P2, P3 por tus preguntas de perfil (puedes agregar columnas) y escribe el código de cada respuesta. El número de encuestado se pone solo. Si alguien no respondió, deja la celda vacía.',
+    preguntas: 'Una fila por encuestado y una columna por enunciado. Los nombres continúan después del perfil (aquí P4 a P11); cámbialos según tu libro de códigos. Cada celda lleva el código de la respuesta (1 a 4). Agrega filas hasta completar tu número de encuestados. Si alguien no respondió, deja la celda vacía.',
+    perfilInf: 'Una fila por informante. En la primera columna escribe su código (por ejemplo E1CM1; en un grupo focal, F1P2). Cambia P1, P2, P3 por tus preguntas de perfil y escribe el código de cada respuesta. Si alguien no respondió, deja la celda vacía.',
+  };
+  const PH = { codPerfil: [{ num: 'Ej: P1', info: 'Ej: Género', c1: 'Ej: Hombre', c2: 'Ej: Mujer', c3: 'Ej: Prefiero no decirlo' }, { num: 'Ej: P2', info: 'Ej: Años de experiencia', c1: 'Ej: Menos de 5', c2: 'Ej: 5 a 10', c3: 'Ej: Más de 10' }, { num: 'Ej: P3', info: 'Ej: Edad', c1: 'Ej: 18 a 25', c2: 'Ej: 26 a 35', c3: 'Ej: 36 a 45', c4: 'Ej: Más de 45' }], perfil: { c1: 'Ej: 1' }, preguntas: { c1: 'Ej: 3' }, perfilInf: { c0: 'Ej: E1CM1', c1: 'Ej: 1' } };
+  const mkCols = labels => labels.map((l, i) => ({ key: 'c' + i, label: l }));
+  const mkRows = (cols, n) => Array.from({ length: n }, (_, i) => { const r = { id: i + 1 }; cols.forEach(c => { r[c.key] = ''; }); return r; });
+  const nuevoCodPerfil = () => ({ cols: [['num', 'P'], ['info', 'Pregunta'], ['c1', '1'], ['c2', '2'], ['c3', '3'], ['c4', '4']].map(a => ({ key: a[0], label: a[1] })), rows: ['P1', 'P2', 'P3'].map((v, i) => ({ id: i + 1, num: v, info: '', c1: '', c2: '', c3: '', c4: '' })) });
+  const nuevoPerfil = id => { const pc = mkCols(['Encuestado', 'P1', 'P2', 'P3']); return { id, nombre: '', codPerfil: nuevoCodPerfil(), perfil: { cols: pc, rows: mkRows(pc, 10) } }; };
+  const nuevaEncuesta = id => {
+    const rc = mkCols(['Encuestado', 'P4', 'P5', 'P6', 'P7', 'P8', 'P9', 'P10', 'P11']);
+    return { id, nombre: '', perfiles: [nuevoPerfil(1)],
+      codPreguntas: { groups: [{ id: 1, dimension: '', escalaTipo: null, rows: ['P4', 'P5', 'P6', 'P7'].map((v, i) => ({ id: i + 1, num: v, enunciado: '' })) }] },
+      preguntas: { cols: rc, rows: mkRows(rc, 10) } };
+  };
+  const nuevoInf = () => { const ic = mkCols(['Informante', 'P1', 'P2', 'P3']); return { codPerfil: nuevoCodPerfil(), perfil: { cols: ic, rows: mkRows(ic, 4) } }; };
+  function cargarBases() {
+    const b = leer(BK, null);
+    if (b && Array.isArray(b.encs) && b.encs.length && b.encs.every(e => e && Array.isArray(e.perfiles) && e.perfiles.length && e.codPreguntas && e.preguntas)) return b;
+    // Migración desde la versión anterior (perfiles adicionales guardados como codPerfil_N y perfil_N).
+    const v = leer(TK, null), e = nuevaEncuesta(1);
+    if (v && v.codPerfil && v.codPreguntas && v.perfil && v.preguntas) {
+      const ps = (Array.isArray(v.perfiles) ? v.perfiles : []).map(p => ({ id: Number(p.id), nombre: String(p.nombre || '') })).filter(p => Number.isInteger(p.id) && p.id > 0).sort((a, c) => a.id - c.id);
+      const n1 = (ps.find(p => p.id === 1) || {}).nombre || '';
+      e.perfiles = [{ id: 1, nombre: /^Perfil 1$/.test(n1) ? '' : n1, codPerfil: v.codPerfil, perfil: v.perfil }];
+      ps.filter(p => p.id > 1 && v['codPerfil_' + p.id] && v['perfil_' + p.id]).forEach(p => e.perfiles.push({ id: p.id, nombre: /^Perfil \d+$/.test(p.nombre) ? '' : p.nombre, codPerfil: v['codPerfil_' + p.id], perfil: v['perfil_' + p.id] }));
+      e.codPreguntas = v.codPreguntas; e.preguntas = v.preguntas;
+    }
+    return { encs: [e], inf: null, act: 'e1' };
+  }
+  let B = cargarBases();
+  // Datos guardados con la versión anterior: se actualizan los nombres de columna y la clave interna de la columna P.
+  const VIEJO = 'Vari' + 'able', CLAVE_VIEJA = VIEJO.toLowerCase();
+  const moverClave = r => { if (r && CLAVE_VIEJA in r) { if (!('num' in r)) r.num = r[CLAVE_VIEJA]; delete r[CLAVE_VIEJA]; } };
+  B.encs.forEach(e => e.codPreguntas.groups.forEach(g => g.rows.forEach(moverClave)));
+  [...B.encs.flatMap(e => e.perfiles.map(p => p.codPerfil)), ...(B.inf ? [B.inf.codPerfil] : [])].forEach(t => { t.rows.forEach(moverClave); t.cols.forEach(c => { if (c.key === CLAVE_VIEJA) c.key = 'num'; if (c.key === 'info' && c.label === VIEJO) c.label = 'Pregunta'; const m = /^Código (\d+)$/.exec(c.label); if (m) c.label = m[1]; }); });
+  const maxId = arr => Math.max(0, ...arr.map(r => r.id));
+  const esInf = () => B.act === 'inf' && !!B.inf;
+  const enc = () => B.encs.find(e => 'e' + e.id === B.act) || B.encs[0];
+  const nombreEnc = e => `Encuesta ${B.encs.indexOf(e) + 1}${e.nombre.trim() ? ' · ' + e.nombre.trim() : ''}`;
+  const nombrePerfil = (e, p) => `Perfil ${e.perfiles.indexOf(p) + 1}${p.nombre.trim() ? ' · ' + p.nombre.trim() : ''}`;
+  const offsetPerfil = (e, p) => e.perfiles.slice(0, e.perfiles.indexOf(p)).reduce((s, x) => s + x.perfil.rows.length, 0);
+  const perfilDeFila = (e, n) => { let s = 0; for (const p of e.perfiles) { s += p.perfil.rows.length; if (n <= s) return p; } return null; };
+  let tab = 'cp:' + enc().perfiles[0].id;
+  const perfilDeTab = t => { const m = /^c?p:(\d+)$/.exec(t); return m && !esInf() ? enc().perfiles.find(p => String(p.id) === m[1]) : null; };
+  const tipoDe = t => t === 'cq' ? 'codPreguntas' : t === 'q' ? 'preguntas' : t === 'p:inf' ? 'perfilInf' : t.startsWith('cp:') ? 'codPerfil' : 'perfil';
+  const tablaDe = t => {
+    if (t === 'q') return enc().preguntas;
+    if (t === 'cp:inf') return B.inf.codPerfil;
+    if (t === 'p:inf') return B.inf.perfil;
+    const p = perfilDeTab(t); return p ? (t.startsWith('cp:') ? p.codPerfil : p.perfil) : null;
+  };
+  const G = () => enc().codPreguntas;
+  const autoNum = k => k === 'perfil' || k === 'preguntas';
+  function tabsDef() {
+    if (esInf()) return { libro: [['cp:inf', 'Códigos perfil']], resp: [['p:inf', 'Perfil de informantes']] };
+    const e = enc(), varios = e.perfiles.length > 1;
+    return {
+      libro: e.perfiles.map(p => ['cp:' + p.id, varios ? 'Códigos · ' + nombrePerfil(e, p) : 'Códigos perfil']).concat([['cq', 'Códigos preguntas']]),
+      resp: e.perfiles.map(p => ['p:' + p.id, varios ? nombrePerfil(e, p) : 'Perfil']).concat([['q', 'Preguntas (Likert)']]),
+    };
+  }
+  const idGrupoFila = () => Math.max(0, ...G().groups.flatMap(g => g.rows.map(r => r.id)));
+  const tieneDatos = (r, skip) => Object.keys(r).some(k => k !== 'id' && k !== skip && String(r[k] || '').trim() !== '');
+  let tGuardar = null;
+  function guardarTablas() {
+    clearTimeout(tGuardar);
+    tGuardar = setTimeout(() => {
+      const ok = guardar(BK, B);
+      const e = $('#estadoT'); e.className = 'estado ' + (ok ? 'ok' : 'warn');
+      e.textContent = ok ? 'Guardado en este navegador. Descarga el Excel para no perder tu trabajo.' : 'No se pudo guardar en este navegador. Descarga el Excel para no perder tu trabajo.';
+    }, 250);
+  }
+
+  function htmlTabla() {
+    const t = tablaDe(tab), k = tipoDe(tab), num = autoNum(k), inf = k === 'perfilInf', e = esInf() ? null : enc();
+    const multiQ = k === 'preguntas' && e.perfiles.length > 1;
+    const off = k === 'perfil' ? offsetPerfil(e, perfilDeTab(tab)) : 0;
+    const fijas = k === 'codPerfil' ? 2 : (num || inf ? 1 : 0);
+    const ph = PH[k];
+    const head = t.cols.map((c, i) => (num && i === 0)
+      ? '<th scope="col" style="width:110px">Encuestado</th>' + (multiQ ? '<th scope="col" style="width:150px">Perfil</th>' : '')
+      : (inf && i === 0) ? '<th scope="col" style="width:150px">Informante</th>'
+      : `<th scope="col"><div class="th-in"><input value="${esc(c.label)}" data-ac="lab" data-k="${esc(c.key)}" aria-label="Nombre de la columna ${i + 1}">${i >= fijas ? `<button type="button" data-ac="delcol" data-k="${esc(c.key)}" aria-label="Eliminar columna ${esc(c.label)}">×</button>` : ''}</div></th>`).join('');
+    const body = t.rows.map((r, ri) => '<tr>' + t.cols.map((c, ci) => {
+      if (num && ci === 0) {
+        const pf = multiQ ? perfilDeFila(e, ri + 1) : null;
+        return `<td class="nump">${off + ri + 1}</td>` + (multiQ ? `<td class="perf-c">${pf ? esc(nombrePerfil(e, pf)) : '<span title="Esta fila no corresponde a ningún perfil">Sin perfil</span>'}</td>` : '');
+      }
+      return `<td><input data-ac="cel" data-r="${r.id}" data-k="${esc(c.key)}" value="${esc(r[c.key])}" placeholder="${esc(((Array.isArray(ph) ? ph[ri] : (ri === 0 ? ph : null)) || {})[c.key] || '')}" aria-label="${esc(c.label)}, fila ${ri + 1}"></td>`;
+    }).join('') + `<td style="width:44px;text-align:center"><button type="button" class="x" data-ac="delrow" data-r="${r.id}" aria-label="Eliminar fila ${ri + 1}">×</button></td></tr>`).join('');
+    const titulo = [...tabsDef().libro, ...tabsDef().resp].find(x => x[0] === tab)[1];
+    return `<div class="scroll-x"><table class="tabla-ed" style="min-width:${k === 'codPerfil' ? 760 : (k === 'preguntas' ? 720 : 420)}px"><caption class="sr">${esc(titulo)}</caption><thead><tr>${head}<th><span class="sr">Acciones</span></th></tr></thead><tbody>${body}</tbody></table></div>`;
+  }
+  function htmlGrupos() {
+    const gs = G().groups;
+    return gs.map(g => {
+      const e = ESCALAS.find(x => x[0] === g.escalaTipo);
+      return `<div class="dim"><div class="dim-h"><label class="lab-dim">Dimensión<textarea data-ac="dim" data-g="${g.id}" rows="2" placeholder="Ej: Motivación intrínseca">${esc(g.dimension)}</textarea></label>
+        <p class="lab-dim-t">Tipo de escala Likert de esta dimensión</p>
+        <div class="esc">${ESCALAS.map(x => `<button type="button" class="chip${g.escalaTipo === x[0] ? ' on' : ''}" data-ac="esc" data-g="${g.id}" data-v="${x[0]}" aria-pressed="${g.escalaTipo === x[0]}">${x[1]}</button>`).join('')}</div>
+        ${e ? `<div class="refs">${e[2].map((t, i) => `<span><b>${i + 1}</b> · ${esc(t)}</span>`).join('')}</div>` : ''}</div>
+        <div class="dim-b">${g.rows.map((r, ri) => `<div class="fila-q"><label class="q-p">P<input data-ac="gcel" data-g="${g.id}" data-r="${r.id}" data-k="num" value="${esc(r.num)}" placeholder="${ri === 0 && g.id === gs[0].id ? 'Ej: P4' : ''}"></label><label class="q-e">Enunciado<textarea data-ac="gcel" data-g="${g.id}" data-r="${r.id}" data-k="enunciado" rows="2" placeholder="${ri === 0 && g.id === gs[0].id ? 'Ej: Estudié Pedagogía porque me agrada enseñar.' : ''}">${esc(r.enunciado)}</textarea></label><button type="button" class="x" data-ac="delg" data-g="${g.id}" data-r="${r.id}" aria-label="Eliminar fila ${ri + 1} de esta dimensión">×</button></div>`).join('')}
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="mini-btn" data-ac="addg" data-g="${g.id}">+ Fila en esta dimensión</button>${gs.length > 1 ? `<button type="button" class="mini-btn" data-ac="deldim" data-g="${g.id}">Quitar esta dimensión</button>` : ''}</div></div></div>`;
+    }).join('');
+  }
+  const campo = (id, label, ayuda, valor) => `<label class="cab-campo" for="${id}">${label}<span class="small">${ayuda}</span><input id="${id}" value="${esc(valor)}" autocomplete="off"></label>`;
+  function pintarCabeceras() {
+    const nBases = B.encs.length + (B.inf ? 1 : 0);
+    $('#basesT').hidden = nBases < 2;
+    $('#basesT').innerHTML = '<p class="bases-t">Tus bases de datos. Completa y descarga cada una por separado.</p>' +
+      B.encs.map(e => `<button type="button" class="base-b" data-base="e${e.id}" aria-pressed="${!esInf() && enc() === e}">${esc(nombreEnc(e))}</button>`).join('') +
+      (B.inf ? `<button type="button" class="base-b inf" data-base="inf" aria-pressed="${esInf()}">Perfil de informantes</button>` : '');
+    let cb = '';
+    if (esInf()) cb = '<p class="cab-t">Perfil de informantes</p><button type="button" class="btn btn-peligro btn-quitar" data-quitar="inf">Quitar perfil de informantes</button>';
+    else if (B.encs.length > 1) {
+      const e = enc();
+      cb = campo('nombreEnc', 'Nombre de esta encuesta', 'A quiénes se aplicó, por ejemplo, “Estudiantes”. Se usa en el nombre del Excel.', e.nombre) +
+        (B.encs.indexOf(e) > 0 ? `<button type="button" class="btn btn-peligro btn-quitar" data-quitar="enc">Quitar esta encuesta</button>` : '');
+    }
+    $('#cabBase').hidden = !cb; $('#cabBase').innerHTML = cb;
+    const p = perfilDeTab(tab); let cp = '';
+    if (p && enc().perfiles.length > 1) {
+      cp = campo('nombrePerf', 'Nombre de este perfil', 'El grupo que respondió, por ejemplo, “Docentes”.', p.nombre) +
+        (enc().perfiles.indexOf(p) > 0 ? `<button type="button" class="btn btn-peligro btn-quitar" data-quitar="perfil">Quitar este perfil</button>` : '');
+    }
+    $('#cabPerfil').hidden = !cp; $('#cabPerfil').innerHTML = cp;
+    const enInf = esInf();
+    $('[data-agregar="perfil"]').disabled = enInf;
+    $('#agrInf').hidden = !!B.inf;
+  }
+  function pintarTabs() {
+    const d = tabsDef(), col = t => tipoDe(t) === 'preguntas' ? '#2E7D1F' : (tipoDe(t) === 'perfil' || tipoDe(t) === 'perfilInf' ? '#0055B7' : '#0d1b2a');
+    const btn = x => { const c = col(x[0]), on = x[0] === tab; return `<button type="button" class="tab-t" data-tab="${x[0]}" aria-pressed="${on}" style="background:${on ? c : '#fff'};color:${on ? '#fff' : c};border-color:${c}">${esc(x[1])}</button>`; };
+    $('#tabsL').innerHTML = d.libro.map(btn).join('');
+    $('#tabsR').innerHTML = d.resp.map(btn).join('');
+  }
+  function notaActual() {
+    const k = tipoDe(tab);
+    if (esInf() || !['perfil', 'preguntas'].includes(k) || enc().perfiles.length < 2) return NOTAS[k];
+    const e = enc();
+    if (k === 'perfil') {
+      const p = perfilDeTab(tab), off = offsetPerfil(e, p);
+      return NOTAS.perfil + (off ? ` La numeración continúa desde el perfil anterior (parte en ${off + 1}), para que cada encuestado tenga un número único en la hoja Preguntas.` : '');
+    }
+    const rangos = e.perfiles.map(p => { const o = offsetPerfil(e, p); return `${o + 1} a ${o + p.perfil.rows.length}: ${nombrePerfil(e, p)}`; }).join('; ');
+    const total = e.perfiles.reduce((s, p) => s + p.perfil.rows.length, 0), faltan = total - e.preguntas.rows.length;
+    return NOTAS.preguntas + ` Todos los perfiles responden en esta misma hoja, en el mismo orden que sus tablas de perfil (filas ${rangos}). La columna Perfil se completa sola.` + (faltan > 0 ? ` Faltan ${faltan} fila(s) para cubrir a todos los encuestados; usa “+ Fila”.` : '');
+  }
+  function pintarEd() {
+    const d = tabsDef();
+    if (![...d.libro, ...d.resp].some(x => x[0] === tab)) tab = d.libro[0][0];
+    pintarCabeceras(); pintarTabs();
+    $('#notaT').textContent = notaActual();
+    const k = tipoDe(tab);
+    $('#accT').innerHTML = k === 'codPreguntas'
+      ? '<button type="button" class="mini-btn" data-ac="adddim">+ Agregar dimensión</button>'
+      : '<button type="button" class="mini-btn" data-ac="addrow">+ Fila</button>' + (k !== 'codPerfil' ? '<button type="button" class="mini-btn" data-ac="addrow10">+ 10 filas</button>' : '') + '<button type="button" class="mini-btn" data-ac="addcol">+ Columna</button>';
+    $('#edT').innerHTML = k === 'codPreguntas' ? htmlGrupos() : htmlTabla();
+    $('#btnPlantillaX').textContent = B.encs.length + (B.inf ? 1 : 0) > 1 ? 'Descargar Excel de esta base' : 'Descargar Excel';
+  }
+  const edEl = $('#edT');
+  edEl.addEventListener('input', e => {
+    const ac = e.target.dataset && e.target.dataset.ac; if (!ac) return;
+    const d = e.target.dataset, v = e.target.value;
+    if (ac === 'cel') { const r = tablaDe(tab).rows.find(x => String(x.id) === d.r); if (r) r[d.k] = v; }
+    else if (ac === 'lab') { const c = tablaDe(tab).cols.find(x => x.key === d.k); if (c) c.label = v; }
+    else if (ac === 'dim') { const g = G().groups.find(x => String(x.id) === d.g); if (g) g.dimension = v; }
+    else if (ac === 'gcel') { const g = G().groups.find(x => String(x.id) === d.g); const r = g && g.rows.find(x => String(x.id) === d.r); if (r) r[d.k] = v; }
+    guardarTablas();
+  });
+  function accion(ac, d) {
+    const t = tipoDe(tab) === 'codPreguntas' ? null : tablaDe(tab), k = tipoDe(tab), gr = () => G().groups;
+    if (ac === 'addrow' || ac === 'addrow10') {
+      const n = ac === 'addrow10' ? 10 : 1;
+      for (let i = 0; i < n; i++) { const r = { id: maxId(t.rows) + 1 }; t.cols.forEach(c => { r[c.key] = ''; }); t.rows.push(r); }
+    } else if (ac === 'addcol') {
+      const label = k === 'codPerfil' ? String(t.cols.length - 1) : 'Nueva';
+      const key = 'c' + Date.now(); t.cols.push({ key, label }); t.rows.forEach(r => { r[key] = ''; });
+    } else if (ac === 'delcol') {
+      const c = t.cols.find(x => x.key === d.k); if (!c) return;
+      if (!confirm('¿Eliminar la columna "' + c.label + '"?')) return;
+      t.cols = t.cols.filter(x => x.key !== d.k); t.rows.forEach(r => { delete r[d.k]; });
+    } else if (ac === 'delrow') {
+      const r = t.rows.find(x => String(x.id) === d.r); if (!r) return;
+      if (tieneDatos(r, autoNum(k) ? t.cols[0].key : null) && !confirm('Esta fila tiene datos. ¿Quieres eliminarla?')) return;
+      t.rows = t.rows.filter(x => String(x.id) !== d.r);
+    } else if (ac === 'adddim') {
+      gr().push({ id: maxId(gr()) + 1, dimension: '', escalaTipo: null, rows: [{ id: idGrupoFila() + 1, num: '', enunciado: '' }] });
+    } else if (ac === 'addg') {
+      const g = gr().find(x => String(x.id) === d.g); if (g) g.rows.push({ id: idGrupoFila() + 1, num: '', enunciado: '' });
+    } else if (ac === 'delg') {
+      const g = gr().find(x => String(x.id) === d.g); const r = g && g.rows.find(x => String(x.id) === d.r); if (!r) return;
+      if (tieneDatos(r) && !confirm('Esta fila tiene datos. ¿Quieres eliminarla?')) return;
+      g.rows = g.rows.filter(x => String(x.id) !== d.r);
+      if (!g.rows.length && gr().length > 1) G().groups = gr().filter(x => x !== g);
+      else if (!g.rows.length) g.rows.push({ id: idGrupoFila() + 1, num: '', enunciado: '' });
+    } else if (ac === 'deldim') {
+      const g = gr().find(x => String(x.id) === d.g); if (!g) return;
+      if ((g.dimension || g.rows.some(r => tieneDatos(r))) && !confirm('Esta dimensión tiene datos. ¿Quieres quitarla?')) return;
+      G().groups = gr().filter(x => x !== g);
+    } else if (ac === 'esc') {
+      const g = gr().find(x => String(x.id) === d.g); if (g) g.escalaTipo = d.v;
+    } else return;
+    guardarTablas(); pintarEd();
+  }
+  const avisar = (txt, ok) => { const m = $('#msgX'); m.className = 'msg' + (ok ? ' ok' : ''); m.textContent = txt; };
+  edEl.addEventListener('click', e => { const b = e.target.closest('[data-ac]'); if (b && b.tagName === 'BUTTON') accion(b.dataset.ac, b.dataset); });
+  $('#accT').addEventListener('click', e => { const b = e.target.closest('[data-ac]'); if (b) accion(b.dataset.ac, b.dataset); });
+  [$('#tabsL'), $('#tabsR')].forEach(el => el.addEventListener('click', e => { const b = e.target.closest('[data-tab]'); if (b) { tab = b.dataset.tab; pintarEd(); } }));
+  $('#basesT').addEventListener('click', e => {
+    const b = e.target.closest('[data-base]'); if (!b) return;
+    B.act = b.dataset.base; tab = esInf() ? 'cp:inf' : 'cp:' + enc().perfiles[0].id; avisar('');
+    guardarTablas(); pintarEd();
+  });
+  function enfocar(sel) { const el = $(sel); if (el) { el.scrollIntoView({ behavior: 'auto', block: 'center' }); el.focus({ preventScroll: true }); } }
+  // Agregar: otro perfil (mismos enunciados), otra encuesta (enunciados distintos) o perfil de informantes.
+  $('#agregar').addEventListener('click', e => {
+    const b = e.target.closest('[data-agregar]'); if (!b || b.disabled) return;
+    const que = b.dataset.agregar, m = $('#msgAgregar');
+    if (que === 'perfil') {
+      const en = enc(), p = nuevoPerfil(maxId(en.perfiles) + 1); en.perfiles.push(p); tab = 'cp:' + p.id;
+      guardarTablas(); pintarEd();
+      m.textContent = `Agregaste el ${nombrePerfil(en, p)} a ${nombreEnc(en)}. Escribe su nombre y completa sus códigos y sus respuestas.`;
+      enfocar('#nombrePerf');
+    } else if (que === 'encuesta') {
+      const en = nuevaEncuesta(maxId(B.encs) + 1); B.encs.push(en); B.act = 'e' + en.id; tab = 'cp:1';
+      guardarTablas(); pintarEd();
+      m.textContent = `Agregaste la ${nombreEnc(en)}. Escribe su nombre y completa sus tablas.`;
+      enfocar('#nombreEnc');
+    } else if (que === 'inf') {
+      if (!B.inf) B.inf = nuevoInf();
+      B.act = 'inf'; tab = 'cp:inf'; guardarTablas(); pintarEd();
+      m.textContent = 'Agregaste el Perfil de informantes. Completa sus códigos y luego una fila por informante.';
+      enfocar('#basesT [data-base="inf"]');
+    }
+  });
+  // Quitar lo agregado (con confirmación).
+  document.addEventListener('click', e => {
+    const b = e.target.closest('[data-quitar]'); if (!b) return;
+    const que = b.dataset.quitar;
+    if (que === 'perfil') {
+      const en = enc(), p = perfilDeTab(tab); if (!p || en.perfiles.indexOf(p) === 0) return;
+      const nom = nombrePerfil(en, p);
+      if (!confirm(`¿Quitar el ${nom}? Se borrarán sus códigos y sus respuestas de este navegador. Las respuestas de la hoja Preguntas no se borran.`)) return;
+      en.perfiles = en.perfiles.filter(x => x !== p); tab = 'cp:' + en.perfiles[0].id; avisar(`Quitaste el ${nom}.`, true);
+    } else if (que === 'enc') {
+      const en = enc(); if (B.encs.indexOf(en) === 0) return;
+      const nom = nombreEnc(en);
+      if (!confirm(`¿Quitar la ${nom}? Se borrarán todas sus tablas de este navegador.`)) return;
+      B.encs = B.encs.filter(x => x !== en); B.act = 'e' + B.encs[0].id; tab = 'cp:' + B.encs[0].perfiles[0].id; avisar(`Quitaste la ${nom}.`, true);
+    } else if (que === 'inf') {
+      if (!confirm('¿Quitar el Perfil de informantes? Se borrarán sus tablas de este navegador.')) return;
+      B.inf = null; B.act = 'e' + B.encs[0].id; tab = 'cp:' + B.encs[0].perfiles[0].id; avisar('Quitaste el Perfil de informantes.', true);
+    } else return;
+    guardarTablas(); pintarEd();
+  });
+  document.addEventListener('input', e => {
+    if (e.target.id === 'nombreEnc') { enc().nombre = e.target.value; guardarTablas(); $$('#basesT [data-base="e' + enc().id + '"]').forEach(b => { b.textContent = nombreEnc(enc()); }); }
+    else if (e.target.id === 'nombrePerf') { const p = perfilDeTab(tab); if (p) { p.nombre = e.target.value; guardarTablas(); pintarTabs(); } }
+  });
+  $('#btnResetT').addEventListener('click', () => {
+    const nom = esInf() ? 'Perfil de informantes' : nombreEnc(enc());
+    if (!confirm(`Se borrarán las tablas de "${nom}" en este navegador${esInf() ? '' : ', incluidos sus perfiles adicionales'}. ¿Empezar de nuevo?`)) return;
+    if (esInf()) { B.inf = nuevoInf(); tab = 'cp:inf'; }
+    else { const en = enc(), nu = nuevaEncuesta(en.id); nu.nombre = en.nombre; B.encs[B.encs.indexOf(en)] = nu; tab = 'cp:1'; }
+    guardar(BK, B); pintarEd(); avisar('Tablas restablecidas.');
+  });
+  pintarEd();
+
+  /* ---- Excel con formato (libro de códigos + base) ---- */
+  const cargarLib = (url, get) => new Promise((res, rej) => {
+    if (get()) return res(get());
+    const s = document.createElement('script'); s.src = url;
+    s.onload = () => (get() ? res(get()) : rej(new Error('sin librería'))); s.onerror = () => rej(new Error('no cargó'));
+    document.head.appendChild(s);
+  });
+  const valorCelda = v => { const s = String(v == null ? '' : v).trim(); if (s === '') return null; return /^-?\d+([.,]\d+)?$/.test(s) ? Number(s.replace(',', '.')) : String(v); };
+  const slug = s => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^A-Za-z0-9]+/g, '_').replace(/^_+|_+$/g, '').toLowerCase();
+  const hojaSegura = s => String(s).replace(/[\\/?*:[\]]/g, ' ').trim().slice(0, 31);
+  $('#btnPlantillaX').addEventListener('click', async () => {
+    const msg = $('#msgX'); msg.className = 'msg'; msg.textContent = 'Preparando el Excel…';
+    let ExcelJS;
+    try { ExcelJS = await cargarLib('https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js', () => window.ExcelJS); }
+    catch (e) { msg.className = 'msg err'; msg.textContent = 'No se pudo cargar la herramienta de Excel. Revisa tu conexión e intenta de nuevo.'; return; }
+    try {
+      const inf = esInf(), en = inf ? null : enc();
+      const perfiles = inf ? [{ nombre: '', codPerfil: B.inf.codPerfil, perfil: B.inf.perfil, titulo: 'Perfil de informantes' }]
+        : en.perfiles.map(p => ({ p, codPerfil: p.codPerfil, perfil: p.perfil, titulo: en.perfiles.length > 1 ? nombrePerfil(en, p) : 'Perfil' }));
+      const wb = new ExcelJS.Workbook();
+      const borde = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+      const encabezado = c => { c.font = { bold: true }; c.alignment = { vertical: 'middle', horizontal: 'center', wrapText: true }; c.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFE9F2FB' } }; c.border = borde; };
+      const celda = (c, centro) => { c.alignment = { vertical: 'middle', horizontal: centro ? 'center' : 'left', wrapText: true }; c.border = borde; };
+      const combinar = (ws, r1, c1, r2, c2, valor, estilo) => {
+        if (r2 > r1 || c2 > c1) ws.mergeCells(r1, c1, r2, c2);
+        ws.getCell(r1, c1).value = valor;
+        for (let r = r1; r <= r2; r++) for (let c = c1; c <= c2; c++) estilo(ws.getCell(r, c));
+      };
+      const ws = wb.addWorksheet('Libro de códigos', { pageSetup: { orientation: 'landscape', fitToPage: true, fitToWidth: 1, fitToHeight: 0 } });
+      let c0 = 2;
+      perfiles.forEach(pf => {
+        const pr = pf.codPerfil.rows.filter(r => tieneDatos(r));
+        const pc = pf.codPerfil.cols.filter((col, j) => j < 2 || pr.some(r => String(r[col.key] || '').trim() !== ''));
+        const nCod = Math.max(0, pc.length - 2);
+        combinar(ws, 2, c0, 2, c0 + pc.length - 1, pf.titulo, encabezado);
+        combinar(ws, 3, c0, 4, c0, pc[0].label, encabezado);
+        combinar(ws, 3, c0 + 1, 4, c0 + 1, pc[1].label, encabezado);
+        if (nCod > 0) {
+          combinar(ws, 3, c0 + 2, 3, c0 + pc.length - 1, 'Códigos', encabezado);
+          pc.slice(2).forEach((col, i) => { const m = String(col.label).match(/\d+/); const cc = ws.getCell(4, c0 + 2 + i); cc.value = m ? Number(m[0]) : i + 1; encabezado(cc); });
+        }
+        pr.forEach((r, i) => pc.forEach((col, j) => { const cc = ws.getCell(5 + i, c0 + j); cc.value = valorCelda(r[col.key]); celda(cc, j !== 1); }));
+        ws.getColumn(c0).width = 10; ws.getColumn(c0 + 1).width = 24;
+        for (let j = 2; j < pc.length; j++) ws.getColumn(c0 + j).width = 16;
+        c0 += pc.length + 1;
+      });
+      if (!inf) {
+        const qc = [['dimension', 'Dimensión'], ['num', 'P'], ['enunciado', 'Enunciado'], ['escala', 'Escala']];
+        const q0 = c0;
+        qc.forEach((col, j) => { const cc = ws.getCell(2, q0 + j); cc.value = col[1]; encabezado(cc); });
+        let rCursor = 3;
+        en.codPreguntas.groups.filter(g => g.dimension.trim() || g.escalaTipo || g.rows.some(r => tieneDatos(r))).forEach(g => {
+          const r1 = rCursor, r2 = r1 + g.rows.length - 1;
+          qc.forEach((col, j) => {
+            if (col[0] === 'dimension') combinar(ws, r1, q0 + j, r2, q0 + j, g.dimension || null, cc => celda(cc, true));
+            else if (col[0] === 'escala') combinar(ws, r1, q0 + j, r2, q0 + j, escalaTexto(g.escalaTipo) || null, cc => celda(cc, true));
+            else g.rows.forEach((f, k) => { const cc = ws.getCell(r1 + k, q0 + j); cc.value = valorCelda(f[col[0]]); celda(cc, col[0] === 'num'); });
+          });
+          rCursor = r2 + 1;
+        });
+        qc.forEach((col, j) => { ws.getColumn(q0 + j).width = { dimension: 24, num: 10, enunciado: 60, escala: 50 }[col[0]]; });
+        for (let r = 3; r < rCursor; r++) ws.getRow(r).height = 30;
+      }
+      // Hojas de respuestas. Con varios perfiles, la numeración es continua y Preguntas lleva la columna Perfil.
+      const hojaDatos = (nombre, t, numero, extra) => {
+        const h = wb.addWorksheet(hojaSegura(nombre));
+        const heads = t.cols.map((c, j) => j === 0 ? (numero ? 'Encuestado' : 'Informante') : c.label);
+        if (extra) heads.splice(1, 0, 'Perfil');
+        heads.forEach((l, j) => { const cc = h.getCell(1, j + 1); cc.value = l; encabezado(cc); h.getColumn(j + 1).width = Math.max(j === 0 ? 14 : 8, String(l).length + 2); });
+        if (extra) h.getColumn(2).width = 22;
+        let fila = 2;
+        t.rows.forEach((r, i) => {
+          if (!tieneDatos(r, numero ? t.cols[0].key : null)) return;
+          const vals = t.cols.map((c, j) => j === 0 && numero ? numero(i) : valorCelda(r[c.key]));
+          if (extra) vals.splice(1, 0, extra(i));
+          vals.forEach((v, j) => { const cc = h.getCell(fila, j + 1); cc.value = v; celda(cc, true); });
+          fila++;
+        });
+      };
+      if (inf) hojaDatos('Perfil informantes', B.inf.perfil, null, null);
+      else {
+        const multi = en.perfiles.length > 1;
+        en.perfiles.forEach((p, k) => { const off = offsetPerfil(en, p); hojaDatos(multi ? `Perfil ${k + 1}${p.nombre.trim() ? ' - ' + p.nombre.trim() : ''}` : 'Perfil', p.perfil, i => off + i + 1, null); });
+        hojaDatos('Preguntas', en.preguntas, i => i + 1, multi ? i => { const p = perfilDeFila(en, i + 1); return p ? (p.nombre.trim() || `Perfil ${en.perfiles.indexOf(p) + 1}`) : null; } : null);
+      }
+      const archivo = inf ? 'perfil_informantes.xlsx'
+        : (B.encs.length === 1 && !en.nombre.trim() ? 'base_datos_cuantitativa.xlsx' : 'base_datos_' + (slug(en.nombre) || 'encuesta_' + (B.encs.indexOf(en) + 1)) + '.xlsx');
+      const buf = await wb.xlsx.writeBuffer();
+      const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([buf], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })); a.download = archivo;
+      document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 3000);
+      msg.className = 'msg ok'; msg.textContent = `Excel descargado (${archivo}). Súbelo a la carpeta Drive del curso.` + (B.encs.length + (B.inf ? 1 : 0) > 1 ? ' Recuerda descargar también las otras bases.' : '');
+    } catch (e) { msg.className = 'msg err'; msg.textContent = 'No se pudo generar el Excel.'; }
+  });
+
+  /* ---------- camino ---------- */
+  const ICO = {"encuesta": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M4 20V10M10 20V4M16 20v-7M22 20H2\"/></svg>", "entrevista": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect x=\"9\" y=\"3\" width=\"6\" height=\"12\" rx=\"3\"/><path d=\"M5 11a7 7 0 0 0 14 0M12 18v3\"/></svg>", "focal": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"9\" cy=\"8\" r=\"3\"/><circle cx=\"17\" cy=\"9\" r=\"2.5\"/><path d=\"M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M15 14.3c3 0 6 1.7 6 5.7\"/></svg>"};
+  const OPC = [
+    { k: 'encuesta', t: 'Encuesta', d: 'Escala Likert o cuestionario. Preparas una base de datos en Excel.', c: 'c-verde', vista: 2 },
+    { k: 'entrevista', t: 'Entrevistas', d: 'Individuales y grabadas. Preparas una transcripción por informante.', c: 'c-azul', vista: 3 },
+    { k: 'focal', t: 'Grupo focal', d: 'Varias personas en una grabación. Preparas una transcripción por grupo.', c: 'c-azul', vista: 3 },
+  ];
+  let camino = leer(K.camino, {});
+  function pintarCaminos() {
+    $('#caminos').innerHTML = OPC.map(o => `<label class="camino ${o.c} ${camino[o.k] ? 'on' : ''}"><input type="checkbox" data-k="${o.k}" ${camino[o.k] ? 'checked' : ''}><span class="ic">${ICO[o.k]}</span><span><span class="t">${esc(o.t)}</span><span class="d">${esc(o.d)}</span></span></label>`).join('');
+    const sel = OPC.filter(o => camino[o.k]);
+    let h = '';
+    if (!sel.length) h = '<p class="small" style="margin:0">Marca al menos un instrumento para ver qué te toca dejar listo.</p>';
+    else {
+      const pasos = [];
+      if (camino.encuesta) pasos.push('<li>Prepara tu <strong>base de datos</strong> en la vista 2.</li>');
+      if (camino.entrevista || camino.focal) pasos.push('<li>Prepara tu <strong>transcripción</strong> en la vista 3.' + (camino.focal ? ' En el grupo focal, una por grupo.' : '') + '</li>');
+      pasos.push('<li>Confirma todo en la <strong>lista</strong> de la vista 4.</li>');
+      h = '<div class="aviso"><div><p style="margin:0 0 6px"><strong>Tu ruta</strong></p><ol style="margin:0;padding-left:20px;line-height:1.8">' + pasos.join('') + '</ol>' +
+        (sel.length > 1 && (camino.encuesta && (camino.entrevista || camino.focal) || (camino.entrevista && camino.focal)) ? '<p style="margin:8px 0 0">Con más de un instrumento, cada uno se prepara y se analiza con su recurso. Al final, el recurso de triangulación sirve para cruzar los resultados.</p>' : '') + '</div></div>';
+    }
+    $('#resumenCamino').innerHTML = h;
+    pintarEsquema();
+    const visibles = indicesVisibles();
+    const actual = vistas.findIndex(v => !v.hidden) + 1;
+    if (actual && !visibles.includes(actual)) mostrar(visibles.find(n => n > actual) || visibles[visibles.length - 1], false);
+    const hay = Object.values(camino).some(Boolean);
+    const aplica = v => !hay || OPC.some(o => camino[o.k] && o.vista === v);
+    $('#nota2').hidden = aplica(2); $('#nota3').hidden = aplica(3);
+    pintarListas(); pintarSoftware(); pintarRecursosAnalisis();
+  }
+  $('#caminos').addEventListener('change', e => { const k = e.target.dataset.k; if (!k) return; camino[k] = e.target.checked; guardar(K.camino, camino); pintarCaminos(); });
+
+  /* ---------- programas para el análisis ---------- */
+  const SOFT = [
+    { t: 'Jamovi', logo: './jamovi.jpeg', c: 'var(--verde-osc)', bg: 'var(--verde-claro)', url: 'https://www.jamovi.org/download.html', ver: c => c.encuesta,
+      d: 'Para tu base de datos: frecuencias, porcentajes, media y moda. Es gratuito. En la página de descarga elige la versión para tu sistema (Windows, Mac o Linux) e instálala.' },
+    { t: 'Atlas.ti', logo: './atlasti.jpeg', c: 'var(--azul-osc)', bg: 'var(--azul-claro)', url: 'https://atlasti.com/es', ver: c => c.entrevista || c.focal,
+      d: 'Para codificar tus transcripciones. Tiene una versión de prueba gratuita que dura una cantidad limitada de días. Por eso, crea tu cuenta solo cuando hayas terminado todas tus transcripciones, no antes.' },
+  ];
+  function pintarSoftware() {
+    const hay = OPC.some(o => camino[o.k]);
+    $('#software').innerHTML = SOFT.filter(s => !hay || s.ver(camino)).map(s => `<a href="${s.url}" target="_blank" rel="noopener" class="card herr" style="border-top-color:${s.c};background:${s.bg}"><span class="fila"><img src="${s.logo}" alt="" width="28" height="28" style="width:28px;height:28px;border-radius:7px;flex:none;object-fit:contain;background:#fff"><b style="color:${s.c}">${s.t}</b><span aria-hidden="true">↗</span></span><span class="small">${esc(s.d)}</span><span class="sr">(se abre en una pestaña nueva)</span></a>`).join('');
+  }
+  function pintarRecursosAnalisis() {
+    const hay = OPC.some(o => camino[o.k]);
+    const recursos = [
+      { t: 'Recurso Cuantitativo', d: 'Analizar tu base en Jamovi y presentar los resultados.', url: './Recurso Cuantitativo.dc.html', c: 'var(--verde)', visible: !hay || camino.encuesta },
+      { t: 'Recurso Cualitativo', d: 'Codificar en Atlas.ti y presentar los resultados.', url: './Recurso Cualitativo.dc.html', c: 'var(--azul)', visible: !hay || camino.entrevista || camino.focal },
+      { t: 'Triangulación', d: 'Si aplicaste dos o más instrumentos, cruza los resultados al final.', url: './Recurso Triangulacion.html', c: 'var(--morado)', visible: !hay || OPC.filter(o => camino[o.k]).length > 1 },
+    ];
+    $('#recursosAnalisis').innerHTML = recursos.filter(r => r.visible).map(r => `<a class="card" href="${r.url}" style="border-top-color:${r.c};text-decoration:none"><p class="card-t" style="color:${r.c}">${r.t}</p><p class="txt">${r.d}</p></a>`).join('');
+  }
+
+  /* ---------- lista ---------- */
+  const GRUPOS = [
+    { id: 'todos', t: 'Para todos', visible: () => true, items: [
+      'Los archivos no contienen nombres de personas ni de establecimientos.',
+      'Cada archivo está nombrado con el código del informante, del grupo o del instrumento.',
+      'Todas las personas del grupo pueden abrir los archivos, y hay una copia en la carpeta Drive del curso.',
+      'Tienes a mano las categorías o dimensiones definidas en tu diseño metodológico.',
+    ] },
+    { id: 'encuesta', t: 'Encuesta', visible: c => c.encuesta, items: [
+      'El libro de códigos está completo, con perfil y enunciados numerados de corrido.',
+      'La base tiene una fila por encuestado y una columna por pregunta, con los nombres en la primera fila.',
+      'Las celdas tienen solo números del libro de códigos, y las sin respuesta están vacías, no con 0.',
+      'No hay celdas combinadas, filas de totales ni colores que signifiquen algo.',
+      'Revisaste cada columna y no hay valores fuera de rango.',
+      'El número de filas coincide con el número de instrumentos aplicados.',
+      'La base está en Excel, descargada desde la tabla de esta guía, y subida a la carpeta Drive del curso.',
+      'Si aplicaste la encuesta a más de un grupo o más de una encuesta, cada perfil y cada encuesta tienen su nombre, y descargaste un Excel por encuesta.',
+      'Tienes Jamovi instalado en tu computador.',
+    ] },
+    { id: 'cuali', t: 'Entrevistas y grupo focal', visible: c => c.entrevista || c.focal, items: [
+      'Transcribiste el 100 % de cada grabación.',
+      'Corregiste cada transcripción escuchando la grabación.',
+      'Usas etiquetas claras (Entrevistador y Participante, o Moderador y P1, P2) y un turno por línea.',
+      'Donde no se entiende, dice [inaudible] y no hay palabras inventadas.',
+      'Hay un archivo Word por informante, o por grupo focal, con su código.',
+      'Hiciste una copia de trabajo de cada archivo, con las preguntas como título, y el original no se toca.',
+      'Tienes las copias de trabajo listas para pegar en Atlas.ti.',
+      'Si tu guion incluyó preguntas de perfil, las tabulaste en la vista 2 (Perfil de informantes) y descargaste su Excel.',
+      'Terminaste todas tus transcripciones y recién ahora creas tu cuenta en la versión de prueba gratuita de Atlas.ti.',
+    ] },
+  ];
+  let chk = leer(K.chk, {});
+  const gruposVisibles = () => { const hay = Object.values(camino).some(Boolean); return GRUPOS.filter(g => g.id === 'todos' || !hay || g.visible(camino)); };
+  function pintarListas() {
+    const gs = gruposVisibles();
+    $('#listas').innerHTML = gs.map(g => `<h4 class="h3" style="margin-top:22px;font-size:18px">${esc(g.t)}</h4><div class="checks">` +
+      g.items.map((t, i) => `<label class="check"><input type="checkbox" data-id="${g.id}-${i}" ${chk[g.id + '-' + i] ? 'checked' : ''}><span>${esc(t)}</span></label>`).join('') + '</div>').join('');
+    progreso();
+  }
+  function progreso() {
+    let total = 0, hechos = 0; gruposVisibles().forEach(g => g.items.forEach((_, i) => { total++; if (chk[g.id + '-' + i]) hechos++; }));
+    $('#chkProg').textContent = hechos === total ? `${hechos} de ${total} revisados. Todo listo para analizar.` : `${hechos} de ${total} revisados.`;
+  }
+  $('#listas').addEventListener('change', e => { const id = e.target.dataset.id; if (!id) return; chk[id] = e.target.checked; guardar(K.chk, chk); progreso(); });
+
+  /* ================= ESPACIO DE TRABAJO (sin persistencia) ================= */
+  const ta = $('#txt'), panel = $('#panel'), estado = $('#estado'), msgT = $('#msgT');
+  const LET = 'A-Za-zÁÉÍÓÚÜÑáéíóúüñ';
+  const LABEL_RE = new RegExp('^\\s*([' + LET + '0-9]+(?: [' + LET + '0-9]+){0,2}):[ \\t]*(.*)$');
+  const STD_RE = /^(Entrevistador|Entrevistadora|Participante|Moderador|Moderadora|P\d{1,2})$/;
+  const PREG_RE = /^Pregunta\s*\d+$/i;
+  const destinos = () => ($('#tipoT').value === 'focal' ? ['Moderador', 'P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'P7', 'P8'] : ['Entrevistador', 'Participante']);
+  const INST_RE = new RegExp('\\b(Colegio|Liceo|Escuela|Instituto|Jard[ií]n Infantil|Universidad|Centro Educacional)(?: (?:de|del|de la|de los|de las))?\\s+[A-ZÁÉÍÓÚÑ][' + LET + ']+(?: [A-ZÁÉÍÓÚÑ][' + LET + ']+){0,3}', 'g');
+  const NOMBRE_RE = new RegExp('(^|[^' + LET + '0-9])([A-ZÁÉÍÓÚÑ][a-záéíóúüñ]{2,}(?: [A-ZÁÉÍÓÚÑ][a-záéíóúüñ]{2,}){0,2})', 'g');
+  const IGNORAR_BASE = new Set(['Chile', 'Osorno', 'Atlas', 'Jamovi', 'Excel', 'Word', 'Google', 'Zoom', 'Meet', 'Teams', 'Covid', 'Mineduc', 'Ministerio', 'Pedagogía', 'Educación', 'Dios', 'Latinoamérica']);
+
+  const svgR = d => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + d + '</svg>';
+  const ICO_R = {
+    info: svgR('<circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>'),
+    warn: svgR('<path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/>'),
+    ok: svgR('<circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>'),
+  };
+  const TR_KEY = 'ulagos-previa-transcripcion-v1', TR_DIAS = 14;
+  let almacenOk = true, trTs = 0, trTxt = '', trasAbierto = false;
+  let ult = null;            // texto en el último Word descargado
+  let ign = new Set();       // candidatos ignorados (solo en memoria)
+  let ignLab = new Set();    // etiquetas que no son etiquetas
+  let selLab = {};           // destino elegido por etiqueta
+  let timer = null;
+
+  function parseLinea(l) {
+    const m = LABEL_RE.exec(l);
+    if (!m || /^\d+$/.test(m[1])) return { label: null, rest: l.trim() };
+    return { label: m[1], rest: m[2] };
+  }
+  function analizar(txt) {
+    const lines = txt.split('\n');
+    const info = [];
+    lines.forEach((l, idx) => {
+      if (!l.trim()) return;
+      const p = parseLinea(l);
+      let kind = 'ninguna';
+      if (p.label) kind = PREG_RE.test(p.label) ? 'titulo' : (STD_RE.test(p.label) ? 'std' : (ignLab.has(p.label) ? 'ninguna' : 'otra'));
+      info.push({ idx, line: l, label: p.label, rest: p.rest, kind });
+    });
+    return { lines, info };
+  }
+  const recortar = (s, n) => { s = s.trim(); return s.length > n ? s.slice(0, n) + '…' : s; };
+  const escRe = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const offset = (lines, idx) => { let o = 0; for (let i = 0; i < idx; i++) o += lines[i].length + 1; return o; };
+
+  function render() {
+    const txt = ta.value;
+    if (!txt.trim()) {
+      panel.innerHTML = '<p class="small" style="margin:0">Pega tu transcripción para ver la revisión.</p>';
+      actualizarEstado(); return;
+    }
+    const { lines, info } = analizar(txt);
+    const turnos = info.filter(x => x.kind === 'std' || x.kind === 'otra');
+    const sinEt = info.filter(x => x.kind === 'ninguna');
+    const palabras = info.reduce((n, x) => n + (x.rest ? x.rest.split(/\s+/).filter(Boolean).length : 0), 0);
+    const filas = [];
+    const fila = (ico, html, acc) => filas.push(`<div class="r"><span class="i ${ICO_R[ico] ? ico : ''}" aria-hidden="true">${ICO_R[ico] || ico}</span><div class="c">${html}${acc ? '<div class="acc">' + acc + '</div>' : ''}</div></div>`);
+
+    // resumen
+    const porEt = {}; turnos.forEach(x => { porEt[x.label] = (porEt[x.label] || 0) + 1; });
+    const resumen = Object.keys(porEt).map(k => `${esc(k)} ×${porEt[k]}`).join(', ');
+    fila('info', `<strong>${turnos.length}</strong> turnos y <strong>${palabras}</strong> palabras.${resumen ? ' ' + resumen + '.' : ''}`);
+
+    // etiquetas por asignar
+    const otras = {}; info.filter(x => x.kind === 'otra').forEach(x => { otras[x.label] = (otras[x.label] || 0) + 1; });
+    Object.keys(otras).forEach(lab => {
+      const cur = selLab[lab] || '';
+      fila('warn', `Etiqueta <code>${esc(lab)}:</code> (${otras[lab]} turnos). ${$('#tipoT').value === 'focal' ? 'Usa Moderador y P1, P2, P3…' : 'Usa Entrevistador y Participante'}. No dejes nombres ni iniciales.`,
+        `<select data-lab="${esc(lab)}" aria-label="Cambiar ${esc(lab)} por"><option value="">Cambiar por…</option>${destinos().map(d => `<option value="${d}" ${cur === d ? 'selected' : ''}>${d}</option>`).join('')}</select>` +
+        `<button class="mini-btn" type="button" data-act="asignar" data-arg="${esc(lab)}">Reemplazar</button>` +
+        `<button class="mini-btn" type="button" data-act="noetiqueta" data-arg="${esc(lab)}">No es una etiqueta</button>`);
+    });
+
+    // dos turnos en una línea
+    const conocidas = Array.from(new Set(info.filter(x => x.kind === 'std' || x.kind === 'otra').map(x => x.label)));
+    let mezclados = 0;
+    if (conocidas.length) {
+      const re = new RegExp('\\S[ \\t]+(?:' + conocidas.map(escRe).join('|') + '):[ \\t]');
+      info.forEach(x => { if (re.test(x.rest)) mezclados++; });
+    }
+    if (mezclados) fila('warn', `<strong>${mezclados}</strong> línea(s) con dos turnos en la misma línea. Cada turno debe ir en su propia línea.`, '<button class="mini-btn" type="button" data-act="separar">Separar turnos</button>');
+
+    // sin etiqueta
+    if (sinEt.length) {
+      const ej = sinEt.slice(0, 4).map(x => `<div style="margin-top:6px"><em>"${esc(recortar(x.line, 60))}"</em><div class="acc"><button class="mini-btn" type="button" data-act="ver" data-arg="${x.idx}">Ver</button><button class="mini-btn" type="button" data-act="unir" data-arg="${x.idx}">Unir con la anterior</button></div></div>`).join('');
+      fila('warn', `<strong>${sinEt.length}</strong> línea(s) sin etiqueta. Si son continuación de un turno, únelas con la anterior; si habla otra persona, agrega su etiqueta.${sinEt.length > 4 ? ' Se muestran las primeras 4.' : ''}${ej}`);
+    }
+
+    // nombres y establecimientos
+    const cand = {};
+    info.forEach(x => {
+      const r = x.rest.replace(/\[[^\]]*\]/g, ' ');
+      let m; INST_RE.lastIndex = 0;
+      while ((m = INST_RE.exec(r))) { cand[m[0]] = cand[m[0]] || { n: 0, t: 'establecimiento' }; cand[m[0]].n++; }
+      NOMBRE_RE.lastIndex = 0;
+      while ((m = NOMBRE_RE.exec(r))) {
+        const pal = m[2]; const ini = m.index + m[1].length;
+        const antes = r.slice(0, ini).trimEnd();
+        const finFrase = antes === '' || /[.?!¿¡:…"“«(]$/.test(antes);
+        if (finFrase) continue;
+        if (IGNORAR_BASE.has(pal)) continue;
+        if (Object.keys(cand).some(k => cand[k].t === 'establecimiento' && k.indexOf(pal) !== -1)) continue;
+        cand[pal] = cand[pal] || { n: 0, t: 'nombre' }; cand[pal].n++;
+      }
+    });
+    const cl = Object.keys(cand).filter(k => !ign.has(k));
+    if (cl.length) {
+      const cap = cl.slice(0, 8);
+      fila('warn', `Posibles <strong>nombres o establecimientos</strong> (${cl.length}). Revisa cada uno, puede haber falsos avisos.${cl.length > 8 ? ' Se muestran los primeros 8.' : ''}`);
+      cap.forEach(k => {
+        const c = cand[k];
+        const lbl = c.t === 'establecimiento' ? '[establecimiento]' : '[nombre]';
+        const alt = c.t === 'establecimiento' ? '[nombre]' : '[establecimiento]';
+        fila('•', `<code>${esc(k)}</code> ×${c.n}`,
+          `<button class="mini-btn" type="button" data-act="rep" data-arg="${esc(k)}" data-por="${lbl}">Reemplazar por ${lbl}</button>` +
+          `<button class="mini-btn" type="button" data-act="rep" data-arg="${esc(k)}" data-por="${alt}">por ${alt}</button>` +
+          `<button class="mini-btn" type="button" data-act="ign" data-arg="${esc(k)}">Ignorar</button>`);
+      });
+    }
+
+    // espacios y líneas vacías
+    const vacias = lines.filter(l => !l.trim()).length;
+    const dobles = (txt.match(/[ \t]{2,}| |​|\t/g) || []).length;
+    if (vacias || dobles) fila('warn', `Hay ${vacias} línea(s) vacías y ${dobles} espacio(s) dobles o raros. Se pueden limpiar sin cambiar tus palabras.`, '<button class="mini-btn" type="button" data-act="limpiar">Limpiar</button>');
+
+    // inaudible y muletillas (solo informativo)
+    const inaud = (txt.match(/\[inaudible\]/gi) || []).length;
+    const mule = (txt.match(/\b(e+h+|m+h*m+|o sea|cierto)\b/gi) || []).length;
+    if (inaud) fila('info', `<strong>${inaud}</strong> tramo(s) marcados como [inaudible]. Revisa si alguno se puede completar escuchando la grabación.`);
+    if (mule) fila('info', `Posibles muletillas (eh, mm, o sea, cierto) ×${mule}. En la literal limpia se omiten. Revisa en cada caso, algunas son parte de la frase.`);
+
+    if (turnos.length && !sinEt.length && !Object.keys(otras).length && !mezclados && !cl.length && !vacias && !dobles) fila('ok', '<strong>Se ve ordenada.</strong> Escucha la grabación una vez más para confirmar y descárgala.');
+    panel.innerHTML = filas.join('');
+    actualizarEstado();
+  }
+
+  function actualizarEstado() {
+    const txt = ta.value;
+    if (!txt.trim()) { estado.className = 'estado warn'; estado.textContent = 'Aún no hay texto'; return; }
+    if (ult !== null && ult === txt) { estado.className = 'estado ok'; estado.textContent = 'Descargado a las ' + (estado.dataset.hora || '') + '. Sigue guardado aquí.'; }
+    else { estado.className = 'estado warn'; estado.textContent = almacenOk ? 'Guardado en este navegador, sin descargar.' : 'No se puede guardar aquí. Descarga el Word antes de salir.'; }
+    const tr = document.getElementById('tras'); if (tr) tr.hidden = !(trasAbierto && ult !== null && ult === txt);
+  }
+  const programar = () => { clearTimeout(timer); timer = setTimeout(render, 150); };
+  ta.addEventListener('input', programar);
+  ta.addEventListener('paste', () => { setTimeout(render, 0); });
+  function pintarModoTranscripcion() {
+    const focal = $('#tipoT').value === 'focal';
+    $$('.modo-sel [data-modo]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.modo === (focal ? 'focal' : 'entrevista'))));
+    $$('[data-modo-transcripcion]').forEach(el => { el.hidden = el.dataset.modoTranscripcion !== (focal ? 'focal' : 'entrevista'); });
+    $('#lblCodigoArchivo').textContent = focal ? 'Código del grupo focal' : 'Código de la entrevista';
+    $('#codigo').placeholder = focal ? 'Ej. F1' : 'Ej. E1CM1';
+    ta.placeholder = focal
+      ? 'Pega aquí la transcripción. Cada línea comienza con Moderador o con el código estable de una persona (P1, P2, etc.).'
+      : 'Pega aquí la transcripción. Cada línea comienza con quién habla y dos puntos (Entrevistador: / Participante:).';
+    const consejo = $('#consejos li span:nth-child(2)'), archivo = $('#consejos li:nth-child(2) span:nth-child(2)');
+    archivo.textContent = focal ? 'Guarda un archivo Word por grupo focal y nómbralo con su código (por ejemplo, F1.docx).' : 'Guarda un archivo Word por participante y nómbralo con su código (por ejemplo, E1CM1.docx).';
+    consejo.textContent = focal
+      ? 'En cada línea, escribe "Moderador:" o el código estable de quien habla ("P1:", "P2:", etc.). Conserva los códigos al citar (por ejemplo, F1P2).'
+      : 'Al inicio de cada línea, escribe quién habla y luego dos puntos: "Entrevistador:" y "Participante:".';
+  }
+  $('#tipoT').addEventListener('change', () => { msgT.textContent = ''; selLab = {}; pintarModoTranscripcion(); render(); });
+  const elegirModo = m => { if ($('#tipoT').value === m) return; $('#tipoT').value = m; $('#tipoT').dispatchEvent(new Event('change')); };
+  $$('.modo-sel [data-modo]').forEach(b => b.addEventListener('click', () => elegirModo(b.dataset.modo)));
+  // Si en la vista 1 marcó solo grupo focal (o solo entrevista), el modo se ajusta solo.
+  const modoPorCamino = () => camino.focal && !camino.entrevista ? 'focal' : camino.entrevista && !camino.focal ? 'entrevista' : null;
+  $('#caminos').addEventListener('change', () => { const m = modoPorCamino(); if (m) elegirModo(m); });
+
+  function setTexto(nuevo, selIdx) {
+    ta.value = nuevo; render();
+    if (typeof selIdx === 'number') {
+      const lines = nuevo.split('\n'); const o = offset(lines, selIdx);
+      ta.focus(); ta.setSelectionRange(o, o + (lines[selIdx] || '').length);
+    }
+  }
+  panel.addEventListener('change', e => { const lab = e.target.dataset && e.target.dataset.lab; if (lab !== undefined) selLab[lab] = e.target.value; });
+  panel.addEventListener('click', e => {
+    const b = e.target.closest('[data-act]'); if (!b) return;
+    const act = b.dataset.act, arg = b.dataset.arg;
+    const lines = ta.value.split('\n');
+    if (act === 'asignar') {
+      const dest = selLab[arg]; if (!dest) { msgT.className = 'msg err'; msgT.textContent = 'Elige primero por cuál etiqueta quieres cambiar "' + arg + '".'; return; }
+      msgT.textContent = '';
+      const out = lines.map(l => { const p = parseLinea(l); return (p.label === arg) ? dest + ': ' + p.rest : l; });
+      delete selLab[arg]; setTexto(out.join('\n'));
+    } else if (act === 'noetiqueta') { ignLab.add(arg); render();
+    } else if (act === 'separar') {
+      const info = analizar(ta.value).info; const conocidas = Array.from(new Set(info.filter(x => x.kind === 'std' || x.kind === 'otra').map(x => x.label)));
+      const re = new RegExp('(\\S)[ \\t]+(' + conocidas.map(escRe).join('|') + '):[ \\t]+', 'g');
+      setTexto(ta.value.replace(re, '$1\n$2: '));
+    } else if (act === 'unir') {
+      const idx = parseInt(arg, 10); let p = idx - 1; while (p >= 0 && !lines[p].trim()) p--;
+      if (p < 0) return;
+      lines[p] = lines[p].replace(/\s+$/, '') + ' ' + lines[idx].trim(); lines.splice(p + 1, idx - p);
+      setTexto(lines.join('\n'));
+    } else if (act === 'ver') {
+      const idx = parseInt(arg, 10); const o = offset(lines, idx); ta.focus(); ta.setSelectionRange(o, o + lines[idx].length);
+      ta.scrollIntoView({ behavior: 'auto', block: 'center' });
+    } else if (act === 'rep') {
+      const por = b.dataset.por; const re = new RegExp('(?<![' + LET + '])' + escRe(arg) + '(?![' + LET + '])', 'g');
+      const out = lines.map(l => { const p = parseLinea(l); if (p.label) return l.slice(0, l.length - p.rest.length) + p.rest.replace(re, por); return l.replace(re, por); });
+      setTexto(out.join('\n'));
+    } else if (act === 'ign') { ign.add(arg); render();
+    } else if (act === 'limpiar') {
+      const out = lines.map(l => l.replace(/[ ​\t]/g, ' ').replace(/ {2,}/g, ' ').trim()).filter(l => l !== '');
+      setTexto(out.join('\n'));
+    }
+  });
+
+  /* ---- salida ---- */
+  function textoLimpio() {
+    return ta.value.split('\n').map(l => l.replace(/[ ​\t]/g, ' ').replace(/ {2,}/g, ' ').trim()).filter(l => l !== '');
+  }
+  function codigoValido() {
+    const c = $('#codigo').value.trim();
+    if (!/^[A-Za-z0-9_-]{2,20}$/.test(c)) { msgT.className = 'msg err'; msgT.textContent = 'Escribe el código del archivo (por ejemplo E1CM1 o F1), sin espacios ni tildes.'; $('#codigo').focus(); return null; }
+    return c;
+  }
+  $('#btnCopiar').addEventListener('click', async () => {
+    const ps = textoLimpio(); if (!ps.length) { msgT.className = 'msg err'; msgT.textContent = 'No hay texto para copiar.'; return; }
+    const t = ps.join('\n');
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) await navigator.clipboard.writeText(t);
+      else { const aux = document.createElement('textarea'); aux.value = t; document.body.appendChild(aux); aux.select(); document.execCommand('copy'); aux.remove(); }
+      msgT.className = 'msg ok'; msgT.textContent = 'Texto copiado, sin formato. Recuerda que copiar no guarda tu trabajo; descarga también el Word.';
+    } catch (e) { msgT.className = 'msg err'; msgT.textContent = 'No se pudo copiar. Selecciona el texto del recuadro y cópialo con Ctrl+C.'; }
+  });
+  $('#btnWord').addEventListener('click', () => {
+    const ps = textoLimpio(); if (!ps.length) { msgT.className = 'msg err'; msgT.textContent = 'No hay texto para descargar.'; return; }
+    const c = codigoValido(); if (!c) return;
+    if (typeof docx === 'undefined') { msgT.className = 'msg err'; msgT.textContent = 'No se pudo cargar el generador de Word. Recarga la página y vuelve a intentarlo.'; return; }
+    const { Document, Packer, Paragraph, TextRun, AlignmentType } = docx;
+    const doc = new Document({
+      styles: { default: { document: { run: { font: 'Calibri', size: 22 } } } },
+      sections: [{ children: ps.map(t => new Paragraph({ alignment: AlignmentType.JUSTIFIED, spacing: { line: 360, after: 0 }, children: [new TextRun({ text: t, font: 'Calibri', size: 22, bold: false })] })) }],
+    });
+    Packer.toBlob(doc).then(blob => {
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = c + '.docx';
+      document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+      ult = ta.value; const d = new Date(); estado.dataset.hora = String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
+      msgT.className = 'msg ok'; msgT.textContent = 'Descargado como ' + c + '.docx. Revisa la carpeta de descargas.'; trasAbierto = true; guardarT(); actualizarEstado();
+    }).catch(() => { msgT.className = 'msg err'; msgT.textContent = 'No se pudo generar el Word.'; });
+  });
+  $('#btnBorrar').addEventListener('click', () => {
+    if (!ta.value.trim()) return;
+    const sinDescargar = ult === null || ult !== ta.value;
+    const ok = confirm(sinDescargar ? 'Este texto NO está descargado. Si lo borras, se pierde. ¿Borrar de todos modos?' : '¿Borrar tu transcripción de este navegador? El Word que descargaste no se toca.');
+    if (!ok) return;
+    borrarTodo();
+  });
+  function borrarTodo() {
+    ta.value = ''; $('#codigo').value = ''; ult = null; ign = new Set(); ignLab = new Set(); selLab = {}; trasAbierto = false;
+    msgT.className = 'msg ok'; msgT.textContent = 'Transcripción borrada de este navegador.'; render();
+  }
+  $('#btnBorrarTras').addEventListener('click', borrarTodo);
+  $('#btnDejar').addEventListener('click', () => { trasAbierto = false; actualizarEstado(); });
+  window.addEventListener('beforeunload', e => { if (!almacenOk && ta.value.trim() && ult !== ta.value) { e.preventDefault(); e.returnValue = ''; } });
+
+  /* ---- guardado en este navegador ---- */
+  function trBorrarAlmacen() { try { localStorage.removeItem(TR_KEY); } catch (e) { almacenOk = false; } trTs = 0; trTxt = ''; }
+  function guardarT() {
+    const t = ta.value, c = $('#codigo').value;
+    if (!t.trim() && !c.trim()) { trBorrarAlmacen(); return; }
+    if (t !== trTxt) { trTs = Date.now(); trTxt = t; }
+    try { localStorage.setItem(TR_KEY, JSON.stringify({ t, c, tipo: $('#tipoT').value, bajado: ult !== null && ult === t, hora: estado.dataset.hora || '', ts: trTs })); almacenOk = true; } catch (e) { almacenOk = false; }
+  }
+  function restaurarT() {
+    let d = null;
+    try { const r = localStorage.getItem(TR_KEY); d = r ? JSON.parse(r) : null; } catch (e) { almacenOk = false; return; }
+    if (!d) return;
+    if (!d.ts || Date.now() - d.ts > TR_DIAS * 86400000) { trBorrarAlmacen(); msgT.className = 'msg'; msgT.textContent = 'Tu transcripción guardada llevaba más de ' + TR_DIAS + ' días sin cambios y se borró de este navegador.'; return; }
+    ta.value = d.t || ''; $('#codigo').value = d.c || ''; if (d.tipo === 'focal') $('#tipoT').value = 'focal';
+    trTs = d.ts; trTxt = ta.value;
+    if (d.bajado) { ult = ta.value; estado.dataset.hora = d.hora || ''; }
+    if (ta.value.trim()) { msgT.className = 'msg ok'; msgT.textContent = 'Recuperamos la transcripción que tenías guardada en este navegador.'; }
+  }
+  const renderBase = render;
+  render = function () { guardarT(); renderBase(); };
+  $('#codigo').addEventListener('input', guardarT);
+
+  /* ---- plantilla en Word ---- */
+  $('#btnPlantillaWord').addEventListener('click', () => {
+    if (typeof docx === 'undefined') { msgT.className = 'msg err'; msgT.textContent = 'No se pudo cargar el generador de Word. Recarga la página y vuelve a intentarlo.'; return; }
+    const { Document, Packer, Paragraph, TextRun, AlignmentType, Header } = docx;
+    const focal = $('#tipoT').value === 'focal';
+    const etiquetas = focal ? ['Moderador', 'P1', 'P2', 'P1', 'P3', 'P2'] : ['Entrevistador', 'Participante', 'Entrevistador', 'Participante', 'Entrevistador', 'Participante'];
+    const instr = [
+      'Plantilla de transcripción · Código del archivo: ________',
+      'Un turno por línea, con su etiqueta al comienzo. Escribe tal como se dijo, sin muletillas ni repeticiones. Marca [inaudible] donde no se entienda.',
+      'Cambia los nombres de personas y establecimientos por [nombre] y [establecimiento]. Este encabezado no se copia al pegar el texto en la página.',
+    ];
+    const run = (t, extra) => new TextRun(Object.assign({ text: t, font: 'Calibri', size: 22, bold: false }, extra || {}));
+    const doc = new Document({
+      styles: { default: { document: { run: { font: 'Calibri', size: 22 } } } },
+      sections: [{
+        headers: { default: new Header({ children: instr.map((t, i) => new Paragraph({ spacing: { after: 40 }, children: [run(t, { size: 18, color: '555555', bold: i === 0 })] })) }) },
+        children: etiquetas.map(e => new Paragraph({ alignment: AlignmentType.JUSTIFIED, spacing: { line: 360, after: 0 }, children: [run(e + ': ')] })),
+      }],
+    });
+    Packer.toBlob(doc).then(blob => {
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = focal ? 'plantilla_transcripcion_grupo_focal.docx' : 'plantilla_transcripcion_entrevista.docx';
+      document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+      msgT.className = 'msg ok'; msgT.textContent = 'Plantilla descargada. Complétala en Word y pega aquí el texto para revisarlo.';
+    }).catch(() => { msgT.className = 'msg err'; msgT.textContent = 'No se pudo generar la plantilla.'; });
+  });
+
+  pintarCaminos(); if (modoPorCamino()) $('#tipoT').value = modoPorCamino(); restaurarT(); pintarModoTranscripcion(); render();
+  const m = /^#v([1-4])$/.exec(location.hash || '');
+  mostrar(m ? +m[1] : 1, false);
+})();
+</script>
+<script>
+(function(){
+  var primera={p:'"…cuando es la formación universaria, por lo general siempre es como el ideal…" La herramienta escribió "universaria". ¿Qué haces?',o:['Lo dejo así, es lo que transcribió la herramienta','Escucho de nuevo ese tramo y, si dijo "universitaria", lo corrijo','Borro la frase completa','Lo reemplazo por una palabra que suene parecida'],c:1,e:'Si al escuchar confirmas la palabra, se corrige. Si no se entiende, se marca [inaudible]. Nunca se adivina.',error:'Vuelve a escuchar el fragmento: confirma la palabra en la grabación, no la corrijas por intuición.'};
+  var entrevista={p:'¿Qué problemas tiene esta transcripción?',ej:'Juan Pérez (entrevistador): ¿Ustedes les van mostrando un formato de planificación? Nicole Moreno (Entrevistada): No, no nos dan uno, pero depende del profesor (...).',o:['1. Tiene muletillas','2. Mezcla dos turnos de habla en una misma línea','3. No utiliza códigos y revela identidades','4. 2 y 3 son correctas'],c:3,e:'Se mezclan dos problemas: las intervenciones están juntas en una línea y aparecen nombres en vez de códigos. Separa las intervenciones y usa "Entrevistador:" y "Participante:".',error:'Revisa por separado si las intervenciones están juntas y si aparecen nombres en lugar de roles.'};
+  var grupoFocal={p:'¿Qué problemas tiene esta transcripción?',ej:'Moderador: ¿Qué opinan? Camila: Me sirve trabajar en grupo. Nicole: Yo prefiero hacerlo sola.',o:['1. Tiene muletillas','2. Junta varias intervenciones en una línea','3. Usa nombres en vez de códigos para identificar a las personas','4. 2 y 3 son correctas'],c:3,e:'Se mezclan varias intervenciones en una línea y aparecen nombres en vez de códigos. Pon cada intervención en una línea y usa "Moderador:", "P1:", "P2:"…; conserva el código al citar, por ejemplo F1P2.',error:'Revisa si cada intervención está en su propia línea y si las personas están identificadas con códigos estables (P1, P2…), no con sus nombres.'};
+  var box=document.getElementById('qz'); if(!box) return;
+  function pintarQuiz(){
+    var q2=document.getElementById('tipoT').value==='focal'?grupoFocal:entrevista;
+    box.replaceChildren();
+    [primera,q2].forEach(function(q,i){
+      var d=document.createElement('div'); d.className='qz';
+      var h='<p class="q">'+(i+1)+'. '+q.p.replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</p>';
+      if(q.ej) h+='<p class="q-ej">'+q.ej.replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</p>';
+      q.o.forEach(function(t,j){h+='<button type="button" class="op" data-j="'+j+'">'+t+'</button>';});
+      h+='<p class="fb" role="status" aria-live="polite"></p>';
+      d.innerHTML=h; box.appendChild(d);
+      d.addEventListener('click',function(e){
+        var b=e.target.closest('.op'); if(!b) return;
+        var j=+b.dataset.j, fb=d.querySelector('.fb');
+        d.querySelectorAll('.op').forEach(function(x){x.classList.remove('ok','mal');});
+        if(j===q.c){b.classList.add('ok'); fb.textContent='Correcto. '+q.e;}
+        else{b.classList.add('mal'); fb.textContent='Revisa la explicación: '+q.error;}
+      });
+    });
+  }
+  document.getElementById('tipoT').addEventListener('change',pintarQuiz);
+  pintarQuiz();
+})();
+</script>
+<script>
+(function(){
+  // Activación de conocimientos previos: una pregunta a la vez; una respuesta y se muestra la explicación.
+  var ACT={
+    encuesta:[
+     {p:'Un enunciado se responde con una escala de 1 a 4. ¿Qué significa el 4?',o:['Siempre significa "Totalmente de acuerdo"','Depende de la escala: puede ser acuerdo, frecuencia, importancia u otro grado, según lo que definiste en tu instrumento','La cantidad de veces que la persona respondió','La nota que obtiene el participante'],c:1,e:'El número es solo un código. Su significado lo da la escala de tu instrumento: en una de acuerdo, 4 puede ser "Totalmente de acuerdo"; en una de frecuencia, "Siempre". Por eso necesitas un libro de códigos que lo deje anotado.'},
+     {p:'En el Excel, el género quedó escrito como "Mujer", "mujer" y "Mujer " (con un espacio al final). ¿Qué crees que hará el programa al contar?',o:['Los junta automáticamente en una sola categoría','Los cuenta como tres categorías distintas','Borra los que están mal escritos','Muestra un aviso de error'],c:1,e:'Para el programa son textos diferentes, así que el gráfico saldría con tres barras. Por eso cada respuesta se codifica con un número.'},
+    {p:'20 encuestados respondieron una encuesta de 15 enunciados. ¿Cómo ordenarías la tabla para que el programa cuente las respuestas de cada enunciado?',o:['20 filas (una por encuestado) y 15 columnas (una por enunciado)','15 filas (una por enunciado) y 20 columnas (una por encuestado)','Una sola columna con las 300 respuestas seguidas','Una hoja distinta para cada encuestado'],c:0,e:'Cada fila corresponde a un encuestado y cada columna a una pregunta. Así el programa recorre cada columna y cuenta, por ejemplo, cuántos marcaron 3 en P5.'},
+     {p:'En una escala de 1 a 4 alguien digitó 44 en vez de 4. ¿Qué crees que le pasa a la media de esa pregunta?',o:['Nada, es un solo dato entre muchos','Sube y deja de representar lo que respondió el grupo','Baja un poco','El programa lo corrige solo'],c:1,e:'Un solo valor fuera de la escala basta para inflar la media. Por eso, antes de analizar, se revisa que todos los valores estén dentro de la escala.'}
+    ],
+    transcripcion:[
+     {p:'En una encuesta obtienes números. ¿Qué obtienes en una entrevista o un grupo focal?',o:['Números que luego se promedian','Palabras: relatos, opiniones y experiencias de las personas','Porcentajes por categoría','Gráficos de barras'],c:1,e:'El dato cualitativo es lo que dijeron las personas. Si la transcripción cambia sus palabras, cambia el dato.'},
+     {p:'Transcribir a mano una hora de grabación puede tomar varias horas. ¿Qué crees que conviene hacer?',o:['Usar una herramienta automática y luego revisar el texto escuchando la grabación','Usar una herramienta automática y entregar el texto tal como sale','Escribir solo un resumen de lo más importante','Transcribir solo las respuestas que parecen útiles'],c:0,e:'Las herramientas ahorran tiempo, pero se equivocan con palabras y turnos de habla. El borrador siempre se revisa con la grabación y se transcribe completo.'},
+     {p:'¿Por qué crees que cada informante se identifica con un código (E1CM1, F1P2) y no con su nombre?',o:['Para ahorrar espacio en el documento','Para resguardar la confidencialidad comprometida en el consentimiento informado','Porque Atlas.ti no acepta nombres','Porque lo exige el formato APA'],c:1,e:'Es un compromiso ético con quienes participaron. Por lo mismo, los nombres de personas y establecimientos se reemplazan por [nombre] o [establecimiento].'},
+     {p:'En tus resultados vas a citar lo que dijo un informante. ¿Cómo crees que debe ir ese extracto?',o:['Resumido con tus propias palabras','Textual, tal como lo dijo la persona','Con la gramática corregida y frases agregadas para que se entienda mejor','Mezclando lo que dijeron dos informantes'],c:1,e:'Las citas se copian de la transcripción. Por eso necesitas una transcripción completa y fiel antes de analizar.'}
+    ]
+  };
+  var esc=function(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');};
+  document.querySelectorAll('[data-activ]').forEach(function(box){
+    var Q=ACT[box.dataset.activ]||[], paso=0, resp={};
+    var cuerpo=box.querySelector('.act-cuerpo'), num=box.querySelector('.act-n'), dots=box.querySelector('.act-dots');
+    var ant=box.querySelector('[data-mov="-1"]'), sig=box.querySelector('[data-mov="1"]');
+    function pintar(){
+      var q=Q[paso], r=resp[paso], h='';
+      h+='<div tabindex="-1" class="act-q'+(r==null?'':(r===q.c?' ok':' mal'))+'"><p class="q">'+(paso+1)+'. '+esc(q.p)+'</p><div class="act-ops" role="group" aria-label="Opciones de respuesta">';
+      q.o.forEach(function(t,j){
+        var cl='', m='';
+        if(r!=null&&j===q.c){cl=' ok';m='✓';} else if(r===j){cl=' mal';m='✗';}
+        h+='<button type="button" class="op'+cl+'" data-j="'+j+'"'+(r!=null?' disabled':'')+(r===j?' aria-pressed="true"':'')+'><span class="marca" aria-hidden="true">'+m+'</span><span>'+esc(t)+'</span></button>';
+      });
+      h+='</div><div aria-live="polite">';
+      if(r!=null) h+='<div class="act-fb '+(r===q.c?'ok':'mal')+'"><p class="t">'+(r===q.c?'¡Exacto!':'La respuesta correcta está marcada')+'</p><p>'+esc(q.e)+'</p></div>';
+      h+='</div></div>';
+      cuerpo.innerHTML=h;
+      num.textContent='Pregunta '+(paso+1)+' de '+Q.length;
+      dots.innerHTML=Q.map(function(_,i){return '<span'+(i===paso?' class="on"':'')+'></span>';}).join('');
+      ant.disabled=paso===0;
+      sig.textContent=paso<Q.length-1?'Siguiente →':'Seguir con la guía ↓';
+    }
+    cuerpo.addEventListener('click',function(e){
+      var b=e.target.closest('.op'); if(!b||b.disabled) return;
+      resp[paso]=+b.dataset.j; pintar();
+      cuerpo.querySelector('.act-q').focus({preventScroll:true});
+    });
+    ant.addEventListener('click',function(){ if(paso>0){paso--;pintar();} });
+    sig.addEventListener('click',function(){
+      if(paso<Q.length-1){paso++;pintar();}
+      else { var n=box.nextElementSibling; if(n) n.scrollIntoView({behavior:'smooth',block:'start'}); }
+    });
+    pintar();
+  });
+})();
+</script>
+</body>
+</html>

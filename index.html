@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Análisis de Datos · Seminario de Grado ULagos</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
+<script src="./image-slot.js"></script>
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;padding:0;background:#ffffff;font-family:'Open Sans',sans-serif;color:#1a232b;line-height:1.6;overflow-x:hidden}
+  a{color:#0055B7}
+  a:hover{color:#003d85}
+  h1,h2,h3,h4{font-family:'Roboto Condensed',sans-serif;margin:0;line-height:1.15}
+  img{display:block;max-width:100%;height:auto}
+  ::selection{background:#8FC6E8}
+  .home-card{transition:transform .18s ease,box-shadow .18s ease}
+  .home-card:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(13,27,42,.10)}
+  :focus-visible{outline:3px solid #0055B7;outline-offset:2px}
+  .skip-link{position:absolute;left:-999px;top:0;background:#0055B7;color:#fff;padding:10px 18px;z-index:200}
+  .skip-link:focus{left:0}
+  @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}.home-card:hover{transform:none}}
+</style>
+</helmet>
+
+<a href="#contenido-principal" class="skip-link">Saltar al contenido principal</a>
+
+<div style="display:flex;flex-direction:column;min-height:100vh">
+
+<header style="background:#0055B7;color:#fff;padding:48px clamp(20px,6vw,56px) 44px;display:flex;align-items:center;gap:32px;flex-wrap:wrap">
+  <image-slot id="logo-ulagos-gen" src="./logoula.png" shape="rect" placeholder="Isologotipo ULagos (min. 84px ancho)" style="width:180px;height:76px;flex:none;background:#fff;border-radius:4px"></image-slot>
+  <div style="flex:1;min-width:260px">
+    <p style="margin:0 0 6px;font:600 12px/1.4 'Open Sans',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#d6ebfa">Seminario de Grado · SEM2-2026</p>
+    <h1 style="font-size:clamp(32px,5vw,52px);line-height:1.04;font-weight:700">Análisis de Datos</h1>
+    <p style="margin:10px 0 0;font-size:16px;line-height:1.5;max-width:640px;color:#e9f2fb">Línea Licenciatura en Educación · Departamento de Educación · Carreras Pedagógicas</p>
+  </div>
+</header>
+
+<main id="contenido-principal" style="flex:1">
+
+<section style="padding:56px clamp(20px,6vw,56px) 24px">
+  <div style="max-width:900px;margin:0 auto">
+    <p style="display:inline-block;background:#e9f2fb;color:#0055B7;font:700 12px 'Open Sans',sans-serif;letter-spacing:.08em;text-transform:uppercase;padding:6px 12px;border-radius:20px;margin-bottom:18px">Antes de empezar</p>
+    <h2 style="font-size:clamp(24px,3.2vw,34px);margin-bottom:14px;color:#0d1b2a">¿Por dónde empezar?
+</h2>
+    <p style="font-size:17px;line-height:1.7;color:#3a4551;margin:0 0 14px">Primero deja ordenados tus datos en el paso Previo al análisis. Luego elige el recurso según el enfoque de tu estudio. Cada uno te guía paso a paso, con ejemplos, plantillas descargables y actividades para practicar. Los de cada enfoque terminan en la presentación de resultados; si aplicaste dos o más instrumentos, el paso 3 ayuda a cruzarlos. La interpretación se trabaja en la discusión.</p>
+    <p style="font-size:15.5px;line-height:1.65;color:#1a3a5c;background:#e9f2fb;border-radius:10px;padding:14px 16px;margin:0 0 10px"><strong>¿Aplicaste dos o más instrumentos?</strong> Analiza cada uno con el recurso de su enfoque (cuantitativo para la encuesta, cualitativo para entrevistas o grupos focales) y luego cruza los resultados con el recurso de triangulación.</p>
+    <p style="font-size:15.5px;line-height:1.65;color:#5c4a14;background:#fff8e6;border:1px solid #f0dca0;border-radius:10px;padding:14px 16px;margin:0">Las plantillas guardan lo que escribes solo en el navegador del computador que estás usando. Descarga tu trabajo cada vez que termines.</p>
+  </div>
+</section>
+
+<section style="padding:8px clamp(20px,6vw,56px) 0">
+  <div style="max-width:960px;margin:0 auto">
+    <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap;background:#f3e8f7;border:1px solid #dcc0e6;border-left:8px solid #9F26B4;border-radius:14px;padding:24px 28px">
+      <div style="flex:1 1 380px;min-width:0">
+        <p style="display:inline-block;background:#fff;color:#7d1d8f;font:700 12px 'Open Sans',sans-serif;letter-spacing:.08em;text-transform:uppercase;padding:5px 12px;border-radius:20px;margin:0 0 10px">Paso 1 · Obligatorio antes de empezar</p>
+        <h2 style="font-size:clamp(24px,3vw,32px);color:#0d1b2a;margin:0 0 6px">Previo al análisis</h2>
+        <p style="font-size:16px;line-height:1.6;color:#1a232b;margin:0">Arma y ordena tus bases de datos o tus transcripciones para poder hacer el análisis después.</p>
+      </div>
+      <a href="./Recurso Previa.html" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;background:#9F26B4;color:#fff;text-decoration:none;padding:14px 24px;border-radius:10px;font:700 15px 'Open Sans',sans-serif" style-hover="background:#7d1d8f">Preparar mis datos →</a>
+    </div>
+    <p style="font:700 13px 'Open Sans',sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#55606b;margin:28px 0 0">Paso 2 · Elige el recurso de tu enfoque</p>
+  </div>
+</section>
+
+<section style="padding:16px clamp(20px,6vw,56px) 32px">
+  <div style="max-width:960px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px">
+
+    <div class="home-card" style="display:flex;flex-direction:column;background:#fff;border:1px solid #e2e6ea;border-radius:16px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.04)">
+      <div style="background:#0055B7;padding:22px 26px">
+        <p style="font:700 11px 'Open Sans',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#d6ebfa;margin:0 0 6px">Enfoque cualitativo</p>
+        <p style="font:700 24px 'Roboto Condensed',sans-serif;color:#fff;margin:0">Datos Cualitativos</p>
+      </div>
+      <div style="padding:24px 26px;display:flex;flex-direction:column;flex:1">
+        <p style="font-size:14.5px;line-height:1.6;color:#3a4551;margin:0 0 16px">Para estudios que buscan <strong>comprender</strong> experiencias, percepciones o significados a partir de <strong>entrevistas o grupos focales</strong>.</p>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:22px">
+          <p style="font-size:13.5px;color:#1a232b;margin:0;display:flex;gap:8px"><span style="color:#0055B7;font-weight:700">1.</span>Partir desde tus transcripciones listas (Previo al análisis)</p>
+          <p style="font-size:13.5px;color:#1a232b;margin:0;display:flex;gap:8px"><span style="color:#0055B7;font-weight:700">2.</span>Codificar en Atlas.ti</p>
+          <p style="font-size:13.5px;color:#1a232b;margin:0;display:flex;gap:8px"><span style="color:#0055B7;font-weight:700">3.</span>Tablas de resultados por informante y por categoría</p>
+        </div>
+        <a href="./Recurso Cualitativo.dc.html" style="margin-top:auto;display:inline-flex;align-items:center;justify-content:center;gap:8px;background:#0055B7;color:#fff;text-decoration:none;padding:14px 20px;border-radius:10px;font:700 15px 'Open Sans',sans-serif" style-hover="background:#004498">Ir al recurso cualitativo →</a>
+      </div>
+    </div>
+
+    <div class="home-card" style="display:flex;flex-direction:column;background:#fff;border:1px solid #e2e6ea;border-radius:16px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.04)">
+      <div style="background:#2E7D1F;padding:22px 26px">
+        <p style="font:700 11px 'Open Sans',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#eafbe6;margin:0 0 6px">Enfoque cuantitativo</p>
+        <p style="font:700 24px 'Roboto Condensed',sans-serif;color:#fff;margin:0">Datos Cuantitativos</p>
+      </div>
+      <div style="padding:24px 26px;display:flex;flex-direction:column;flex:1">
+        <p style="font-size:14.5px;line-height:1.6;color:#3a4551;margin:0 0 16px">Para estudios que buscan <strong>medir</strong> variables en una muestra a partir de <strong>encuestas o escalas Likert</strong>.</p>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:22px">
+          <p style="font-size:13.5px;color:#1a232b;margin:0;display:flex;gap:8px"><span style="color:#2E7D1F;font-weight:700">1.</span>Analizar tu base en Jamovi</p>
+          <p style="font-size:13.5px;color:#1a232b;margin:0;display:flex;gap:8px"><span style="color:#2E7D1F;font-weight:700">2.</span>Gráficos en Google Sheets</p>
+          <p style="font-size:13.5px;color:#1a232b;margin:0;display:flex;gap:8px"><span style="color:#2E7D1F;font-weight:700">3.</span>Tablas síntesis por perfil y por dimensión</p>
+        </div>
+        <a href="./Recurso Cuantitativo.dc.html" style="margin-top:auto;display:inline-flex;align-items:center;justify-content:center;gap:8px;background:#2E7D1F;color:#fff;text-decoration:none;padding:14px 20px;border-radius:10px;font:700 15px 'Open Sans',sans-serif" style-hover="background:#24651a">Ir al recurso cuantitativo →</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section style="padding:0 clamp(20px,6vw,56px) 56px">
+  <div style="max-width:960px;margin:0 auto">
+    <p style="font:700 13px 'Open Sans',sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#55606b;margin:0 0 12px">Paso 3 · Solo si aplicaste dos o más instrumentos</p>
+    <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap;background:#e9f2fb;border:1px solid #bcd6ef;border-left:8px solid #0055B7;border-radius:14px;padding:20px 28px">
+      <div style="flex:1 1 380px;min-width:0">
+        <h2 style="font-size:clamp(22px,2.6vw,28px);color:#0d1b2a;margin:0 0 6px">Triangulación</h2>
+        <p style="font-size:15.5px;line-height:1.6;color:#1a232b;margin:0">Cruza lo que mostró cada instrumento sobre un mismo aspecto: reconoce el tipo de triangulación, completa la matriz y redacta la relación entre resultados.</p>
+      </div>
+      <a href="./Recurso Triangulacion.html" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;background:#0055B7;color:#fff;text-decoration:none;padding:14px 24px;border-radius:10px;font:700 15px 'Open Sans',sans-serif" style-hover="background:#003d85">Ir a triangulación →</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer" style="background:#0d1b2a;color:#e9f2fb;padding:36px clamp(20px,6vw,56px);text-align:center">
+  <p style="margin-bottom: 10px;">
+    <strong>Universidad de Los Lagos</strong> · Departamento de Educación · Seminario de Grado
+  </p>
+  <div class="cc-license" style="margin-top: 15px;display:inline-block;text-align:center;max-width:760px;">
+    <a rel="license noopener" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" style="display:inline-block;">
+      <img alt="Licencia Creative Commons" style="border-width:0; margin-bottom: 5px;" src="https://i.creativecommons.org/l/by-nc/4.0/88x31.png">
+    </a>
+    <br>
+    <small style="display:block;line-height:1.5;">
+      Esta obra de <strong>Jesús Sánchez Alvarado</strong> está bajo una
+      <a rel="license noopener" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" style="color: inherit;">
+        Licencia Creative Commons Atribución-NoComercial 4.0 Internacional.
+      </a>
+    </small>
+  </div>
+</footer>
+
+</div>
+</x-dc>
+</body>
+</html>
