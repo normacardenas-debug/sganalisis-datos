@@ -407,7 +407,7 @@
       <div class="scroll-x" style="margin:6px 0 14px">
         <table class="tabla-ej" style="min-width:700px">
           <caption style="position:absolute;left:-9999px">Ejemplo de fila de la tabla por informante</caption>
-          <thead><tr><th scope="col">Informante</th><th scope="col">Categoría</th><th scope="col">Pregunta(s)</th><th scope="col">Palabras clave</th><th scope="col">Extracto</th></tr></thead>
+          <thead><tr><th scope="col">Informante</th><th scope="col">Categoría</th><th scope="col">Pregunta(s)</th><th scope="col">Códigos / palabras clave</th><th scope="col">Extracto</th></tr></thead>
           <tbody><tr><td>E1CM1</td><td>Adaptación al modelo virtual</td><td>¿Cómo cambió su forma de evaluar durante la pandemia?</td><td>cambio de instrumentos, control de la copia</td><td>"Tuve que cambiar las pruebas escritas por trabajos en grupo, porque en línea no podía controlar que no se copiaran."</td></tr></tbody>
         </table>
       </div>
@@ -428,7 +428,7 @@
       <div class="scroll-x" style="margin:6px 0 14px">
         <table class="tabla-ej" style="min-width:700px">
           <caption style="position:absolute;left:-9999px">Ejemplo de filas de la tabla por participante</caption>
-          <thead><tr><th scope="col">Participante</th><th scope="col">Categoría</th><th scope="col">Pregunta(s)</th><th scope="col">Palabras clave</th><th scope="col">Extracto</th></tr></thead>
+          <thead><tr><th scope="col">Participante</th><th scope="col">Categoría</th><th scope="col">Pregunta(s)</th><th scope="col">Códigos / palabras clave</th><th scope="col">Extracto</th></tr></thead>
           <tbody>
             <tr><td>F1P2</td><td>Adaptación al modelo virtual</td><td>¿Cómo cambió su forma de evaluar durante la pandemia?</td><td>cambio de instrumentos, control de la copia</td><td>"Yo pasé de las pruebas escritas a trabajos en grupo, porque en línea era difícil controlar la copia."</td></tr>
             <tr><td>F1P3</td><td>Adaptación al modelo virtual</td><td>¿Cómo cambió su forma de evaluar durante la pandemia?</td><td>prueba con tiempo limitado</td><td>"Yo mantuve la prueba, pero le puse tiempo limitado."</td></tr>
@@ -736,9 +736,10 @@ class Component extends DCLogic {
     this.setState({ checklist });
   };
   construirChecklist(raw) {
-    const items = raw.map((texto, i) => {
-      const id = 'chk-' + i;
-      return { id, texto, checked: !!this.state.checklist[id], toggle: () => this.toggleCheck(id) };
+    const items = raw.map((entrada, i) => {
+      const item = typeof entrada === 'string' ? { texto: entrada } : entrada;
+      const id = item.id || 'chk-' + i;
+      return { id, texto: item.texto, checked: !!this.state.checklist[id], toggle: () => this.toggleCheck(id) };
     });
     const hechos = items.filter(it => it.checked).length;
     return { items, progreso: `${hechos} de ${items.length} revisados.` };
@@ -977,7 +978,7 @@ class Component extends DCLogic {
       { key: 'informante', label: 'Informante', placeholder: 'Ej: E1CM1' },
       { key: 'categoria', label: 'Categoría', placeholder: 'Ej: Adaptación al modelo virtual' },
       { key: 'pregunta', label: 'Pregunta(s)', placeholder: 'Ej: ¿Cómo cambió su forma de evaluar...?' },
-      { key: 'palabrasClave', label: 'Palabras clave', placeholder: 'Ej: cambio de instrumentos, control de la copia' },
+      { key: 'palabrasClave', label: 'Códigos / palabras clave', placeholder: 'Ej: cambio de instrumentos, control de la copia' },
       { key: 'extracto', label: 'Extracto entre comillas', placeholder: 'Ej: "Tuve que cambiar las pruebas escritas..."' },
     ];
     const simCols = [
@@ -1113,12 +1114,12 @@ class Component extends DCLogic {
         explicacion: 'Ambas decisiones pueden justificarse: puedes proponer una categoría nueva si está respaldada por el marco teórico, usar una categoría existente si su definición realmente abarca la cita, o incluirla como hallazgo en conclusiones, pero no debe eliminarse. Consultar a tus docentes puede ayudarte ante una duda.' },
     ], 'caso', 'practica');
     const chk = this.construirChecklist([
-      '¿Tienes tus transcripciones listas, completas, revisadas con la grabación, sin nombres y con su código? Se preparan en Previo al análisis.',
+      { id: 'chk-proyecto', texto: '¿Creaste en ATLAS.ti un proyecto con el nombre de tu estudio?' },
       '¿Preparaste la copia de trabajo con cada pregunta como título y la respuesta completa debajo?',
-      '¿Creaste tu cuenta en Atlas.ti Web con tu correo institucional?',
-      '¿Subiste un documento por informante con su código (por ejemplo, E1CM1), o uno por grupo focal (por ejemplo, F1)?',
+      { id: 'chk-3', texto: '¿Subiste a ATLAS.ti un documento por informante con su código (por ejemplo, E1CM1), o un documento por grupo focal (por ejemplo, F1)?' },
+      { id: 'chk-codificacion', texto: '¿Terminaste de codificar todos tus documentos en ATLAS.ti?' },
       '¿Revisaste la codificación con IA y desactivaste las citas que no corresponden, incluidas las que son solo preguntas?',
-      '¿Ajustaste los códigos (palabras o ideas clave) a las categorías de la trazabilidad, sin crear categorías nuevas?',
+      '¿Ajustaste los códigos (palabras o ideas clave) a las categorías de la trazabilidad?',
       '¿Completaste tus tablas de resultados con palabras clave y extractos textuales entre comillas?',
       '¿Describiste los resultados sin interpretarlos todavía?',
     ]);
