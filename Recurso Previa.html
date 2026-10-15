@@ -62,7 +62,7 @@
   .tabla-ej td{padding:9px 12px;border-top:1px solid #eef1f4;vertical-align:top;line-height:1.5}
   .scroll-x{overflow-x:auto;background:#fff;border-radius:12px;border:1px solid var(--borde)}
   .btn{min-height:44px;padding:10px 18px;border-radius:8px;font:700 13.5px 'Open Sans',sans-serif;cursor:pointer;transition:background .15s ease}
-  .btn-pri{background:var(--azul);color:#fff;border:none} .btn-pri:hover{background:var(--azul-osc)}
+  .btn-pri{background:var(--azul, #0055B7);color:#fff;border:none} .btn-pri:hover{background:var(--azul-osc, #003d85)}
   .btn-sec{background:#fff;color:var(--azul);border:1.5px solid var(--azul)} .btn-sec:hover{background:var(--azul-claro)}
   .btn-ver{background:var(--verde);color:#fff;border:none} .btn-ver:hover{background:#24651a}
   .btn-peligro{background:#fff;color:var(--rojo);border:1.5px solid var(--rojo)} .btn-peligro:hover{background:var(--rojo-claro)}
@@ -275,7 +275,7 @@
 <a href="#contenido-principal" class="skip-link">Saltar al contenido principal</a>
 <div style="display:flex;flex-direction:column;min-height:100vh">
 
-<header style="background:var(--azul);color:#fff;padding:42px clamp(16px,6vw,56px) 34px;display:flex;align-items:center;gap:32px;flex-wrap:wrap">
+<header style="background:var(--azul, #0055B7);color:#fff;padding:42px clamp(16px,6vw,56px) 34px;display:flex;align-items:center;gap:32px;flex-wrap:wrap">
   <div style="width:180px;height:76px;flex:none;display:flex;align-items:center;justify-content:center">
     <img src="./logoula.png" alt="Universidad de Los Lagos" width="916" height="398" style="max-height:100%;width:auto">
   </div>
@@ -284,7 +284,7 @@
     <h1 style="font-size:clamp(30px,4.6vw,48px);line-height:1.05;font-weight:700">Previo al Análisis</h1>
     <p style="margin:10px 0 0;font-size:16px;line-height:1.5;color:#e9f2fb">Deja tus datos listos para llegar a analizar y no a ordenar</p>
     <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">
-      <a href="./index.html" style="display:inline-flex;align-items:center;min-height:44px;font:600 13.5px 'Open Sans',sans-serif;color:var(--azul);background:#fff;padding:9px 16px;border-radius:22px;text-decoration:none">← Inicio</a>
+      <a href="./index.html" style="display:inline-flex;align-items:center;min-height:44px;font:600 13.5px 'Open Sans',sans-serif;color:var(--azul, #0055B7);background:#fff;border:2px solid #0055B7;padding:9px 16px;border-radius:22px;text-decoration:none">← Inicio</a>
     </div>
   </div>
 </header>
@@ -449,7 +449,7 @@
       <summary>Ver ejemplo de transcripción</summary>
       <div class="ejemplo">
         <p>Entrevistador: ¿Cómo cambió su forma de evaluar durante la pandemia?</p>
-        <p>Participante: Tuve que cambiar las pruebas escritas por trabajos en grupo, porque en línea no podía controlar que no se copiaran. Al principio me costó mucho, sobre todo con [inaudible], pero después los estudiantes se acostumbraron.</p>
+        <p>Entrevistado: Tuve que cambiar las pruebas escritas por trabajos en grupo, porque en línea no podía controlar que no se copiaran. Al principio me costó mucho, sobre todo con [inaudible], pero después los estudiantes se acostumbraron.</p>
         <p>Entrevistador: ¿Y cómo entregaba la retroalimentación?</p>
       </div>
       <p>Archivo <strong>E1CM1.docx</strong>. Al inicio de cada línea, escribe quién habla y luego dos puntos. Usa [inaudible] donde la grabación no se entiende. No uses negritas.</p>
@@ -478,7 +478,7 @@
         <caption class="sr">Errores frecuentes en transcripciones, con ejemplos reales y cómo corregirlos</caption>
         <thead><tr><th scope="col" style="width:20%">Error</th><th scope="col" style="width:45%">Así apareció</th><th scope="col">Qué hacer</th></tr></thead>
         <tbody>
-          <tr class="modo-transcripcion" data-modo-transcripcion="entrevista"><td><strong>Nombres en lugar de roles</strong></td><td>"A: Bueno, mucho gusto. Yo soy [nombre]…"<br>"F: Ya."</td><td>Usa "Entrevistador:" y "Participante:". Reemplaza los nombres de personas y establecimientos por [nombre] o [establecimiento].</td></tr>
+          <tr class="modo-transcripcion" data-modo-transcripcion="entrevista"><td><strong>Nombres en lugar de roles</strong></td><td>"A: Bueno, mucho gusto. Yo soy [nombre]…"<br>"F: Ya."</td><td>Usa "Entrevistador:" y "Entrevistado:". Reemplaza los nombres de personas y establecimientos por [nombre] o [establecimiento].</td></tr>
           <tr class="modo-transcripcion" data-modo-transcripcion="focal"><td><strong>Nombres en lugar de códigos</strong></td><td>"Moderador: ¿Qué opinan? Camila: Yo prefiero trabajar en grupo."</td><td>Identifica a quien modera como "Moderador" y asigna a cada participante un código estable ("P1", "P2"…). Reemplaza nombres de personas y establecimientos por [nombre] o [establecimiento].</td></tr>
           <tr><td><strong>Muletillas y repeticiones</strong></td><td>"…ordenar los contenidos, <u>cierto</u>, como dije anteriormente, también ayuda <u>como</u> a darle el sentido lógico, <u>cierto</u> a las clases…"</td><td>Quítalas sin cambiar las palabras de la persona.</td></tr>
           <tr><td><strong>Palabras mal reconocidas por la herramienta</strong></td><td>"…cuando es la formación <u>universaria</u>…"<br>"Que les vaya muy <u>viendo</u>…"</td><td>Escucha de nuevo ese tramo. Si confirmas la palabra, corrígela ("universitaria"). Si no se entiende, escribe [inaudible].</td></tr>
@@ -498,7 +498,7 @@
       <div class="card" style="border-top-color:var(--verde)">
         <p class="card-t" style="color:var(--verde)">✓ Literal limpia (archivo E1PH.docx)</p>
         <p style="font-size:14.5px;line-height:1.6;margin:0 0 8px">Entrevistador: ¿Consideras que la planificación es una guía útil o más bien un requisito administrativo?</p>
-        <p style="font-size:14.5px;line-height:1.6;margin:0">Participante: Considero que son ambas cosas, porque al hacer el ejercicio de ordenar los contenidos, como dije anteriormente, también ayuda a darle el sentido lógico a las clases, al contenido.</p>
+        <p style="font-size:14.5px;line-height:1.6;margin:0">Entrevistado: Considero que son ambas cosas, porque al hacer el ejercicio de ordenar los contenidos, como dije anteriormente, también ayuda a darle el sentido lógico a las clases, al contenido.</p>
       </div>
       <div class="card" style="border-top-color:var(--azul)">
         <p class="card-t" style="color:var(--azul)">→ Copia de trabajo para Atlas.ti</p>
@@ -554,7 +554,7 @@
     <div class="espacio">
       <div>
         <label for="txt" class="sr">Texto de la transcripción</label>
-        <textarea id="txt" spellcheck="false" placeholder="Pega aquí tu transcripción. Una intervención por línea: Entrevistador: / Participante:."></textarea>
+        <textarea id="txt" spellcheck="false" placeholder="Pega aquí tu transcripción. Una intervención por línea: Entrevistador: / Entrevistado:."></textarea>
         <p class="small" style="margin:8px 0 0">Al pegar, se elimina automáticamente el formato (negritas, colores, tipografías). Solo queda el texto. Los cambios se guardan solos en este navegador.</p>
       </div>
       <div class="panel" aria-live="polite"><h4>Revisión</h4><div id="panel"></div></div>
@@ -591,7 +591,7 @@
     <h3 class="h3">Y luego, el análisis</h3>
     <div class="grid" id="recursosAnalisis"></div>
   </div>
-  <div class="wrap-sm pie-vista"><button class="btn btn-sec" data-ir="3">← Volver</button><a class="btn btn-pri" href="./index.html" style="text-decoration:none;display:inline-flex;align-items:center">Volver al inicio</a></div>
+  <div class="wrap-sm pie-vista"><button class="btn btn-sec" data-ir="3">← Volver</button><a class="btn btn-pri" href="./index.html" style="text-decoration:none;display:inline-flex;align-items:center;background:#0055B7;color:#fff">Volver al inicio</a></div>
 </section>
 
 </main>
@@ -694,8 +694,8 @@
   $('#tipos').innerHTML = TIPOS.map(t => `<div class="card" style="padding:0;overflow:hidden;border-top-width:1px;border-color:${t[1]}"><div class="caso-h" style="background:${t[1]}"><h4>${esc(t[0])}</h4></div><div class="caso-b"><p class="small" style="margin:0 0 12px">${esc(t[2])}</p><p style="font-size:14px;line-height:1.55;margin:0;font-style:italic">"${esc(t[3])}"</p></div></div>`).join('');
 
   const CONSEJOS = [
-    'Al inicio de cada línea, escribe quién habla y luego dos puntos: "Entrevistador:" y "Participante:" (en un grupo focal, "Moderador:", "P1:", "P2:", etc.).',
-    'Guarda un archivo Word por participante y nómbralo con su código (por ejemplo, E1CM1.docx).',
+    'Al inicio de cada línea, escribe quién habla y luego dos puntos: "Entrevistador:" y "Entrevistado:" (en un grupo focal, "Moderador:", "P1:", "P2:", etc.).',
+    'Guarda un archivo Word por entrevistado y nómbralo con su código (por ejemplo, E1CM1.docx).',
     'Si una parte no se entiende, escribe [inaudible] y sigue. No completes con lo que crees que dijo.',
     'Omite muletillas (eh, o sea, este), repeticiones y sonidos, pero conserva las palabras propias de la persona.',
     'No uses negrita, subrayado ni colores en el texto de las respuestas.',
@@ -1162,7 +1162,7 @@
     { id: 'cuali', t: 'Entrevistas y grupo focal', visible: c => c.entrevista || c.focal, items: [
       'Transcribiste el 100 % de cada grabación.',
       'Corregiste cada transcripción escuchando la grabación.',
-      'Usas etiquetas claras (Entrevistador y Participante, o Moderador y P1, P2) y un turno por línea.',
+      'Usas etiquetas claras (Entrevistador y Entrevistado, o Moderador y P1, P2) y un turno por línea.',
       'Donde no se entiende, dice [inaudible] y no hay palabras inventadas.',
       'Hay un archivo Word por informante, o por grupo focal, con su código.',
       'Hiciste una copia de trabajo de cada archivo, con las preguntas como título, y el original no se toca.',
@@ -1189,9 +1189,9 @@
   const ta = $('#txt'), panel = $('#panel'), estado = $('#estado'), msgT = $('#msgT');
   const LET = 'A-Za-zÁÉÍÓÚÜÑáéíóúüñ';
   const LABEL_RE = new RegExp('^\\s*([' + LET + '0-9]+(?: [' + LET + '0-9]+){0,2}):[ \\t]*(.*)$');
-  const STD_RE = /^(Entrevistador|Entrevistadora|Participante|Moderador|Moderadora|P\d{1,2})$/;
+  const STD_RE = /^(Entrevistador|Entrevistadora|Entrevistado|Entrevistada|Participante|Moderador|Moderadora|P\d{1,2})$/;
   const PREG_RE = /^Pregunta\s*\d+$/i;
-  const destinos = () => ($('#tipoT').value === 'focal' ? ['Moderador', 'P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'P7', 'P8'] : ['Entrevistador', 'Participante']);
+  const destinos = () => ($('#tipoT').value === 'focal' ? ['Moderador', 'P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'P7', 'P8'] : ['Entrevistador', 'Entrevistado']);
   const INST_RE = new RegExp('\\b(Colegio|Liceo|Escuela|Instituto|Jard[ií]n Infantil|Universidad|Centro Educacional)(?: (?:de|del|de la|de los|de las))?\\s+[A-ZÁÉÍÓÚÑ][' + LET + ']+(?: [A-ZÁÉÍÓÚÑ][' + LET + ']+){0,3}', 'g');
   const NOMBRE_RE = new RegExp('(^|[^' + LET + '0-9])([A-ZÁÉÍÓÚÑ][a-záéíóúüñ]{2,}(?: [A-ZÁÉÍÓÚÑ][a-záéíóúüñ]{2,}){0,2})', 'g');
   const IGNORAR_BASE = new Set(['Chile', 'Osorno', 'Atlas', 'Jamovi', 'Excel', 'Word', 'Google', 'Zoom', 'Meet', 'Teams', 'Covid', 'Mineduc', 'Ministerio', 'Pedagogía', 'Educación', 'Dios', 'Latinoamérica']);
@@ -1253,7 +1253,7 @@
     const otras = {}; info.filter(x => x.kind === 'otra').forEach(x => { otras[x.label] = (otras[x.label] || 0) + 1; });
     Object.keys(otras).forEach(lab => {
       const cur = selLab[lab] || '';
-      fila('warn', `Etiqueta <code>${esc(lab)}:</code> (${otras[lab]} turnos). ${$('#tipoT').value === 'focal' ? 'Usa Moderador y P1, P2, P3…' : 'Usa Entrevistador y Participante'}. No dejes nombres ni iniciales.`,
+      fila('warn', `Etiqueta <code>${esc(lab)}:</code> (${otras[lab]} turnos). ${$('#tipoT').value === 'focal' ? 'Usa Moderador y P1, P2, P3…' : 'Usa Entrevistador y Entrevistado'}. No dejes nombres ni iniciales.`,
         `<select data-lab="${esc(lab)}" aria-label="Cambiar ${esc(lab)} por"><option value="">Cambiar por…</option>${destinos().map(d => `<option value="${d}" ${cur === d ? 'selected' : ''}>${d}</option>`).join('')}</select>` +
         `<button class="mini-btn" type="button" data-act="asignar" data-arg="${esc(lab)}">Reemplazar</button>` +
         `<button class="mini-btn" type="button" data-act="noetiqueta" data-arg="${esc(lab)}">No es una etiqueta</button>`);
@@ -1340,12 +1340,12 @@
     $('#codigo').placeholder = focal ? 'Ej. F1' : 'Ej. E1CM1';
     ta.placeholder = focal
       ? 'Pega aquí la transcripción. Cada línea comienza con Moderador o con el código estable de una persona (P1, P2, etc.).'
-      : 'Pega aquí la transcripción. Cada línea comienza con quién habla y dos puntos (Entrevistador: / Participante:).';
+      : 'Pega aquí la transcripción. Cada línea comienza con quién habla y dos puntos (Entrevistador: / Entrevistado:).';
     const consejo = $('#consejos li span:nth-child(2)'), archivo = $('#consejos li:nth-child(2) span:nth-child(2)');
-    archivo.textContent = focal ? 'Guarda un archivo Word por grupo focal y nómbralo con su código (por ejemplo, F1.docx).' : 'Guarda un archivo Word por participante y nómbralo con su código (por ejemplo, E1CM1.docx).';
+    archivo.textContent = focal ? 'Guarda un archivo Word por grupo focal y nómbralo con su código (por ejemplo, F1.docx).' : 'Guarda un archivo Word por entrevistado y nómbralo con su código (por ejemplo, E1CM1.docx).';
     consejo.textContent = focal
       ? 'En cada línea, escribe "Moderador:" o el código estable de quien habla ("P1:", "P2:", etc.). Conserva los códigos al citar (por ejemplo, F1P2).'
-      : 'Al inicio de cada línea, escribe quién habla y luego dos puntos: "Entrevistador:" y "Participante:".';
+      : 'Al inicio de cada línea, escribe quién habla y luego dos puntos: "Entrevistador:" y "Entrevistado:".';
   }
   $('#tipoT').addEventListener('change', () => { msgT.textContent = ''; selLab = {}; pintarModoTranscripcion(); render(); });
   const elegirModo = m => { if ($('#tipoT').value === m) return; $('#tipoT').value = m; $('#tipoT').dispatchEvent(new Event('change')); };
@@ -1471,7 +1471,7 @@
     if (typeof docx === 'undefined') { msgT.className = 'msg err'; msgT.textContent = 'No se pudo cargar el generador de Word. Recarga la página y vuelve a intentarlo.'; return; }
     const { Document, Packer, Paragraph, TextRun, AlignmentType, Header } = docx;
     const focal = $('#tipoT').value === 'focal';
-    const etiquetas = focal ? ['Moderador', 'P1', 'P2', 'P1', 'P3', 'P2'] : ['Entrevistador', 'Participante', 'Entrevistador', 'Participante', 'Entrevistador', 'Participante'];
+    const etiquetas = focal ? ['Moderador', 'P1', 'P2', 'P1', 'P3', 'P2'] : ['Entrevistador', 'Entrevistado', 'Entrevistador', 'Entrevistado', 'Entrevistador', 'Entrevistado'];
     const instr = [
       'Plantilla de transcripción · Código del archivo: ________',
       'Un turno por línea, con su etiqueta al comienzo. Escribe tal como se dijo, sin muletillas ni repeticiones. Marca [inaudible] donde no se entienda.',
@@ -1500,7 +1500,7 @@
 <script>
 (function(){
   var primera={p:'"…cuando es la formación universaria, por lo general siempre es como el ideal…" La herramienta escribió "universaria". ¿Qué haces?',o:['Lo dejo así, es lo que transcribió la herramienta','Escucho de nuevo ese tramo y, si dijo "universitaria", lo corrijo','Borro la frase completa','Lo reemplazo por una palabra que suene parecida'],c:1,e:'Si al escuchar confirmas la palabra, se corrige. Si no se entiende, se marca [inaudible]. Nunca se adivina.',error:'Vuelve a escuchar el fragmento: confirma la palabra en la grabación, no la corrijas por intuición.'};
-  var entrevista={p:'¿Qué problemas tiene esta transcripción?',ej:'Juan Pérez (entrevistador): ¿Ustedes les van mostrando un formato de planificación? Nicole Moreno (Entrevistada): No, no nos dan uno, pero depende del profesor (...).',o:['1. Tiene muletillas','2. Mezcla dos turnos de habla en una misma línea','3. No utiliza códigos y revela identidades','4. 2 y 3 son correctas'],c:3,e:'Se mezclan dos problemas: las intervenciones están juntas en una línea y aparecen nombres en vez de códigos. Separa las intervenciones y usa "Entrevistador:" y "Participante:".',error:'Revisa por separado si las intervenciones están juntas y si aparecen nombres en lugar de roles.'};
+  var entrevista={p:'¿Qué problemas tiene esta transcripción?',ej:'Juan Pérez (entrevistador): ¿Ustedes les van mostrando un formato de planificación? Nicole Moreno (Entrevistada): No, no nos dan uno, pero depende del profesor (...).',o:['1. Tiene muletillas','2. Mezcla dos turnos de habla en una misma línea','3. No utiliza códigos y revela identidades','4. 2 y 3 son correctas'],c:3,e:'Se mezclan dos problemas: las intervenciones están juntas en una línea y aparecen nombres en vez de códigos. Separa las intervenciones y usa "Entrevistador:" y "Entrevistado:".',error:'Revisa por separado si las intervenciones están juntas y si aparecen nombres en lugar de roles.'};
   var grupoFocal={p:'¿Qué problemas tiene esta transcripción?',ej:'Moderador: ¿Qué opinan? Camila: Me sirve trabajar en grupo. Nicole: Yo prefiero hacerlo sola.',o:['1. Tiene muletillas','2. Junta varias intervenciones en una línea','3. Usa nombres en vez de códigos para identificar a las personas','4. Opciones 2 y 3 son correctas'],c:3,e:'Se mezclan varias intervenciones en una línea y aparecen nombres en vez de códigos. Pon cada intervención en una línea y usa "Moderador:", "P1:", "P2:"…; conserva el código al citar, por ejemplo F1P2.',error:'Revisa si cada intervención está en su propia línea y si las personas están identificadas con códigos estables (P1, P2…), no con sus nombres.'};
   var box=document.getElementById('qz'); if(!box) return;
   function pintarQuiz(){
@@ -1531,7 +1531,7 @@
   // Activación de conocimientos previos: una pregunta a la vez; una respuesta y se muestra la explicación.
   var ACT={
     encuesta:[
-     {p:'Un enunciado se responde con una escala de 1 a 4. ¿Qué significa el 4?',o:['Siempre significa "Totalmente de acuerdo"','Depende de la escala: puede ser acuerdo, frecuencia, importancia u otro grado, según lo que definiste en tu instrumento','La cantidad de veces que la persona respondió','La nota que obtiene el participante'],c:1,e:'El número es solo un código. Su significado lo da la escala de tu instrumento: en una de acuerdo, 4 puede ser "Totalmente de acuerdo"; en una de frecuencia, "Siempre". Por eso necesitas un libro de códigos que lo deje anotado.'},
+     {p:'Un enunciado se responde con una escala de 1 a 4. ¿Qué significa el 4?',o:['Siempre significa "Totalmente de acuerdo"','Depende de la escala: puede ser acuerdo, frecuencia, importancia u otro grado, según lo que definiste en tu instrumento','La cantidad de veces que la persona respondió','La nota que obtiene el encuestado'],c:1,e:'El número es solo un código. Su significado lo da la escala de tu instrumento: en una de acuerdo, 4 puede ser "Totalmente de acuerdo"; en una de frecuencia, "Siempre". Por eso necesitas un libro de códigos que lo deje anotado.'},
      {p:'En el Excel, el género quedó escrito como "Mujer", "mujer" y "Mujer " (con un espacio al final). ¿Qué crees que hará el programa al contar?',o:['Los junta automáticamente en una sola categoría','Los cuenta como tres categorías distintas','Borra los que están mal escritos','Muestra un aviso de error'],c:1,e:'Para el programa son textos diferentes, así que el gráfico saldría con tres barras. Por eso cada respuesta se codifica con un número.'},
     {p:'20 encuestados respondieron una encuesta de 15 enunciados. ¿Cómo ordenarías la tabla para que el programa cuente las respuestas de cada enunciado?',o:['20 filas (una por encuestado) y 15 columnas (una por enunciado)','15 filas (una por enunciado) y 20 columnas (una por encuestado)','Una sola columna con las 300 respuestas seguidas','Una hoja distinta para cada encuestado'],c:0,e:'Cada fila corresponde a un encuestado y cada columna a una pregunta. Así el programa recorre cada columna y cuenta, por ejemplo, cuántos marcaron 3 en P5.'},
      {p:'En una escala de 1 a 4 alguien digitó 44 en vez de 4. ¿Qué crees que le pasa a la media de esa pregunta?',o:['Nada, es un solo dato entre muchos','Sube y deja de representar lo que respondió el grupo','Baja un poco','El programa lo corrige solo'],c:1,e:'Un solo valor fuera de la escala basta para inflar la media. Por eso, antes de analizar, se revisa que todos los valores estén dentro de la escala.'}
