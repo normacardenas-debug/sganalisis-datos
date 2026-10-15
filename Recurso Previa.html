@@ -284,7 +284,7 @@
     <h1 style="font-size:clamp(30px,4.6vw,48px);line-height:1.05;font-weight:700">Previo al Análisis</h1>
     <p style="margin:10px 0 0;font-size:16px;line-height:1.5;color:#e9f2fb">Deja tus datos listos para llegar a analizar y no a ordenar</p>
     <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">
-      <a href="./index.html" style="display:inline-flex;align-items:center;min-height:44px;font:600 13.5px 'Open Sans',sans-serif;color:#fff;background:rgba(255,255,255,.16);padding:9px 16px;border-radius:22px;text-decoration:none">← Inicio</a>
+      <a href="./index.html" style="display:inline-flex;align-items:center;min-height:44px;font:600 13.5px 'Open Sans',sans-serif;color:var(--azul);background:#fff;padding:9px 16px;border-radius:22px;text-decoration:none">← Inicio</a>
     </div>
   </div>
 </header>
@@ -576,11 +576,11 @@
 </section>
 
 <!-- ============ VISTA 4 ============ -->
-<section class="vista sec" id="v4" data-titulo="Lista para analizar" hidden>
+<section class="vista sec" id="v4" data-titulo="Cierre del paso 1" hidden>
   <div class="wrap-sm">
-    <p class="badge b-ambar">4 · Cierre</p>
-    <h2 class="h2" tabindex="-1">Lista para analizar</h2>
-    <p class="lead">Primero deja listo el programa de análisis y luego revisa cada punto de la lista con tu grupo. Cuando todos los de tu camino estén marcados, puedes llegar a analizar.</p>
+    <p class="badge b-ambar">Paso 1 · Cierre</p>
+    <h2 class="h2" tabindex="-1">Aquí termina el paso 1</h2>
+    <p class="lead">Para cerrar este paso, deja listo el programa que usarás y revisa la lista de tu camino. Cuando completes los puntos que corresponden a tu grupo, tendrás tus datos preparados para pasar al análisis.</p>
     <h3 class="h3" style="margin-top:8px">Deja listo el programa de análisis</h3>
     <p class="lead">En el análisis trabajarás con un programa según tu enfoque. Los recursos de análisis te enseñan a usarlo paso a paso; acá solo tienes que dejarlo listo antes de esa sesión, así llegas directo a analizar.</p>
     <div class="grid" id="software" style="margin-bottom:8px"></div>
@@ -1501,7 +1501,7 @@
 (function(){
   var primera={p:'"…cuando es la formación universaria, por lo general siempre es como el ideal…" La herramienta escribió "universaria". ¿Qué haces?',o:['Lo dejo así, es lo que transcribió la herramienta','Escucho de nuevo ese tramo y, si dijo "universitaria", lo corrijo','Borro la frase completa','Lo reemplazo por una palabra que suene parecida'],c:1,e:'Si al escuchar confirmas la palabra, se corrige. Si no se entiende, se marca [inaudible]. Nunca se adivina.',error:'Vuelve a escuchar el fragmento: confirma la palabra en la grabación, no la corrijas por intuición.'};
   var entrevista={p:'¿Qué problemas tiene esta transcripción?',ej:'Juan Pérez (entrevistador): ¿Ustedes les van mostrando un formato de planificación? Nicole Moreno (Entrevistada): No, no nos dan uno, pero depende del profesor (...).',o:['1. Tiene muletillas','2. Mezcla dos turnos de habla en una misma línea','3. No utiliza códigos y revela identidades','4. 2 y 3 son correctas'],c:3,e:'Se mezclan dos problemas: las intervenciones están juntas en una línea y aparecen nombres en vez de códigos. Separa las intervenciones y usa "Entrevistador:" y "Participante:".',error:'Revisa por separado si las intervenciones están juntas y si aparecen nombres en lugar de roles.'};
-  var grupoFocal={p:'¿Qué problemas tiene esta transcripción?',ej:'Moderador: ¿Qué opinan? Camila: Me sirve trabajar en grupo. Nicole: Yo prefiero hacerlo sola.',o:['1. Tiene muletillas','2. Junta varias intervenciones en una línea','3. Usa nombres en vez de códigos para identificar a las personas','4. 2 y 3 son correctas'],c:3,e:'Se mezclan varias intervenciones en una línea y aparecen nombres en vez de códigos. Pon cada intervención en una línea y usa "Moderador:", "P1:", "P2:"…; conserva el código al citar, por ejemplo F1P2.',error:'Revisa si cada intervención está en su propia línea y si las personas están identificadas con códigos estables (P1, P2…), no con sus nombres.'};
+  var grupoFocal={p:'¿Qué problemas tiene esta transcripción?',ej:'Moderador: ¿Qué opinan? Camila: Me sirve trabajar en grupo. Nicole: Yo prefiero hacerlo sola.',o:['1. Tiene muletillas','2. Junta varias intervenciones en una línea','3. Usa nombres en vez de códigos para identificar a las personas','4. Opciones 2 y 3 son correctas'],c:3,e:'Se mezclan varias intervenciones en una línea y aparecen nombres en vez de códigos. Pon cada intervención en una línea y usa "Moderador:", "P1:", "P2:"…; conserva el código al citar, por ejemplo F1P2.',error:'Revisa si cada intervención está en su propia línea y si las personas están identificadas con códigos estables (P1, P2…), no con sus nombres.'};
   var box=document.getElementById('qz'); if(!box) return;
   function pintarQuiz(){
     var q2=document.getElementById('tipoT').value==='focal'?grupoFocal:entrevista;
