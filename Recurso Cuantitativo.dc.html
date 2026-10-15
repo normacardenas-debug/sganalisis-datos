@@ -782,9 +782,10 @@ class Component extends DCLogic {
     this.setState({ checklist });
   };
   construirChecklist(raw) {
-    const items = raw.map((texto, i) => {
-      const id = 'chk-' + i;
-      return { id, texto, checked: !!this.state.checklist[id], toggle: () => this.toggleCheck(id) };
+    const items = raw.map((entrada, i) => {
+      const item = typeof entrada === 'string' ? { texto: entrada } : entrada;
+      const id = item.id || 'chk-' + i;
+      return { id, texto: item.texto, checked: !!this.state.checklist[id], toggle: () => this.toggleCheck(id) };
     });
     const hechos = items.filter(it => it.checked).length;
     return { items, progreso: `${hechos} de ${items.length} revisados.` };
@@ -1403,7 +1404,7 @@ class Component extends DCLogic {
     ], 'act', 'practica');
 
     const chk = this.construirChecklist([
-      '¿Tienes tu base de datos lista, revisada y subida en Excel a la carpeta Drive? Se prepara en Previo al análisis.',
+      { id: 'chk-analisis', texto: '¿Completaste en Jamovi el análisis de todos tus datos y generaste las tablas de resultados?' },
       '¿Renombraste las columnas en Jamovi con los nombres de tu libro de códigos?',
       '¿Generaste las tablas de frecuencias con N, Media y Moda?',
       '¿Cambiaste la configuración regional de Google Sheets antes de pegar tus tablas?',
