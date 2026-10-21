@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Triangulación de Resultados · Seminario de Grado ULagos</title>
+<meta name="description" content="Guía para cruzar los resultados de dos o más instrumentos: tipos de triangulación, matriz, redacción y práctica.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js"></script>
+<style>
+  :root{
+    --azul:#0055B7;--azul-osc:#003d85;--azul-claro:#e9f2fb;--celeste:#8FC6E8;
+    --morado:#9F26B4;--morado-claro:#f3e8f7;
+    --verde-texto:#2E7D1F;--verde-claro:#eafbe6;--verde-borde:#ACDA90;
+    --rojo:#b0392b;--rojo-claro:#fdeeee;
+    --ambar-texto:#7a5d12;--ambar-claro:#fff8e6;--ambar-borde:#f0dca0;
+    --tinta:#0d1b2a;--texto:#1a232b;--texto-2:#3a4551;--texto-3:#55606b;
+    --borde:#e2e6ea;--gris-claro:#f4f6f8;--fondo-alt:#f9fafb;--linea-diagrama:#aeb8c2;--borde-diagrama:#c9d1d9;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:#fff;font-family:'Open Sans',sans-serif;color:var(--texto);line-height:1.6;overflow-x:hidden}
+  a{color:var(--azul)} a:hover{color:var(--azul-osc)}
+  h1,h2,h3,h4{font-family:'Roboto Condensed',sans-serif;margin:0;line-height:1.15}
+  img{display:block;max-width:100%;height:auto}
+  ::selection{background:var(--celeste)}
+  textarea,input,button,select{font-family:'Open Sans',sans-serif}
+  :focus-visible{outline:3px solid var(--azul);outline-offset:2px}
+  textarea::placeholder,input::placeholder{color:#6b7682;opacity:1}
+  .skip-link{position:absolute;left:-999px;top:0;background:var(--azul);color:#fff;padding:10px 18px;z-index:200;border-radius:0 0 6px 0}
+  .skip-link:focus{left:0}
+  .sr{position:absolute;left:-9999px}
+  .sec{padding:48px clamp(16px,6vw,56px)}
+  .wrap{max-width:1100px;margin:0 auto}
+  .badge{display:inline-block;font:700 12px 'Open Sans',sans-serif;letter-spacing:.08em;text-transform:uppercase;padding:6px 12px;border-radius:20px;margin:0 0 16px}
+  .b-azul{background:var(--azul-claro);color:var(--azul)}
+  .b-verde{background:var(--verde-claro);color:var(--verde-texto)}
+  .b-morado{background:var(--morado-claro);color:var(--morado)}
+  .b-ambar{background:#fff1c2;color:var(--ambar-texto)}
+  .h2{font-size:clamp(28px,3.6vw,40px);margin-bottom:12px;color:var(--tinta)}
+  .h3{font-size:20px;margin:30px 0 10px;color:var(--tinta)}
+  .lead{font-size:16px;line-height:1.7;color:var(--texto-2);margin:0 0 16px}
+  .small{font-size:14px;line-height:1.6;color:var(--texto-3)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
+  .mapa-tipos{background:var(--gris-claro);border-radius:12px;padding:22px}
+  .mapa-nodo{position:relative;width:max-content;max-width:100%;margin:0 auto 26px;padding:10px 18px;border:1px solid var(--borde-diagrama);border-radius:24px;background:#fff;color:var(--tinta);text-align:center;font:700 15px 'Roboto Condensed',sans-serif}
+  .mapa-nodo::after{content:"";position:absolute;top:100%;left:50%;height:26px;border-left:2px solid var(--linea-diagrama)}
+  .mapa-ramas{position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+  .mapa-ramas::before{content:"";position:absolute;top:0;left:calc((100% - 24px) / 6);right:calc((100% - 24px) / 6);border-top:2px solid var(--linea-diagrama)}
+  .mapa-rama,.relacion-opcion{position:relative;min-height:56px;padding:10px 12px;border:0;border-bottom:3px solid var(--borde-diagrama);border-radius:8px 8px 0 0;background:transparent;color:var(--texto);font:700 14px 'Open Sans',sans-serif;cursor:pointer}
+  .mapa-rama{margin-top:13px}
+  .mapa-tipos [data-tipo="enfoques"]{--rama-color:var(--azul)}
+  .mapa-tipos [data-tipo="tecnicas"]{--rama-color:var(--verde-texto)}
+  .mapa-tipos [data-tipo="fuentes"]{--rama-color:var(--morado)}
+  .mapa-tipos .mapa-rama{border-color:var(--rama-color)}
+  .mapa-rama::before{content:"";position:absolute;bottom:100%;left:50%;height:13px;border-left:2px solid var(--linea-diagrama)}
+  .mapa-rama[aria-pressed="true"],.relacion-opcion[aria-pressed="true"]{border-color:var(--azul);background:#fff;box-shadow:0 3px 12px rgba(13,27,42,.08);color:var(--azul)}
+  .mapa-tipos .mapa-rama[aria-pressed="true"]{border-color:var(--rama-color);color:var(--rama-color)}
+  .mapa-detalle{min-height:88px;margin-top:18px;padding:14px 16px;border-left:4px solid var(--azul);background:#fff;border-radius:0 8px 8px 0}
+  .mapa-detalle strong{display:block;margin-bottom:4px;color:var(--tinta);font:700 15px 'Roboto Condensed',sans-serif}
+  .mapa-detalle p{margin:0;font-size:14.5px;line-height:1.6;color:var(--texto-2)}
+  .relacion-flujo{padding:22px;border-radius:12px;background:var(--gris-claro)}
+  .relacion-entradas{position:relative;display:flex;justify-content:center;align-items:center;gap:12px;margin-bottom:28px}
+  .relacion-entradas::after{content:"";position:absolute;top:100%;left:50%;height:28px;border-left:2px solid var(--linea-diagrama)}
+  .relacion-entrada{padding:10px 14px;border:1px solid var(--borde-diagrama);border-radius:8px;background:#fff;color:var(--texto-2);font-size:14px;font-weight:600;text-align:center}
+  .relacion-mas{color:var(--azul);font:700 20px 'Roboto Condensed',sans-serif}
+  .relacion-pregunta{width:max-content;max-width:100%;margin:0 auto;padding:10px 18px;border:1px solid var(--borde-diagrama);border-radius:24px;background:#fff;color:var(--tinta);text-align:center;font:700 15px 'Roboto Condensed',sans-serif}
+  .relacion-opciones{position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:26px;padding-top:40px}
+  .relacion-opciones::before{content:"";position:absolute;top:26px;left:calc((100% - 24px) / 6);right:calc((100% - 24px) / 6);border-top:2px solid var(--linea-diagrama)}
+  .relacion-opciones::after{content:"";position:absolute;top:0;left:50%;height:26px;border-left:2px solid var(--linea-diagrama)}
+  .relacion-opcion[data-relacion="converge"]{--rama-color:var(--verde-texto)}
+  .relacion-opcion[data-relacion="complementan"]{--rama-color:var(--azul)}
+  .relacion-opcion[data-relacion="divergen"]{--rama-color:var(--morado)}
+  .relacion-opcion{border-color:var(--rama-color)}
+  .relacion-opcion[aria-pressed="true"]{border-color:var(--rama-color);color:var(--rama-color)}
+  .relacion-opcion::before{content:"";position:absolute;bottom:100%;left:50%;height:14px;border-left:2px solid var(--linea-diagrama)}
+  .relacion-opcion[aria-pressed="true"]{border-bottom-width:4px}
+  .relacion-flujo .mapa-detalle{min-height:0;margin-top:22px}
+  .relacion-flujo .mapa-detalle p+p{margin-top:8px}
+  @media(max-width:620px){.mapa-tipos,.relacion-flujo{padding:16px}.mapa-nodo{margin-bottom:16px}.mapa-nodo::after,.mapa-ramas::before,.mapa-rama::before{display:none}.mapa-ramas{grid-template-columns:1fr;gap:4px}.mapa-rama{margin-top:0;text-align:left;border-left:3px solid var(--borde-diagrama);border-bottom:0;border-radius:0 8px 8px 0}.mapa-tipos .mapa-rama{border-left-color:var(--rama-color)}.mapa-tipos .mapa-rama[aria-pressed="true"]{border-left-width:4px}.relacion-entradas{gap:6px;margin-bottom:20px}.relacion-entrada{flex:1 1 0;padding:8px 6px;font-size:12.5px}.relacion-entradas::after,.relacion-opciones::before,.relacion-opciones::after,.relacion-opcion::before{display:none}.relacion-opciones{grid-template-columns:1fr;gap:4px;margin-top:14px;padding-top:0}.relacion-opcion{text-align:left;border-left:3px solid var(--rama-color);border-bottom:0;border-radius:0 8px 8px 0}.relacion-opcion[aria-pressed="true"]{border-left-width:4px;border-bottom:0}}
+  .card{background:#fff;border:1px solid var(--borde);border-radius:12px;padding:18px 20px;border-top-width:4px}
+  .card-t{font:700 16px 'Roboto Condensed',sans-serif;margin:0 0 6px;color:var(--tinta)}
+  .card p.txt{font-size:14px;line-height:1.55;color:var(--texto-3);margin:0}
+  .card,.hover-card,.opcion,.caso-btn{transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+  .card:hover,.hover-card:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(13,27,42,.08)}
+  .aviso{display:flex;gap:10px;align-items:flex-start;background:var(--azul-claro);border-radius:10px;padding:14px 16px;margin:0 0 22px;font-size:14.5px;line-height:1.55;color:#1a3a5c}
+  .aviso-ambar{background:var(--ambar-claro);border:1px solid var(--ambar-borde);color:#5c4a14}
+  .aviso p{margin:0}
+  details.plegable{background:#fff;border:1px dashed #b6c6d6;border-radius:10px;padding:0 18px;margin:16px 0}
+  details.plegable>summary{cursor:pointer;padding:14px 0;font:700 14.5px 'Open Sans',sans-serif;color:var(--azul);min-height:44px}
+  details.plegable[open]{padding-bottom:16px}
+  details.plegable p{font-size:14.5px;line-height:1.6;color:var(--texto-2);margin:0 0 10px}
+  details.plegable ul{margin:0 0 8px;padding-left:20px;font-size:14.5px;line-height:1.7;color:var(--texto-2)}
+  .tabla-ej{width:100%;border-collapse:collapse;font-size:13.5px}
+  .tabla-ej th{background:var(--tinta);color:#fff;text-align:left;padding:9px 12px;font:700 12px 'Open Sans',sans-serif}
+  .tabla-ej td{padding:9px 12px;border-top:1px solid #eef1f4;vertical-align:top;line-height:1.5}
+  .scroll-x{overflow-x:auto;background:#fff;border-radius:12px;border:1px solid var(--borde)}
+  .btn{min-height:44px;padding:10px 18px;border-radius:8px;font:700 13.5px 'Open Sans',sans-serif;cursor:pointer;transition:background .15s ease}
+  .btn-pri{background:var(--azul, #0055B7);color:#fff;border:none} .btn-pri:hover{background:var(--azul-osc, #003d85)}
+  .btn-sec{background:#fff;color:var(--azul);border:1.5px solid var(--azul)} .btn-sec:hover{background:var(--azul-claro)}
+  .btn-ver{background:var(--verde-claro);color:var(--verde-texto);border:1.5px solid var(--verde-borde)}
+  .btn-cel{background:var(--azul-claro);color:var(--azul);border:1.5px solid var(--celeste)}
+  /* esquema de vistas */
+  .esquema{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid var(--borde);box-shadow:0 2px 8px rgba(0,0,0,.04)}
+  .esquema ol{list-style:none;margin:0;padding:0 clamp(16px,6vw,56px);display:flex;gap:2px;overflow-x:auto;scrollbar-width:thin}
+  .esquema button{flex:none;display:flex;align-items:center;gap:8px;min-height:52px;padding:0 14px;background:none;border:none;border-bottom:3px solid transparent;font:600 14px 'Open Sans',sans-serif;color:var(--texto);cursor:pointer;white-space:nowrap}
+  .esquema button:hover{color:var(--azul);border-bottom-color:var(--celeste)}
+  .esquema button[aria-current="step"]{color:var(--azul);border-bottom-color:var(--azul)}
+  .esquema .n{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:var(--gris-claro);font:700 12px 'Open Sans',sans-serif;color:var(--texto-2)}
+  .esquema button[aria-current="step"] .n{background:var(--azul);color:#fff}
+  .vista[hidden]{display:none}
+  .pie-vista{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:40px;padding-top:20px;border-top:1px solid var(--borde)}
+  /* caso */
+  .casos{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:0 0 20px}
+  .caso-btn{min-height:64px;text-align:left;padding:12px 16px;border-radius:10px;border:1.5px solid #c9d1d9;background:#fff;cursor:pointer;font:600 14px 'Open Sans',sans-serif;color:var(--texto)}
+  .caso-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(13,27,42,.08);border-color:rgba(0,85,183,.55)}
+  .caso-btn[aria-pressed="true"]{border-color:var(--azul);background:var(--azul-claro);color:var(--azul)}
+  .caso-panel{background:var(--gris-claro);border-radius:12px;padding:20px 22px}
+  .caso-panel dl{margin:0;display:grid;grid-template-columns:minmax(120px,190px) 1fr;gap:10px 18px}
+  .caso-panel dt{font:700 13px 'Open Sans',sans-serif;color:var(--tinta)}
+  .caso-panel dd{margin:0;font-size:14.5px;line-height:1.6;color:var(--texto-2)}
+  @media(max-width:620px){.caso-panel dl{grid-template-columns:1fr}.caso-panel dt{margin-top:6px}}
+  /* checks */
+  .check{display:flex;gap:12px;align-items:flex-start;background:#fff;border:1px solid var(--borde);border-radius:10px;padding:14px 16px;cursor:pointer;min-height:44px;font-size:14.5px;line-height:1.5}
+  .check:hover{border-color:var(--celeste);background:#fbfdff}
+  .check input{margin-top:3px;width:20px;height:20px;flex:none;accent-color:var(--verde-texto)}
+  .checks{display:flex;flex-direction:column;gap:10px}
+  /* matriz */
+  .mat{width:100%;border-collapse:collapse;min-width:980px}
+  .mat th{background:var(--tinta);color:#fff;text-align:left;padding:8px 10px;font:700 12px 'Open Sans',sans-serif;vertical-align:bottom}
+  .mat th input{width:100%;min-height:36px;border:1px solid #c9d1d9;border-radius:6px;padding:6px 8px;font:700 13px 'Open Sans',sans-serif;color:var(--tinta);background:#fff}
+  .mat td{padding:6px;vertical-align:top;border-top:1px solid var(--borde)}
+  .mat textarea,.mat select{width:100%;min-height:44px;border:1px solid #7f8b96;border-radius:6px;padding:8px 10px;font-size:13.5px;line-height:1.5;color:var(--texto);background:#fff;resize:vertical}
+  .mat .del{background:none;border:none;color:var(--rojo);font-size:22px;cursor:pointer;min-width:44px;min-height:44px}
+  .traer{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;background:var(--gris-claro);border-radius:10px;padding:14px 16px;margin:0 0 16px}
+  .traer label{display:flex;flex-direction:column;gap:4px;font:600 12.5px 'Open Sans',sans-serif;color:var(--texto-2);flex:1 1 220px;min-width:0}
+  .traer select{width:100%;max-width:100%;min-height:44px;border:1px solid #7f8b96;border-radius:8px;padding:6px 10px;font-size:14px;background:#fff}
+  .mat th .col-cab{display:flex;gap:4px;align-items:flex-start}
+  .mat th .col-cab>div{flex:1;display:flex;flex-direction:column;gap:4px;min-width:0}
+  .mat th input.inf{font-weight:400;font-size:12.5px;min-height:32px}
+  .mat th .del-col{background:none;border:none;color:#fff;font-size:20px;cursor:pointer;min-width:32px;min-height:36px;opacity:.8}
+  .mat th .del-col:hover{opacity:1}
+  /* informantes */
+  .inf-paso{margin-top:16px}
+  .inf-paso[hidden]{display:none}
+  .inf-q{font:700 15px 'Open Sans',sans-serif;color:var(--tinta);margin:0 0 10px}
+  .pares{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+  .par{display:grid;grid-template-columns:1fr 1fr 44px;gap:8px;align-items:end}
+  .par label{display:flex;flex-direction:column;gap:4px;font:600 12.5px 'Open Sans',sans-serif;color:var(--texto-2)}
+  .par input{min-height:44px;border:1px solid #7f8b96;border-radius:8px;padding:6px 10px;font-size:14px;width:100%}
+  .par .del{background:none;border:none;color:var(--rojo);font-size:22px;cursor:pointer;min-width:44px;min-height:44px}
+  @media(max-width:620px){.par{grid-template-columns:1fr 44px}.par label:first-child{grid-column:1/-1}}
+  /* quiz */
+  .quiz{background:#fff;border-radius:12px;padding:22px 24px;border:1px solid var(--borde);max-width:820px;margin:0 auto 16px}
+  .quiz-p{font:700 16px 'Roboto Condensed',sans-serif;color:var(--tinta);margin:0 0 14px;line-height:1.4}
+  .quiz-ops{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  @media(max-width:620px){.quiz-ops{grid-template-columns:1fr}}
+  .opcion{min-height:58px;padding:11px 14px;border-radius:8px;border:1.5px solid #c9d1d9;background:#fff;color:var(--texto);font:600 13.5px 'Open Sans',sans-serif;cursor:pointer;text-align:left;display:flex;gap:8px;align-items:center}
+  .opcion:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(13,27,42,.08);border-color:rgba(0,85,183,.55)}
+  .opcion:disabled{cursor:default;transform:none;box-shadow:none}
+  .marca{flex:none;font-weight:700;min-width:1em}
+  .fb{margin-top:14px;padding:14px 16px;border-radius:8px}
+  .fb p{margin:0;font-size:14px;line-height:1.55;color:var(--texto-2)}
+  .fb .fb-t{font-weight:700;margin-bottom:4px}
+  .modelo{border-left:4px solid var(--azul);background:#fbfdff;border-radius:0 10px 10px 0;padding:14px 18px;margin:10px 0;font-size:15px;line-height:1.7;color:var(--texto)}
+  .rel{display:inline-block;font:700 11.5px 'Open Sans',sans-serif;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:14px}
+  @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}.card:hover,.hover-card:hover,.opcion:hover,.caso-btn:hover{transform:none}}
+  @media print{.esquema,.skip-link,button,.no-print{display:none!important}.vista[hidden]{display:block!important}}
+</style>
+</head>
+<body>
+<a href="#contenido-principal" class="skip-link">Saltar al contenido principal</a>
+<div style="display:flex;flex-direction:column;min-height:100vh">
+
+<header style="background:#0055B7;color:#fff;padding:42px clamp(16px,6vw,56px) 34px;display:flex;align-items:center;gap:32px;flex-wrap:wrap">
+  <div style="width:180px;height:76px;flex:none;display:flex;align-items:center;justify-content:center">
+    <img src="./logoula.png" alt="Universidad de Los Lagos" style="max-height:100%;width:auto">
+  </div>
+  <div style="flex:1;min-width:240px">
+    <p style="margin:0 0 6px;font:600 12px/1.4 'Open Sans',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#d6ebfa">Seminario de Grado · SEM2-2026</p>
+    <h1 style="font-size:clamp(30px,4.6vw,48px);line-height:1.05;font-weight:700">Triangulación de Resultados</h1>
+    <p style="margin:10px 0 0;font-size:16px;line-height:1.5;color:#e9f2fb">Cruzar lo que dicen dos o más instrumentos sobre un mismo aspecto</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">
+      <a href="./index.html" style="display:inline-flex;align-items:center;min-height:44px;font:600 13.5px Arial,sans-serif;color:#0055B7;background:#fff;border:2px solid #0055B7;padding:9px 16px;border-radius:22px;text-decoration:none">← Inicio</a>
+      <a href="./Recurso Cuantitativo.dc.html" style="display:inline-flex;align-items:center;min-height:44px;font:600 13.5px 'Open Sans',sans-serif;color:#fff;background:rgba(255,255,255,.16);padding:9px 16px;border-radius:22px;text-decoration:none">Recurso Cuantitativo</a>
+      <a href="./Recurso Cualitativo.dc.html" style="display:inline-flex;align-items:center;min-height:44px;font:600 13.5px 'Open Sans',sans-serif;color:#fff;background:rgba(255,255,255,.16);padding:9px 16px;border-radius:22px;text-decoration:none">Recurso Cualitativo</a>
+    </div>
+  </div>
+</header>
+
+<nav class="esquema" aria-label="Vistas del recurso">
+  <ol id="esquema"></ol>
+</nav>
+
+<main id="contenido-principal" style="flex:1">
+
+<!-- ============ VISTA 1 ============ -->
+<section class="vista sec" id="v1" data-titulo="Qué es y qué no es">
+  <div class="wrap">
+    <p class="badge b-azul">1 · Antes de empezar</p>
+    <h2 class="h2" tabindex="-1">Qué es y qué no es</h2>
+    <p class="lead">Triangular es mirar un mismo aspecto desde más de un instrumento para ver si los hallazgos se refuerzan, se completan o se contradicen. No es poner una tabla al lado de la otra.</p>
+    <div class="aviso">
+      <p><strong>Dónde va.</strong> La triangulación se trabaja cuando cada instrumento ya tiene sus resultados presentados. Explicar por qué coinciden o difieren se hace después, en la discusión.</p>
+    </div>
+
+    <h3 class="h3">Tres formas de triangular</h3>
+    <div class="mapa-tipos">
+      <p class="mapa-nodo">¿Qué se cruza?</p>
+      <div class="mapa-ramas" role="group" aria-label="Elige qué se cruza en la triangulación">
+        <button type="button" class="mapa-rama" data-tipo="enfoques" aria-pressed="true">Entre enfoques</button>
+        <button type="button" class="mapa-rama" data-tipo="tecnicas" aria-pressed="false">Entre técnicas</button>
+        <button type="button" class="mapa-rama" data-tipo="fuentes" aria-pressed="false">Entre fuentes</button>
+      </div>
+      <div class="mapa-detalle" id="detalleTipo" aria-live="polite">
+        <strong>Entre enfoques</strong>
+        <p>Una encuesta con entrevistas o grupo focal: se cruzan cifras con relatos. Es la única forma de esta clasificación que combina métodos cuantitativos y cualitativos, por lo que corresponde a un estudio mixto.</p>
+      </div>
+    </div>
+    <p class="small" style="margin-top:12px">Esta clasificación es una organización propia de este recurso, pensada para los instrumentos que suelen usar los grupos.</p>
+
+    <h3 class="h3">Tres relaciones posibles entre lo que dicen los instrumentos</h3>
+    <div class="relacion-flujo">
+      <div class="relacion-entradas" aria-label="Dos hallazgos que se comparan">
+        <span class="relacion-entrada">Hallazgo del instrumento A</span>
+        <span class="relacion-mas" aria-hidden="true">+</span>
+        <span class="relacion-entrada">Hallazgo del instrumento B</span>
+      </div>
+      <p class="relacion-pregunta">¿Cómo se relacionan?</p>
+      <div class="relacion-opciones" role="group" aria-label="Elige cómo se relacionan los hallazgos">
+        <button type="button" class="relacion-opcion" data-relacion="converge" aria-pressed="true">Convergen</button>
+        <button type="button" class="relacion-opcion" data-relacion="complementan" aria-pressed="false">Se complementan</button>
+        <button type="button" class="relacion-opcion" data-relacion="divergen" aria-pressed="false">Divergen</button>
+      </div>
+      <div class="mapa-detalle" id="detalleRelacion" aria-live="polite">
+        <strong>Convergen</strong>
+        <p>Los instrumentos apuntan en la misma dirección.</p>
+        <p>Ejemplo: la encuesta muestra que la mayoría recibe retroalimentación oportuna; en las entrevistas, los entrevistados también señalan que la reciben a tiempo.</p>
+      </div>
+    </div>
+    <div class="aviso aviso-ambar" style="margin-top:18px">
+      <p><strong>Que las respuestas sean distintas entre instrumentos no es un error.</strong> Una diferencia entre instrumentos es un hallazgo. Se declara, no se esconde ni se corrige.</p>
+    </div>
+  </div>
+  <div class="wrap pie-vista"><span></span><button class="btn btn-pri" data-ir="2">Continuar a tu caso →</button></div>
+</section>
+
+<!-- ============ VISTA 2 ============ -->
+<section class="vista sec" id="v2" data-titulo="Tu caso" hidden>
+  <div class="wrap">
+    <p class="badge b-verde">2 · Tu caso</p>
+    <h2 class="h2" tabindex="-1">Tu caso</h2>
+    <p class="lead">Elige la combinación de instrumentos que aplicó tu grupo. Se indica qué se cruza y de dónde salen los datos.</p>
+    <div class="casos" id="casos" role="group" aria-label="Combinación de instrumentos"></div>
+    <div class="caso-panel" id="casoPanel" aria-live="polite"></div>
+
+    <h3 class="h3">¿Y si tengo informantes diferentes?</h3>
+    <p class="small" style="margin:0 0 12px">Por ejemplo, estudiantes y docentes, o docentes de dos establecimientos. En ese caso también se puede comparar entre grupos de informantes.</p>
+    <p class="inf-q" id="infQ1">¿Aplicaron los instrumentos a más de un grupo de informantes?</p>
+    <div class="casos" id="infDif" role="group" aria-labelledby="infQ1">
+      <button type="button" class="caso-btn" data-dif="si" aria-pressed="false">Sí, a grupos distintos</button>
+      <button type="button" class="caso-btn" data-dif="no" aria-pressed="false">No, a un solo grupo</button>
+    </div>
+    <div class="inf-paso" id="infPaso2" hidden>
+      <p class="inf-q" id="infQ2">¿A cada grupo se le aplicó el mismo instrumento o uno distinto?</p>
+      <div class="casos" id="infModo" role="group" aria-labelledby="infQ2">
+        <button type="button" class="caso-btn" data-modo="mismo" aria-pressed="false">El mismo instrumento a cada grupo</button>
+        <button type="button" class="caso-btn" data-modo="distinto" aria-pressed="false">Un instrumento distinto a cada grupo</button>
+        <button type="button" class="caso-btn" data-modo="mezcla" aria-pressed="false">Una mezcla: algunos instrumentos se repiten entre grupos</button>
+      </div>
+    </div>
+    <div class="caso-panel inf-paso" id="infPanel" aria-live="polite" hidden></div>
+    <div class="inf-paso" id="infPaso3" hidden>
+      <p class="inf-q" style="margin-top:6px">Columnas de tu matriz</p>
+      <p class="small" style="margin:0">Una fila por cada combinación de instrumento y grupo que quieras comparar. Cada una será una columna de la matriz.</p>
+      <div class="pares" id="pares"></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button type="button" class="btn btn-ver" id="addPar">+ Otra columna</button>
+        <button type="button" class="btn btn-pri" id="aplicarInf">Ajustar la matriz con estas columnas</button>
+      </div>
+      <p id="infAviso" class="small" role="status" aria-live="polite" style="margin-top:8px;min-height:20px"></p>
+    </div>
+
+    <h3 class="h3">Condiciones para entrar a la matriz</h3>
+    <p class="small" style="margin:0 0 12px">Marca lo que ya se cumple. Si alguna no se cumple, conviene resolverla antes de seguir.</p>
+    <div class="checks" id="entrada"></div>
+    <p id="deteccion" class="small" style="margin-top:14px" role="status" aria-live="polite"></p>
+  </div>
+  <div class="wrap pie-vista"><button class="btn btn-sec" data-ir="1">← Volver</button><button class="btn btn-pri" data-ir="3">Continuar a cómo redactarlo →</button></div>
+</section>
+
+<!-- ============ VISTA 3 ============ -->
+<section class="vista sec" id="v4" data-titulo="Matriz" hidden>
+  <div style="max-width:1180px;margin:0 auto">
+    <p class="badge b-morado">4 · Herramienta</p>
+    <h2 class="h2" tabindex="-1">Matriz de triangulación</h2>
+    <p class="lead">Una fila por aspecto. En cada columna se resume lo que mostró ese instrumento, luego se clasifica la relación y se describe en una frase lo que se observa. La tabla ordena y clasifica, pero no explica los motivos.</p>
+    <p class="small">En una encuesta, los niveles 3 y 4 dependen de la escala utilizada. Al informar ese porcentaje, escribe también qué respuestas representan; por ejemplo, «De acuerdo» y «Totalmente de acuerdo» o «Frecuentemente» y «Siempre».</p>
+    <div class="aviso aviso-ambar">
+      <p><strong>Importante.</strong> Lo que escribes se guarda solo en este navegador y en este computador. Si cambias de equipo, usas una ventana privada o borras el historial, se pierde. Descarga tu trabajo cada vez que termines.</p>
+    </div>
+
+    <div class="traer no-print">
+      <label>Traer datos desde
+        <select id="trSrc"><option value="cuanti">Recurso Cuantitativo (síntesis por dimensión)</option><option value="cuali">Recurso Cualitativo, entrevistas (similitudes y diferencias)</option><option value="cualiGf">Recurso Cualitativo, grupo focal (similitudes y diferencias)</option></select>
+      </label>
+      <label>A la columna
+        <select id="trCol"></select>
+      </label>
+      <button class="btn btn-sec" id="trBtn">Traer</button>
+      <span class="small" style="flex:1;min-width:200px">Solo completa celdas vacías. Lo que ya escribiste no se modifica.</span>
+    </div>
+
+    <div class="no-print" style="display:flex;gap:10px;margin-bottom:8px;flex-wrap:wrap">
+      <button class="btn btn-sec" id="dlXls">Descargar en Excel</button>
+      <button class="btn btn-pri" id="dlDoc">Descargar en Word</button>
+      <span style="flex:1"></span>
+      <button class="btn btn-cel" id="addCol">+ Columna</button>
+      <button class="btn btn-ver" id="addFila">+ Fila</button>
+    </div>
+    <p class="small" style="margin:0 0 8px">Cada columna es un instrumento. Si hay grupos de informantes distintos, escribe el grupo bajo el nombre del instrumento (por ejemplo, Entrevistas · Docentes). Con tres o más columnas, la relación puede no ser la misma entre todas: elige la que predomina y en Lo que se observa indica entre qué columnas se da.</p>
+    <p id="aviso" role="status" aria-live="polite" style="font-size:13px;color:var(--verde-texto);min-height:20px;margin:0 0 12px"></p>
+    <div class="scroll-x" id="matWrap" tabindex="0" role="region" aria-label="Matriz de triangulación, se desplaza horizontalmente"></div>
+
+    <details class="plegable">
+      <summary>Ver ejemplo resuelto</summary>
+      <p>Ejemplo inventado solo para ilustrar. Los números y los extractos no vienen de ninguna investigación.</p>
+      <div class="scroll-x" style="margin:6px 0 14px">
+        <table class="tabla-ej" style="min-width:860px">
+          <caption class="sr">Ejemplo de matriz de triangulación con tres filas</caption>
+          <thead><tr><th scope="col">Dimensión/categoría que se cruza</th><th scope="col">Encuesta</th><th scope="col">Entrevistas</th><th scope="col">Relación</th><th scope="col">Lo que se observa</th></tr></thead>
+          <tbody>
+            <tr><td>Prácticas evaluativas</td><td>Media más alta en P5 (3,1), con 80 % en «De acuerdo» o «Totalmente de acuerdo».</td><td>Los tres entrevistados dicen haber reemplazado las pruebas escritas por trabajos en grupo.</td><td>Converge</td><td>Ambos instrumentos señalan un mayor uso de trabajos en grupo.</td></tr>
+            <tr><td>Uso de plataformas digitales</td><td>85 % respondió «De acuerdo» o «Totalmente de acuerdo».</td><td>Dos entrevistados relatan dificultades para controlar la copia en evaluaciones en línea.</td><td>Se complementan</td><td>La encuesta muestra el uso y las entrevistas agregan una dificultad que la encuesta no recoge.</td></tr>
+            <tr><td>Retroalimentación</td><td>Media más baja en P7 (1,9), con 20 % en «De acuerdo» o «Totalmente de acuerdo».</td><td>Dos entrevistados afirman devolver la retroalimentación en la misma clase.</td><td>Divergen</td><td>La encuesta indica poca percepción de oportunidad y las entrevistas describen una devolución inmediata.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Fíjate en que la última columna describe lo que se ve en cada instrumento, pero no dice por qué ocurre.</p>
+    </details>
+  </div>
+  <div class="wrap pie-vista"><button class="btn btn-sec" data-ir="3">← Volver a cómo redactarlo</button><button class="btn btn-pri" data-ir="5">Continuar a la práctica →</button></div>
+</section>
+
+<!-- ============ VISTA 4 ============ -->
+<section class="vista sec" id="v3" data-titulo="Redacción" hidden>
+  <div class="wrap">
+    <p class="badge b-ambar">3 · Escritura</p>
+    <h2 class="h2" tabindex="-1">Cómo redactarlo</h2>
+    <p class="lead">Cada párrafo de triangulación sigue tres movimientos. Primero lo que mostró un instrumento, luego lo que mostró el otro, y al final cómo se relacionan.</p>
+
+    <div class="grid" style="margin-bottom:8px">
+      <div class="card" style="border-top-color:var(--azul)"><p class="card-t">1. Un instrumento</p><p class="txt">Se informa qué mostró, con su cifra o su extracto breve.</p></div>
+      <div class="card" style="border-top-color:var(--verde-texto)"><p class="card-t">2. El otro instrumento</p><p class="txt">Se informa qué mostró sobre el mismo aspecto.</p></div>
+      <div class="card" style="border-top-color:var(--morado)"><p class="card-t">3. La relación</p><p class="txt">Se dice si coinciden, se complementan o difieren, sin explicar por qué.</p></div>
+    </div>
+
+    <h3 class="h3">Un modelo para cada relación</h3>
+    <p class="small" style="margin:0 0 6px">Ejemplos inventados con la misma información de la matriz de ejemplo.</p>
+    <span class="rel" style="background:var(--verde-claro);color:var(--verde-texto)">Converge</span>
+    <div class="modelo">En la dimensión Prácticas evaluativas, ambos instrumentos apuntan en la misma dirección. En la encuesta, el enunciado P5 obtuvo la media más alta (3,1), con 80 % de las respuestas «De acuerdo» o «Totalmente de acuerdo». Por su parte, los tres entrevistados (E1CM1, E2CP1 y E3CM2) señalan haber reemplazado las pruebas escritas por trabajos en grupo.</div>
+    <span class="rel" style="background:var(--azul-claro);color:var(--azul)">Se complementan</span>
+    <div class="modelo">En la dimensión Uso de plataformas digitales, la encuesta indica que 85 % de los encuestados respondió «De acuerdo» o «Totalmente de acuerdo». Las entrevistas agregan un aspecto que la encuesta no recoge, ya que dos entrevistados (E1CM1 y E3CM2) relatan dificultades para controlar la copia en las evaluaciones en línea.</div>
+    <span class="rel" style="background:var(--morado-claro);color:var(--morado)">Divergen</span>
+    <div class="modelo">En la dimensión Retroalimentación, los resultados difieren. En la encuesta, el enunciado P7 tiene la media más baja (1,9), con 20 % de respuestas «De acuerdo» o «Totalmente de acuerdo». En las entrevistas, en cambio, dos entrevistados (E1CM1 y E2CP1) afirman devolver la retroalimentación en la misma clase. Esta diferencia se retoma en la discusión.</div>
+
+    <details class="plegable">
+      <summary>Marcos de frase</summary>
+      <ul>
+        <li>Tanto [instrumento 1] como [instrumento 2] indican que…</li>
+        <li>[Instrumento 2] se suma a lo observado en [instrumento 1] al agregar que…</li>
+        <li>Los resultados de ambos instrumentos difieren en…</li>
+        <li>Mientras [instrumento 1] muestra que…, [instrumento 2] señala que…</li>
+        <li>Con distintos informantes: Tanto [grupo 1] como [grupo 2] señalan, en [instrumento], que…</li>
+        <li>Con distintos informantes: Mientras en [instrumento] [grupo 1] indica que…, [grupo 2] señala que…</li>
+        <li>Si cambian instrumento y grupo a la vez: En la encuesta a [grupo 1]…, mientras que en las entrevistas a [grupo 2]…</li>
+      </ul>
+    </details>
+
+    <h3 class="h3">Errores frecuentes</h3>
+    <div class="scroll-x">
+      <table class="tabla-ej" style="min-width:760px">
+        <caption class="sr">Errores frecuentes al redactar la triangulación</caption>
+        <thead><tr><th scope="col">Así no</th><th scope="col">Por qué</th><th scope="col">Así sí</th></tr></thead>
+        <tbody>
+          <tr><td>Las entrevistas confirman los resultados de la encuesta.</td><td>Unos pocos relatos no confirman estadísticamente a una muestra.</td><td>Los relatos de los entrevistados coinciden con la tendencia observada en la encuesta.</td></tr>
+          <tr><td>La encuesta dice una cosa y las entrevistas otra, así que una de las dos está equivocada.</td><td>Una diferencia entre instrumentos no invalida a ninguno.</td><td>Los resultados de ambos instrumentos difieren en este aspecto. La diferencia se retoma en la discusión.</td></tr>
+          <tr><td>Primero van las tablas de la encuesta y después las de las entrevistas.</td><td>Sin cruce por aspecto, eso es presentar por separado y no triangular.</td><td>Para cada aspecto se indica qué muestra cada instrumento y cómo se relacionan.</td></tr>
+          <tr><td>Las entrevistas solo ilustran lo que mostró la encuesta.</td><td>Esta relación puede corresponder al diseño si declara predominancia de la encuesta; no debe suponerse si no está definida.</td><td>Como el diseño da predominancia a la encuesta, las entrevistas complementan sus resultados y aportan aspectos que esta no recoge.</td></tr>
+          <tr><td>Los docentes responden así porque tienen poco tiempo.</td><td>Explicar causas requiere marco teórico y es tarea de la discusión.</td><td>Los docentes señalan que el tiempo disponible es limitado.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="wrap pie-vista"><button class="btn btn-sec" data-ir="2">← Volver</button><button class="btn btn-pri" data-ir="4">Continuar a la matriz →</button></div>
+</section>
+
+<!-- ============ VISTA 5 ============ -->
+<section class="vista sec" id="v5" data-titulo="Práctica y cierre" hidden>
+  <div class="wrap">
+    <p class="badge b-azul">5 · Práctica</p>
+    <h2 class="h2" tabindex="-1">Práctica y cierre</h2>
+    <p class="lead">Casos breves. Si te equivocas recibirás una pista y podrás intentarlo otra vez antes de ver la respuesta.</p>
+    <div id="quiz"></div>
+
+    <h3 class="h3" style="margin-top:36px">Lista de verificación</h3>
+    <p class="small" style="margin:0 0 12px">Revisa la matriz y el texto antes de entregar. Lo marcado se guarda en este navegador.</p>
+    <div class="checks" id="checklist"></div>
+    <p id="chkProg" class="small" style="margin-top:12px" role="status" aria-live="polite"></p>
+
+    <h3 class="h3">Referencias</h3>
+    <p style="margin:0;padding-left:28px;text-indent:-28px;font-size:14.5px;line-height:1.7">Fetters, M. D., Curry, L. A., y Creswell, J. W. (2013). Achieving integration in mixed methods designs: Principles and practices. <em>Health Services Research, 48</em>(6pt2), 2134–2156. https://doi.org/10.1111/1475-6773.12117</p>
+  </div>
+  <div class="wrap pie-vista"><button class="btn btn-sec" data-ir="4">← Volver</button><a class="btn btn-pri" href="./index.html" style="text-decoration:none;display:inline-flex;align-items:center;background:#0055B7;color:#fff">Volver al inicio</a></div>
+</section>
+
+</main>
+
+<footer style="background:var(--tinta);color:#e9f2fb;padding:36px clamp(16px,6vw,56px);text-align:center">
+  <p style="margin:0 0 10px"><strong>Universidad de Los Lagos</strong> · Departamento de Educación · Seminario de Grado</p>
+  <div style="margin-top:15px;display:inline-block;text-align:center;max-width:760px">
+    <a rel="license noopener" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" style="display:inline-block">
+      <img alt="Licencia Creative Commons" width="88" height="31" style="border-width:0;margin:0 auto 5px" src="https://i.creativecommons.org/l/by-nc/4.0/88x31.png">
+    </a>
+    <small style="display:block;line-height:1.5">Esta obra de <strong>Jesús Sánchez Alvarado</strong> está bajo una
+      <a rel="license noopener" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" style="color:inherit">Licencia Creative Commons Atribución-NoComercial 4.0 Internacional</a>.</small>
+  </div>
+</footer>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  const $ = (s, r) => (r || document).querySelector(s);
+  const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const norm = s => String(s || '').trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  const leer = (k, f) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : f; } catch (e) { return f; } };
+  const guardar = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } };
+
+  const K = { mat: 'ulagos-trian-matriz-v1', chk: 'ulagos-trian-checklist-v1', ent: 'ulagos-trian-entrada-v1', caso: 'ulagos-trian-caso-v1', inf: 'ulagos-trian-informantes-v1' };
+  const MAXC = 6;
+  const K_CUANTI = 'ulagos-cuanti-tablas-v1', K_CUALI = 'ulagos-cuali-tablas-v1';
+  const REL = ['Converge', 'Se complementan', 'Divergen'];
+
+  /* ---------------- Vistas ---------------- */
+  const vistaRedaccion = $('#v3'), vistaMatriz = $('#v4');
+  vistaMatriz.parentNode.insertBefore(vistaRedaccion, vistaMatriz);
+  const vistas = $$('.vista');
+  function mostrar(n, enfocar) {
+    n = Math.min(Math.max(1, n), vistas.length);
+    vistas.forEach((v, i) => { v.hidden = (i + 1 !== n); });
+    $$('#esquema button').forEach((b, i) => { if (i + 1 === n) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current'); });
+    try { history.replaceState(null, '', '#v' + n); } catch (e) { /* archivo local */ }
+    if (enfocar) {
+      const h = $('h2', vistas[n - 1]); if (h) h.focus({ preventScroll: true });
+      const nav = $('.esquema'); window.scrollTo({ top: nav ? nav.offsetTop : 0, behavior: 'auto' });
+    }
+    if (n === 2) pintarDeteccion();
+  }
+  $('#esquema').innerHTML = vistas.map((v, i) => `<li><button type="button" data-ir="${i + 1}"><span class="n" aria-hidden="true">${i + 1}</span>${esc(v.dataset.titulo)}</button></li>`).join('');
+  document.addEventListener('click', e => {
+    const b = e.target.closest('[data-ir]'); if (b) mostrar(parseInt(b.dataset.ir, 10), true);
+  });
+
+  /* ---------------- Mapa de formas de triangulación ---------------- */
+  const TIPOS = {
+    enfoques: {
+      titulo: 'Entre enfoques',
+      texto: 'Una encuesta con entrevistas o grupo focal: se cruzan cifras con relatos. Es la única forma de esta clasificación que combina métodos cuantitativos y cualitativos, por lo que corresponde a un estudio mixto.',
+    },
+    tecnicas: {
+      titulo: 'Entre técnicas',
+      texto: 'Una entrevista con un grupo focal. Ambas son cualitativas, pero el dato se produce de forma distinta.',
+    },
+    fuentes: {
+      titulo: 'Entre fuentes',
+      texto: 'La misma técnica aplicada a otros informantes, por ejemplo estudiantes y docentes.',
+    },
+  };
+  $$('.mapa-tipos .mapa-rama').forEach(b => b.addEventListener('click', () => {
+    const tipo = TIPOS[b.dataset.tipo];
+    if (!tipo) return;
+    $$('.mapa-tipos .mapa-rama').forEach(rama => rama.setAttribute('aria-pressed', String(rama === b)));
+    $('#detalleTipo').innerHTML = `<strong>${esc(tipo.titulo)}</strong><p>${esc(tipo.texto)}</p>`;
+  }));
+
+  /* ---------------- Relaciones entre hallazgos ---------------- */
+  const RELACIONES = {
+    converge: {
+      titulo: 'Convergen',
+      significado: 'Los instrumentos apuntan en la misma dirección.',
+      ejemplo: 'La encuesta muestra que la mayoría recibe retroalimentación oportuna; en las entrevistas, los entrevistados también señalan que la reciben a tiempo.',
+    },
+    complementan: {
+      titulo: 'Se complementan',
+      significado: 'Cada instrumento aporta información distinta que ayuda a comprender mejor el mismo aspecto.',
+      ejemplo: 'La encuesta muestra que la mayoría recibe retroalimentación oportuna; en las entrevistas, los entrevistados describen cómo esa retroalimentación les ayuda a mejorar sus trabajos.',
+    },
+    divergen: {
+      titulo: 'Divergen',
+      significado: 'Los instrumentos muestran resultados distintos o contrapuestos sobre el mismo aspecto.',
+      ejemplo: 'La encuesta muestra que la mayoría recibe retroalimentación oportuna; en las entrevistas, varias personas dicen que la reciben tarde.',
+    },
+  };
+  $$('.relacion-opcion').forEach(b => b.addEventListener('click', () => {
+    const relacion = RELACIONES[b.dataset.relacion];
+    if (!relacion) return;
+    $$('.relacion-opcion').forEach(rama => rama.setAttribute('aria-pressed', String(rama === b)));
+    const detalle = $('#detalleRelacion');
+    detalle.innerHTML = `<strong>${esc(relacion.titulo)}</strong><p>${esc(relacion.significado)}</p><p>Ejemplo: ${esc(relacion.ejemplo)}</p>`;
+  }));
+
+  /* ---------------- Casos ---------------- */
+  const CASOS = {
+    a: { label: 'Encuesta y entrevistas', tipo: 'Entre enfoques (diseño mixto)', cols: ['Encuesta', 'Entrevistas'], n: 2,
+      cruza: 'Cada dimensión de la encuesta con la categoría de las entrevistas que trata lo mismo.',
+      datos: 'La tabla Síntesis por dimensión del Recurso Cuantitativo y la tabla Similitudes y diferencias del Recurso Cualitativo, con la técnica Entrevistas.',
+      cuidado: 'Las cifras describen a los encuestados y los relatos a los entrevistados. Los relatos no confirman a la muestra.' },
+    b: { label: 'Encuesta y grupo focal', tipo: 'Entre enfoques (diseño mixto)', cols: ['Encuesta', 'Grupo focal'], n: 2,
+      cruza: 'Cada dimensión de la encuesta con la categoría del grupo focal que trata lo mismo.',
+      datos: 'La tabla Síntesis por dimensión del Recurso Cuantitativo y la tabla Similitudes y diferencias del Recurso Cualitativo, con la técnica Grupo focal.',
+      cuidado: 'Lo dicho en un grupo se produce en conversación. Conviene registrar si una idea fue compartida, discutida o dicha por una sola persona.' },
+    c: { label: 'Entrevistas y grupo focal', tipo: 'Entre técnicas (ambas cualitativas)', cols: ['Entrevistas', 'Grupo focal'], n: 2,
+      cruza: 'Cada categoría tal como aparece en lo dicho de manera individual y en lo dicho en grupo.',
+      datos: 'La tabla Similitudes y diferencias del Recurso Cualitativo, completada una vez con la técnica Entrevistas y otra con Grupo focal. Cada una se trae a su columna.',
+      cuidado: 'No se trata de un diseño mixto. Ambas técnicas son cualitativas y la comparación es entre cómo se produjo el dato.' },
+    d: { label: 'Tres instrumentos', tipo: 'Entre enfoques y entre técnicas a la vez', cols: ['Encuesta', 'Entrevistas', 'Grupo focal'], n: 3,
+      cruza: 'Cada aspecto que aparezca en al menos dos de los tres instrumentos. No es necesario que aparezca en los tres.',
+      datos: 'Síntesis por dimensión del Recurso Cuantitativo y las dos versiones de Similitudes y diferencias del Recurso Cualitativo, entrevistas y grupo focal. Cada una se trae a su columna.',
+      cuidado: 'Más columnas no significan más profundidad. Si un aspecto solo aparece en un instrumento, se deja con esa sola celda completa.' },
+    e: { label: 'Otra combinación o más instrumentos', tipo: 'Entre enfoques si se combinan instrumentos cuantitativos y cualitativos; entre técnicas si todos son cualitativos', cols: ['', '', ''], n: 3,
+      cruza: 'Cada aspecto que aparezca en al menos dos instrumentos. En la matriz se agrega una columna por instrumento con el botón + Columna (hasta seis) y se escribe su nombre, por ejemplo Observación o Análisis documental.',
+      datos: 'Para encuesta, entrevistas y grupo focal, las tablas de los recursos Cuantitativo y Cualitativo. Para otros instrumentos, la síntesis de resultados que elaboró el grupo, escrita a mano en su columna.',
+      cuidado: 'Cada columna debe tener resultados ya analizados. Si un aspecto solo aparece en un instrumento, se deja con esa sola celda completa.' },
+  };
+  let caso = leer(K.caso, '');
+  function pintarCasos() {
+    $('#casos').innerHTML = Object.entries(CASOS).map(([k, c]) => `<button type="button" class="caso-btn" data-caso="${k}" aria-pressed="${caso === k}">${esc(c.label)}</button>`).join('');
+    const c = CASOS[caso];
+    $('#casoPanel').innerHTML = c ? `<dl>
+      <dt>Tipo de triangulación</dt><dd>${esc(c.tipo)}</dd>
+      <dt>Qué se cruza</dt><dd>${esc(c.cruza)}</dd>
+      <dt>De dónde salen los datos</dt><dd>${esc(c.datos)}</dd>
+      <dt>Cuidado con</dt><dd>${esc(c.cuidado)}</dd></dl>`
+      : '<p class="small" style="margin:0">Elige una combinación para ver qué se cruza en tu caso.</p>';
+  }
+  $('#casos').addEventListener('click', e => {
+    const b = e.target.closest('[data-caso]'); if (!b) return;
+    caso = b.dataset.caso; guardar(K.caso, caso);
+    const c = CASOS[caso];
+    if (!mat.custom) { mat.n = c.n; mat.cols = c.cols.slice(); mat.inf = c.cols.map(() => ''); asegurar(); guardar(K.mat, mat); pintarMat(); }
+    pintarCasos();
+  });
+
+  /* ---------------- Informantes diferentes ---------------- */
+  const INF = {
+    mismo: { tipo: 'Entre fuentes',
+      cruza: 'Cada aspecto según lo que mostró el mismo instrumento en cada grupo de informantes. Hay una columna por grupo.',
+      datos: 'Los resultados del instrumento separados por grupo. En la encuesta, la síntesis por dimensión calculada para cada grupo por separado; en entrevistas o grupo focal, las similitudes y diferencias de cada grupo.',
+      cuidado: 'Se comparan grupos, no instrumentos. En una encuesta, indica cuántos encuestados hay en cada grupo y no sumes los grupos en una sola cifra.',
+      ej: [['Entrevistas', 'Estudiantes'], ['Entrevistas', 'Docentes']] },
+    distinto: { tipo: 'Entre fuentes y entre enfoques o técnicas a la vez',
+      cruza: 'Cada aspecto según lo que mostró cada combinación de instrumento y grupo, por ejemplo la encuesta a estudiantes y las entrevistas a docentes.',
+      datos: 'La tabla de resultados de cada instrumento, que corresponde a un solo grupo de informantes.',
+      cuidado: 'Cambian el instrumento y el grupo al mismo tiempo, así que una diferencia no se puede atribuir solo a uno de los dos. Al redactar, nombra siempre ambos y retoma esto en la discusión.',
+      ej: [['Encuesta', 'Estudiantes'], ['Entrevistas', 'Docentes']] },
+    mezcla: { tipo: 'Entre fuentes y entre instrumentos',
+      cruza: 'Cada aspecto en todas las combinaciones de instrumento y grupo. Las columnas con el mismo instrumento permiten comparar grupos; las columnas con el mismo grupo permiten comparar instrumentos.',
+      datos: 'Los resultados de cada instrumento separados por grupo cuando se aplicó a más de uno.',
+      cuidado: 'En un mismo aspecto puede haber convergencia entre grupos y divergencia entre instrumentos. En Lo que se observa, indica entre qué columnas se da cada relación.',
+      ej: [['Encuesta', 'Estudiantes'], ['Encuesta', 'Docentes'], ['Entrevistas', 'Docentes']] },
+  };
+  let inf = leer(K.inf, {});
+  let pares = [];
+  function pintarPares() {
+    const ej = (INF[inf.modo] || INF.mismo).ej;
+    $('#pares').innerHTML = pares.map((p, i) => {
+      const e = ej[i] || ['Instrumento', 'Grupo'];
+      return `<div class="par"><label>Instrumento ${i + 1}<input data-p="${i}" data-k="0" value="${esc(p[0])}" placeholder="Ej: ${esc(e[0])}"></label>
+        <label>Grupo de informantes<input data-p="${i}" data-k="1" value="${esc(p[1])}" placeholder="Ej: ${esc(e[1])}"></label>
+        ${pares.length > 2 ? `<button type="button" class="del" data-delpar="${i}" aria-label="Quitar columna ${i + 1}" title="Quitar">×</button>` : '<span></span>'}</div>`;
+    }).join('');
+    $('#addPar').disabled = pares.length >= MAXC;
+  }
+  function pintarInf() {
+    $$('#infDif [data-dif]').forEach(b => b.setAttribute('aria-pressed', String(inf.dif === b.dataset.dif)));
+    $$('#infModo [data-modo]').forEach(b => b.setAttribute('aria-pressed', String(inf.modo === b.dataset.modo)));
+    const si = inf.dif === 'si', d = si && INF[inf.modo];
+    $('#infPaso2').hidden = !si;
+    $('#infPaso3').hidden = !d;
+    const panel = $('#infPanel');
+    if (inf.dif === 'no') { panel.hidden = false; panel.innerHTML = '<p class="small" style="margin:0">Todos los instrumentos se aplicaron al mismo grupo, así que la comparación es solo entre instrumentos. Sigue con la combinación que elegiste arriba.</p>'; }
+    else if (d) { panel.hidden = false; panel.innerHTML = `<dl>
+      <dt>Tipo de triangulación</dt><dd>${esc(d.tipo)}</dd>
+      <dt>Qué se cruza</dt><dd>${esc(d.cruza)}</dd>
+      <dt>De dónde salen los datos</dt><dd>${esc(d.datos)}</dd>
+      <dt>Cuidado con</dt><dd>${esc(d.cuidado)}</dd></dl>`; }
+    else panel.hidden = true;
+    if (d && !pares.length) pares = mat.inf.slice(0, mat.n).some(x => String(x || '').trim())
+      ? mat.cols.slice(0, mat.n).map((c, i) => [c || '', mat.inf[i] || ''])
+      : d.ej.map(() => ['', '']);
+    if (d) pintarPares();
+  }
+  $('#infDif').addEventListener('click', e => {
+    const b = e.target.closest('[data-dif]'); if (!b) return;
+    inf.dif = b.dataset.dif; guardar(K.inf, inf); pintarInf();
+  });
+  $('#infModo').addEventListener('click', e => {
+    const b = e.target.closest('[data-modo]'); if (!b) return;
+    inf.modo = b.dataset.modo; guardar(K.inf, inf);
+    const largo = INF[inf.modo].ej.length;
+    if (pares.length < largo || !pares.some(p => p[0] || p[1])) pares = Array.from({ length: largo }, (_, i) => pares[i] || ['', '']);
+    $('#infAviso').textContent = '';
+    pintarInf();
+  });
+  $('#pares').addEventListener('input', e => { const t = e.target; if (t.dataset.p != null) pares[+t.dataset.p][+t.dataset.k] = t.value; });
+  $('#pares').addEventListener('click', e => { const b = e.target.closest('[data-delpar]'); if (!b) return; pares.splice(+b.dataset.delpar, 1); pintarPares(); });
+  $('#addPar').addEventListener('click', () => { if (pares.length < MAXC) { pares.push(['', '']); pintarPares(); } });
+  $('#aplicarInf').addEventListener('click', () => {
+    const utiles = pares.map(p => [p[0].trim(), p[1].trim()]).filter(p => p[0] || p[1]);
+    if (utiles.length < 2) { $('#infAviso').textContent = 'Completa al menos dos columnas, con su instrumento y su grupo.'; return; }
+    if (utiles.some(p => !p[1])) { $('#infAviso').textContent = 'Falta el grupo de informantes en alguna columna.'; return; }
+    const hayDatos = mat.rows.some(r => r.c.some(x => String(x || '').trim()));
+    if (hayDatos && !window.confirm('La matriz ya tiene contenido. Cambiarán los nombres y la cantidad de columnas; lo escrito en cada celda se mantiene en su posición. ¿Continuar?')) return;
+    mat.n = utiles.length; mat.cols = utiles.map(p => p[0]); mat.inf = utiles.map(p => p[1]); mat.custom = true;
+    asegurar(); guardarMat(); pintarMat();
+    mostrar(4, true);
+    $('#aviso').textContent = 'La matriz quedó con ' + mat.n + ' columnas, una por cada instrumento y grupo.';
+  });
+
+  /* ---------------- Condiciones de entrada ---------------- */
+  const ENTRADA = [
+    'Los resultados de cada instrumento están organizados de manera que se puedan identificar sus hallazgos.',
+    'El análisis de cada instrumento está terminado.',
+    'Las tablas de resultados de cada instrumento están completas.',
+  ];
+  let ent = leer(K.ent, {});
+  function pintarChecks(cont, items, estado, clave, prog) {
+    $(cont).innerHTML = items.map((t, i) => `<label class="check"><input type="checkbox" data-i="${i}" ${estado[i] ? 'checked' : ''}><span>${esc(t)}</span></label>`).join('');
+    if (prog) { const n = items.filter((_, i) => estado[i]).length; $(prog).textContent = `${n} de ${items.length} revisados.`; }
+  }
+  $('#entrada').addEventListener('change', e => { const i = e.target.dataset.i; if (i == null) return; ent[i] = e.target.checked; guardar(K.ent, ent); });
+  pintarChecks('#entrada', ENTRADA, ent);
+
+  function datosCuanti() {
+    return ((leer(K_CUANTI, {}).sintesis) || []).filter(r => r && String(r.dimension || '').trim()).map(r => {
+      const parte = (rotulo, p, x, pct) => {
+        if (!p && !x && !pct) return '';
+        const det = [x || '', pct ? pct + ' en niveles 3 y 4 de la escala' : ''].filter(Boolean).join('; ');
+        return rotulo + (p ? ' en ' + p : '') + (det ? ' (' + det + ')' : '') + '.';
+      };
+      return { asp: String(r.dimension).trim(), txt: [parte('Media más alta', r.pmayor, r.xmayor, r.pctmayor), parte('Media más baja', r.pmenor, r.xmenor, r.pctmenor)].filter(Boolean).join(' ') };
+    }).filter(r => r.txt);
+  }
+  function datosCuali(gf) {
+    const d = leer(K_CUALI, {});
+    return ((gf ? d.similitudes_gf : d.similitudes) || []).filter(r => r && String(r.categoria || '').trim()).map(r => {
+      let txt = String(r.comparacion || '').trim();
+      if (!txt) txt = Object.keys(r).filter(k => k !== 'id' && k !== 'categoria' && k !== 'dinamica' && typeof r[k] === 'string' && r[k].trim()).map(k => r[k].trim()).join(' / ');
+      const din = String(r.dinamica || '').trim();
+      if (gf && din && txt) txt += ' Cómo se dio en el grupo: ' + din;
+      return { asp: String(r.categoria).trim(), txt };
+    }).filter(r => r.txt);
+  }
+  function pintarDeteccion() {
+    const a = datosCuanti().length, b = datosCuali(false).length, c = datosCuali(true).length;
+    const pl = (n, u, v) => n + ' ' + (n === 1 ? u : v);
+    $('#deteccion').textContent = (a || b || c)
+      ? `En este navegador hay ${pl(a, 'dimensión', 'dimensiones')} con datos en el Recurso Cuantitativo, y en el Recurso Cualitativo ${pl(b, 'categoría', 'categorías')} de entrevistas y ${pl(c, 'categoría', 'categorías')} de grupo focal.`
+      : 'En este navegador no hay datos guardados de los otros recursos. La matriz se puede completar a mano.';
+  }
+
+  /* ---------------- Matriz ---------------- */
+  const filaVacia = id => ({ id, asp: '', c: Array(Math.max(3, mat ? mat.n : 2)).fill(''), rel: '', obs: '' });
+  let mat = leer(K.mat, null);
+  if (!mat || !Array.isArray(mat.rows) || !Array.isArray(mat.cols)) mat = { n: 2, cols: ['Encuesta', 'Entrevistas', ''], inf: [], custom: false, rows: [1, 2, 3].map(filaVacia) };
+  function asegurar() {
+    mat.n = Math.min(Math.max(2, +mat.n || 2), MAXC);
+    if (!Array.isArray(mat.inf)) mat.inf = [];
+    while (mat.cols.length < mat.n) mat.cols.push('');
+    while (mat.inf.length < mat.n) mat.inf.push('');
+    mat.rows.forEach(r => { if (!Array.isArray(r.c)) r.c = []; while (r.c.length < mat.n) r.c.push(''); });
+  }
+  asegurar();
+  const guardarMat = () => { const ok = guardar(K.mat, mat); $('#aviso').textContent = ok ? 'Guardado en este navegador.' : 'No se pudo guardar en este navegador. Descarga tu trabajo para no perderlo.'; };
+  function nombreCol(i) {
+    const ins = (mat.cols[i] || '').trim() || 'Instrumento ' + (i + 1), g = (mat.inf[i] || '').trim();
+    return g ? ins + ' · ' + g : ins;
+  }
+  const esEncuesta = i => /^encuesta\b/i.test((mat.cols[i] || '').trim());
+  const etiquetaGrupo = i => esEncuesta(i) ? 'Encuestado (opcional)' : 'Informantes (opcional)';
+  const ariaEtiquetaGrupo = i => esEncuesta(i) ? `Persona encuestada de la columna ${i + 1} (opcional)` : `Grupo de informantes de la columna ${i + 1}`;
+  function pintarMat() {
+    const n = mat.n;
+    let h = '<table class="mat"><caption class="sr">Matriz de triangulación</caption><thead><tr><th scope="col" style="width:16%">Dimensión/categoría que se cruza</th>';
+    for (let i = 0; i < n; i++) h += `<th scope="col"><div class="col-cab"><div><input data-h="${i}" value="${esc(mat.cols[i])}" placeholder="Instrumento ${i + 1}" aria-label="Nombre del instrumento ${i + 1}">
+      <input class="inf" data-g="${i}" value="${esc(mat.inf[i])}" placeholder="${etiquetaGrupo(i)}" aria-label="${ariaEtiquetaGrupo(i)}"></div>
+      ${n > 2 ? `<button type="button" class="del-col" data-delcol="${i}" aria-label="Quitar columna ${esc(nombreCol(i))}" title="Quitar columna">×</button>` : ''}</div></th>`;
+    h += '<th scope="col" style="width:13%">Relación</th><th scope="col" style="width:20%">Lo que se observa</th><th scope="col" style="width:44px"><span class="sr">Acciones</span></th></tr></thead><tbody>';
+    mat.rows.forEach(r => {
+      h += `<tr><td><textarea rows="3" data-r="${r.id}" data-f="asp" placeholder="Ej: Prácticas evaluativas" aria-label="Dimensión o categoría que se cruza">${esc(r.asp)}</textarea></td>`;
+      for (let i = 0; i < n; i++) h += `<td><textarea rows="3" data-r="${r.id}" data-f="c${i}" placeholder="Qué mostró este instrumento" aria-label="${esc(nombreCol(i))}, ${esc(r.asp || 'fila ' + r.id)}">${esc(r.c[i])}</textarea></td>`;
+      h += `<td><select data-r="${r.id}" data-f="rel" aria-label="Relación entre instrumentos"><option value="">Elegir</option>${REL.map(o => `<option ${r.rel === o ? 'selected' : ''}>${o}</option>`).join('')}</select></td>`;
+      h += `<td><textarea rows="3" data-r="${r.id}" data-f="obs" placeholder="Una frase que describa lo que se ve, sin explicar por qué" aria-label="Lo que se observa">${esc(r.obs)}</textarea></td>`;
+      h += `<td><button type="button" class="del" data-del="${r.id}" aria-label="Eliminar fila ${esc(r.asp || r.id)}" title="Eliminar fila">×</button></td></tr>`;
+    });
+    h += '</tbody></table>';
+    $('#matWrap').innerHTML = h;
+    $('#matWrap table').style.minWidth = (980 + (n - 2) * 260) + 'px';
+    $('#addCol').disabled = n >= MAXC;
+    $('#addCol').title = n >= MAXC ? 'Máximo ' + MAXC + ' columnas' : '';
+    $('#trCol').innerHTML = Array.from({ length: n }, (_, i) => `<option value="${i}">${esc(nombreCol(i))}</option>`).join('');
+  }
+  const buscarFila = id => mat.rows.find(r => String(r.id) === String(id));
+  $('#matWrap').addEventListener('input', e => {
+    const t = e.target;
+    if (t.dataset.h != null) {
+      const i = +t.dataset.h;
+      mat.cols[i] = t.value; mat.custom = true;
+      const grupo = $(`#matWrap [data-g="${i}"]`);
+      if (grupo) { grupo.placeholder = etiquetaGrupo(i); grupo.setAttribute('aria-label', ariaEtiquetaGrupo(i)); }
+      guardarMat(); return;
+    }
+    if (t.dataset.g != null) { mat.inf[+t.dataset.g] = t.value; mat.custom = true; guardarMat(); return; }
+    if (t.dataset.f) {
+      const r = buscarFila(t.dataset.r); if (!r) return;
+      if (t.dataset.f[0] === 'c' && t.dataset.f.length === 2) r.c[+t.dataset.f[1]] = t.value; else r[t.dataset.f] = t.value;
+      guardarMat();
+    }
+  });
+  $('#matWrap').addEventListener('change', e => {
+    const t = e.target; if (t.tagName === 'SELECT' && t.dataset.f === 'rel') { const r = buscarFila(t.dataset.r); if (r) { r.rel = t.value; guardarMat(); } }
+    if (t.dataset.h != null || t.dataset.g != null) $('#trCol').innerHTML = Array.from({ length: mat.n }, (_, i) => `<option value="${i}">${esc(nombreCol(i))}</option>`).join('');
+  });
+  $('#matWrap').addEventListener('click', e => {
+    const bc = e.target.closest('[data-delcol]');
+    if (bc) {
+      const i = +bc.dataset.delcol;
+      if (mat.rows.some(r => String(r.c[i] || '').trim()) && !window.confirm(`Se quitará la columna ${nombreCol(i)} y lo escrito en ella. ¿Continuar?`)) return;
+      mat.cols.splice(i, 1); mat.inf.splice(i, 1); mat.rows.forEach(r => r.c.splice(i, 1));
+      mat.n--; mat.custom = true; asegurar(); guardarMat(); pintarMat(); return;
+    }
+    const b = e.target.closest('[data-del]'); if (!b) return;
+    const r = buscarFila(b.dataset.del); if (!r) return;
+    const tiene = r.asp || r.obs || r.rel || r.c.some(Boolean);
+    if (tiene && !window.confirm('¿Eliminar esta fila y lo que contiene?')) return;
+    mat.rows = mat.rows.filter(x => x !== r); if (!mat.rows.length) mat.rows.push(filaVacia(1));
+    guardarMat(); pintarMat();
+  });
+  const nuevoId = () => Math.max(0, ...mat.rows.map(r => +r.id || 0)) + 1;
+  $('#addFila').addEventListener('click', () => { mat.rows.push(filaVacia(nuevoId())); guardarMat(); pintarMat(); });
+  $('#addCol').addEventListener('click', () => {
+    if (mat.n >= MAXC) return;
+    mat.n++; mat.custom = true; asegurar(); guardarMat(); pintarMat();
+    const nueva = $(`#matWrap [data-h="${mat.n - 1}"]`); if (nueva) nueva.focus();
+  });
+  $('#trBtn').addEventListener('click', () => {
+    const src = $('#trSrc').value, col = +$('#trCol').value;
+    const items = src === 'cuanti' ? datosCuanti() : datosCuali(src === 'cualiGf');
+    const origen = src === 'cuanti' ? 'Recurso Cuantitativo (Síntesis por dimensión)' : src === 'cualiGf' ? 'Recurso Cualitativo (grupo focal)' : 'Recurso Cualitativo (entrevistas)';
+    if (!items.length) { $('#aviso').textContent = `No hay datos guardados del ${origen} en este navegador. Completa esa plantilla primero o escribe aquí a mano.`; return; }
+    let llenas = 0;
+    items.forEach(it => {
+      let fila = mat.rows.find(r => norm(r.asp) === norm(it.asp));
+      if (!fila) fila = mat.rows.find(r => !r.asp && !r.obs && !r.rel && !r.c.some(Boolean));
+      if (!fila) { fila = filaVacia(nuevoId()); mat.rows.push(fila); }
+      if (!fila.asp) fila.asp = it.asp;
+      if (!fila.c[col]) { fila.c[col] = it.txt; llenas++; }
+    });
+    guardar(K.mat, mat); pintarMat();
+    $('#aviso').textContent = llenas ? `Se ${llenas === 1 ? 'completó 1 celda' : 'completaron ' + llenas + ' celdas'} en la columna ${nombreCol(col)}. Revisa que cada texto quede en la fila del aspecto correcto.` : 'Las celdas de esa columna ya tenían contenido, así que no se modificó nada.';
+  });
+
+  /* ---------------- Descargas ---------------- */
+  const esperar = (fn, ms) => new Promise((res, rej) => { const t0 = Date.now(); (function w() { const v = fn(); if (v) return res(v); if (Date.now() - t0 > (ms || 8000)) return rej(new Error('lib')); setTimeout(w, 150); })(); });
+  const filasUtiles = () => mat.rows.filter(r => r.asp.trim() || r.obs.trim() || r.rel || r.c.slice(0, mat.n).some(x => x.trim()));
+  const encabezados = () => ['Dimensión/categoría que se cruza'].concat(Array.from({ length: mat.n }, (_, i) => nombreCol(i)), ['Relación', 'Lo que se observa']);
+  const celdasFila = r => [r.asp].concat(r.c.slice(0, mat.n), [r.rel, r.obs]);
+  function bajar(blob, nombre) { const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = nombre; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500); }
+  $('#dlXls').addEventListener('click', async () => {
+    const filas = filasUtiles(); if (!filas.length) { $('#aviso').textContent = 'La matriz está vacía. Completa al menos una fila antes de descargar.'; return; }
+    let X; try { X = await esperar(() => window.XLSX); } catch (e) { $('#aviso').textContent = 'La herramienta de Excel aún está cargando. Espera unos segundos e intenta de nuevo.'; return; }
+    const ws = X.utils.aoa_to_sheet([encabezados()].concat(filas.map(celdasFila)));
+    ws['!cols'] = encabezados().map((_, i, a) => ({ wch: i === a.length - 1 ? 40 : i === a.length - 2 ? 16 : 32 }));
+    const wb = X.utils.book_new(); X.utils.book_append_sheet(wb, ws, 'Triangulación'); X.writeFile(wb, 'triangulacion_resultados.xlsx');
+    $('#aviso').textContent = 'Excel descargado.';
+  });
+  $('#dlDoc').addEventListener('click', async () => {
+    const filas = filasUtiles(); if (!filas.length) { $('#aviso').textContent = 'La matriz está vacía. Completa al menos una fila antes de descargar.'; return; }
+    let d; try { d = await esperar(() => window.docx); } catch (e) { $('#aviso').textContent = 'La herramienta de Word aún está cargando. Espera unos segundos e intenta de nuevo.'; return; }
+    const { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, WidthType, BorderStyle, AlignmentType, PageOrientation } = d;
+    const FONT = 'Times New Roman', SIZE = 24, U = 13958;
+    const linea = { style: BorderStyle.SINGLE, size: 6, color: '000000' }, nada = { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' };
+    const enc = encabezados(), n = mat.n;
+    const pesos = [16].concat(Array(n).fill(Math.floor((100 - 16 - 12 - 22) / n)), [12, 22]);
+    const anchos = pesos.map(p => Math.floor(U * p / 100));
+    const celda = (txt, i, o) => new TableCell({
+      width: { size: anchos[i], type: WidthType.DXA },
+      borders: { top: o.top ? linea : nada, bottom: o.bottom ? linea : nada, left: nada, right: nada },
+      margins: { top: 80, bottom: 80, left: 100, right: 100 },
+      children: String(txt == null ? '' : txt).split('\n').map(t => new Paragraph({ alignment: o.centro ? AlignmentType.CENTER : AlignmentType.LEFT, spacing: { line: 240 }, children: [new TextRun({ text: t, font: FONT, size: SIZE })] })),
+    });
+    const filaEnc = new TableRow({ tableHeader: true, children: enc.map((t, i) => celda(t, i, { top: true, bottom: true, centro: true })) });
+    const cuerpo = filas.map((r, ri) => new TableRow({ children: celdasFila(r).map((t, i) => celda(t, i, { bottom: ri === filas.length - 1 })) }));
+    const p = (runs, extra) => new Paragraph({ spacing: Object.assign({ line: 480 }, extra || {}), children: runs });
+    const nombres = Array.from({ length: n }, (_, i) => nombreCol(i)).join(', ').toLowerCase();
+    const doc = new Document({ sections: [{
+      properties: { page: { size: { width: 11906, height: 16838, orientation: PageOrientation.LANDSCAPE }, margin: { top: 1440, bottom: 1440, left: 1440, right: 1440 } } },
+      children: [
+        p([new TextRun({ text: 'Tabla N', bold: true, font: FONT, size: SIZE })]),
+        p([new TextRun({ text: 'Triangulación de los resultados por aspecto', italics: true, font: FONT, size: SIZE })]),
+        new Table({ width: { size: anchos.reduce((a, b) => a + b, 0), type: WidthType.DXA }, columnWidths: anchos, rows: [filaEnc].concat(cuerpo) }),
+        p([new TextRun({ text: 'Nota. ', italics: true, font: FONT, size: SIZE }), new TextRun({ text: 'Elaboración propia a partir de los resultados de los instrumentos aplicados (' + nombres + ').', font: FONT, size: SIZE })], { before: 120 }),
+      ] }] });
+    bajar(await Packer.toBlob(doc), 'triangulacion_resultados.docx');
+    $('#aviso').textContent = 'Tabla descargada en Word. Reemplaza la N por el número de la tabla.';
+  });
+
+  /* ---------------- Práctica ---------------- */
+  const PREG = [
+    { p: 'Un grupo aplicó entrevistas y un grupo focal a docentes. ¿Qué tipo de triangulación corresponde?', o: ['Entre enfoques', 'Entre técnicas (instrumentos cualitativos)', 'Entre fuentes', 'No es posible triangular'], c: 1,
+      pista: 'Piensa si se combinaron enfoques distintos o dos instrumentos cualitativos.', e: 'Las entrevistas y el grupo focal son instrumentos cualitativos. Como la información se recoge de maneras distintas, corresponde a una triangulación entre técnicas, no entre enfoques.' },
+    { p: 'En la encuesta, 85 % respondió «De acuerdo» o «Totalmente de acuerdo» (niveles 3 y 4 de la escala de acuerdo) al enunciado «Recibo retroalimentación oportuna». En tres de cuatro entrevistas, las personas dicen recibirla tarde. ¿Qué relación se registra?', o: ['Converge', 'Se complementan', 'Divergen', 'Ninguna, hay que eliminar un instrumento'], c: 2,
+      pista: 'Compara la dirección de lo que dice cada instrumento sobre el mismo aspecto.', e: 'Los instrumentos dicen cosas opuestas sobre el mismo aspecto, así que divergen. La diferencia se declara y se retoma en la discusión.' },
+    { p: '¿Cuál de estas redacciones es adecuada?', o: ['Las entrevistas demuestran que la encuesta es válida.', 'Ambos instrumentos coinciden en que el uso de trabajos en grupo aumentó.', 'La encuesta es más confiable que las entrevistas.', 'Los entrevistados respondieron así porque les gusta trabajar en grupo.'], c: 1,
+      pista: 'Busca la que describe la relación sin validar, jerarquizar ni explicar causas.', e: 'Es la única que describe la relación entre los instrumentos sin validar, jerarquizar ni explicar el porqué.' },
+    { p: 'La encuesta mide motivación y las entrevistas solo preguntaron por infraestructura. ¿Qué corresponde?', o: ['Triangular de todas formas', 'Presentar cada instrumento por separado y declararlo como una limitación', 'Cambiar las preguntas de las entrevistas', 'Aplicar la encuesta de nuevo'], c: 1,
+      pista: 'Sin un aspecto en común no hay nada que cruzar.', e: 'No hay aspecto compartido, así que no hay qué triangular. Cada instrumento se presenta por separado y la falta de cruce se declara como limitación.' },
+    { p: 'En la columna "Lo que se observa" de la matriz, ¿qué debe ir?', o: ['La razón por la que ocurre lo observado', 'Una frase que describe lo que muestran los instrumentos, sin explicar causas', 'La opinión del grupo de investigación', 'La conclusión del estudio'], c: 1,
+      pista: 'La matriz ordena y clasifica, pero no explica.', e: 'La columna describe. Explicar las razones requiere marco teórico y se hace en la discusión.' },
+    { p: 'Un grupo aplicó una encuesta a estudiantes y entrevistas a docentes. En un aspecto, los resultados difieren. ¿Qué corresponde?', o: ['Concluir que los docentes piensan distinto que los estudiantes', 'Concluir que la encuesta y las entrevistas miden cosas distintas', 'Registrar que divergen, nombrando en cada caso el instrumento y el grupo', 'Eliminar ese aspecto de la matriz'], c: 2,
+      pista: 'Aquí cambian dos cosas a la vez: el instrumento y el grupo de informantes.', e: 'Como cambian el instrumento y el grupo a la vez, la diferencia no se puede atribuir solo a uno de los dos. Se registra como divergencia nombrando ambos y se retoma en la discusión.' },
+  ];
+  let quiz = {};
+  function pintarQuiz() {
+    const V = '#2E7D1F', VB = '#eafbe6', R = '#b0392b', RB = '#fdeeee', A = '#7a5d12', AB = '#fff8e6';
+    $('#quiz').innerHTML = PREG.map((q, qi) => {
+      const st = quiz[qi]; let fb = '';
+      if (st && st.resuelto) fb = `<div class="fb" style="background:${st.acierto ? VB : RB}"><p class="fb-t" style="color:${st.acierto ? V : R}">${st.acierto ? '¡Correcto!' : 'Revisa la respuesta marcada con ✓'}</p><p>${esc(q.e)}</p></div>`;
+      else if (st) fb = `<div class="fb" style="background:${AB}"><p class="fb-t" style="color:${A}">Aún no. Elige otra opción.</p><p>Pista: ${esc(q.pista)}</p></div>`;
+      const ops = q.o.map((t, oi) => {
+        const mal = st && st.fallidas.includes(oi), bien = st && st.resuelto && oi === q.c;
+        const sty = bien ? `background:${VB};color:${V};border-color:${V}` : mal ? `background:${RB};color:${R};border-color:${R}` : '';
+        return `<button type="button" class="opcion" data-q="${qi}" data-o="${oi}" style="${sty}" ${st && st.resuelto ? 'disabled' : ''}><span class="marca" aria-hidden="true">${bien ? '✓' : mal ? '✗' : ''}</span><span>${esc(t)}</span></button>`;
+      }).join('');
+      return `<div class="quiz" style="border-color:${st && st.resuelto ? (st.acierto ? '#ACDA90' : '#e7b3ad') : '#e2e6ea'}"><p class="quiz-p">${qi + 1}. ${esc(q.p)}</p><div class="quiz-ops">${ops}</div>${fb}</div>`;
+    }).join('');
+  }
+  $('#quiz').addEventListener('click', e => {
+    const b = e.target.closest('[data-q]'); if (!b) return;
+    const qi = +b.dataset.q, oi = +b.dataset.o, q = PREG[qi];
+    const prev = quiz[qi] || { intentos: 0, fallidas: [], resuelto: false };
+    if (prev.resuelto || prev.fallidas.includes(oi)) return;
+    const ok = oi === q.c, intentos = prev.intentos + 1;
+    quiz[qi] = { intentos, fallidas: ok ? prev.fallidas : prev.fallidas.concat(oi), resuelto: ok || intentos >= 2, acierto: ok };
+    pintarQuiz();
+    const nb = $(`[data-q="${qi}"]:not([disabled])`) || $(`.quiz:nth-child(${qi + 1})`); if (nb && nb.focus) nb.focus({ preventScroll: true });
+  });
+
+  /* ---------------- Checklist ---------------- */
+  const CHECK = [
+    'Cada fila de la matriz tiene un aspecto que aparece en al menos dos instrumentos.',
+    'Cada celda dice qué mostró ese instrumento, con su cifra o su extracto breve.',
+    'La relación está clasificada en todas las filas como converge, se complementan o divergen.',
+    'Las divergencias están señaladas y no se ocultan.',
+    'Ninguna celda explica por qué ocurre lo observado.',
+    'Se evitaron verbos como confirma, valida o demuestra.',
+    'Las cifras de la matriz coinciden con las tablas del Recurso Cuantitativo.',
+    'Los extractos de la matriz coinciden con los de las tablas del Recurso Cualitativo.',
+    'Si hay grupos de informantes distintos, cada columna indica a qué grupo corresponde.',
+  ];
+  let chk = leer(K.chk, {});
+  pintarChecks('#checklist', CHECK, chk, K.chk, '#chkProg');
+  $('#checklist').addEventListener('change', e => { const i = e.target.dataset.i; if (i == null) return; chk[i] = e.target.checked; guardar(K.chk, chk); const n = CHECK.filter((_, j) => chk[j]).length; $('#chkProg').textContent = `${n} de ${CHECK.length} revisados.`; });
+
+  /* ---------------- Inicio ---------------- */
+  pintarCasos(); pintarInf(); pintarMat(); pintarQuiz();
+  const m = /^#v([1-5])$/.exec(location.hash || '');
+  mostrar(m ? +m[1] : 1, false);
+})();
+</script>
+</body>
+</html>
